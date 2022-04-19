@@ -1,11 +1,10 @@
-using System.Linq;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Acme.ShoppingCart.WebApi.Filters {
+namespace Cortside.AspNetCore.Swagger.Filters {
     public class RemoveVersionFromParameter : IOperationFilter {
         public void Apply(OpenApiOperation operation, OperationFilterContext context) {
-            if (!operation.Parameters.Any()) {
+            if (operation.Parameters.Count == 0) {
                 return;
             }
 

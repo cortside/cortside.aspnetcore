@@ -3,7 +3,7 @@ using Cortside.Common.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace Acme.ShoppingCart.Data {
+namespace Cortside.AspNetCore.EntityFramework {
     public class UnitOfWorkContext : AuditableDatabaseContext, IUnitOfWork {
         public UnitOfWorkContext(DbContextOptions options, ISubjectPrincipal subjectPrincipal) : base(options, subjectPrincipal) {
         }

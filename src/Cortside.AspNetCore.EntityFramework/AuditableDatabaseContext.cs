@@ -1,14 +1,14 @@
 using System;
+using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Acme.ShoppingCart.Domain;
-using Acme.ShoppingCart.Domain.Entities;
+using Cortside.AspNetCore.Auditable.Entities;
 using Cortside.Common.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Acme.ShoppingCart.Data {
+namespace Cortside.AspNetCore.EntityFramework {
     public class AuditableDatabaseContext : DbContext {
         private readonly ISubjectPrincipal subjectPrincipal;
 
@@ -56,8 +56,8 @@ namespace Acme.ShoppingCart.Data {
             }
 
             foreach (var item in added) {
-                ((AuditableEntity)(item.Entity)).CreatedSubject = updatingSubject;
-                ((AuditableEntity)(item.Entity)).CreatedDate = DateTime.Now.ToUniversalTime();
+                ((AuditableEntity)item.Entity).CreatedSubject = updatingSubject;
+                ((AuditableEntity)item.Entity).CreatedDate = DateTime.Now.ToUniversalTime();
             }
 #pragma warning restore S3267 // Loops should be simplified with "LINQ" expressions
         }

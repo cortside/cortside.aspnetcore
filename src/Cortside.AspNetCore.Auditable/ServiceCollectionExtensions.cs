@@ -6,17 +6,14 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace Cortside.AspNetCore
-{
-    public static class ServiceCollectionExtensions
-    {
+namespace Cortside.AspNetCore.Auditable {
+    public static class ServiceCollectionExtensions {
         /// <summary>
         /// Adds the subject principal.
         /// </summary>
         /// <param name="services">The services.</param>
         public static IServiceCollection AddSubjectPrincipal(this IServiceCollection services) =>
-            services.AddScoped<ISubjectPrincipal, SubjectPrincipal>((sp) =>
-            {
+            services.AddScoped<ISubjectPrincipal, SubjectPrincipal>((sp) => {
                 var httpContextAccessor = sp.GetRequiredService<IHttpContextAccessor>();
 
                 // when there is no httpcontext available, assume that subject is the "service" itself
@@ -25,11 +22,9 @@ namespace Cortside.AspNetCore
                 };
                 var system = new SubjectPrincipal(claims);
 
-                if (httpContextAccessor?.HttpContext != null)
-                {
+                if (httpContextAccessor?.HttpContext != null) {
                     var principal = new SubjectPrincipal(httpContextAccessor.HttpContext.User);
-                    if (principal.SubjectId != null)
-                    {
+                    if (principal.SubjectId != null) {
                         return principal;
                     }
                 }

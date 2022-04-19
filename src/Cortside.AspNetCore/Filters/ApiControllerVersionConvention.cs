@@ -3,7 +3,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
-namespace Acme.ShoppingCart.WebApi.Filters {
+namespace Cortside.AspNetCore.Filters {
     public class ApiControllerVersionConvention : IControllerModelConvention {
         public void Apply(ControllerModel controller) {
             if (!(controller.ControllerType.IsDefined(typeof(ApiVersionAttribute)) || controller.ControllerType.IsDefined(typeof(ApiVersionNeutralAttribute)))) {

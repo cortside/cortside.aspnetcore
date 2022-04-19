@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Acme.ShoppingCart.WebApi.Filters {
+namespace Cortside.AspNetCore.Swagger.Filters {
     internal static class OperationFilterContextExtensions {
         public static IEnumerable<T> GetControllerAndActionAttributes<T>(this OperationFilterContext context) where T : Attribute {
             var controllerAttributes = context.MethodInfo.DeclaringType.GetTypeInfo().GetCustomAttributes<T>();

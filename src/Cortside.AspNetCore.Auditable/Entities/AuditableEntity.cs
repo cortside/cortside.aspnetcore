@@ -1,9 +1,8 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Acme.ShoppingCart.Domain.Entities;
 
-namespace Acme.ShoppingCart.Domain {
+namespace Cortside.AspNetCore.Auditable.Entities {
     /// <summary>
     /// Auditable entity base class
     /// </summary>
