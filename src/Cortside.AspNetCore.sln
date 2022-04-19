@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32407.392
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cortside.AspNetCore", "Cortside.AspNetCore\Cortside.AspNetCore.csproj", "{CF479250-DD29-474C-B168-B1CC864C3ED6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cortside.AspNetCore.ApplicationInsights", "Cortside.AspNetCore.ApplicationInsights\Cortside.AspNetCore.ApplicationInsights.csproj", "{7693C9CB-61A8-4780-9835-A867DF8919BE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cortside.AspNetCore.Auditable", "Cortside.AspNetCore.Auditable\Cortside.AspNetCore.Auditable.csproj", "{29055B29-FE61-40E8-A63B-CE45B9A05AF1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cortside.AspNetCore.Swagger", "Cortside.AspNetCore.Swagger\Cortside.AspNetCore.Swagger.csproj", "{0E468203-52CF-41FF-923D-C324038F8C26}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cortside.AspNetCore.EntityFramework", "Cortside.AspNetCore.EntityFramework\Cortside.AspNetCore.EntityFramework.csproj", "{BEF6B03B-4A67-4E3E-BDE8-A98044C848C1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CF479250-DD29-474C-B168-B1CC864C3ED6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF479250-DD29-474C-B168-B1CC864C3ED6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF479250-DD29-474C-B168-B1CC864C3ED6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF479250-DD29-474C-B168-B1CC864C3ED6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7693C9CB-61A8-4780-9835-A867DF8919BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7693C9CB-61A8-4780-9835-A867DF8919BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7693C9CB-61A8-4780-9835-A867DF8919BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7693C9CB-61A8-4780-9835-A867DF8919BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29055B29-FE61-40E8-A63B-CE45B9A05AF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29055B29-FE61-40E8-A63B-CE45B9A05AF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29055B29-FE61-40E8-A63B-CE45B9A05AF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29055B29-FE61-40E8-A63B-CE45B9A05AF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E468203-52CF-41FF-923D-C324038F8C26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E468203-52CF-41FF-923D-C324038F8C26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E468203-52CF-41FF-923D-C324038F8C26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E468203-52CF-41FF-923D-C324038F8C26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEF6B03B-4A67-4E3E-BDE8-A98044C848C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEF6B03B-4A67-4E3E-BDE8-A98044C848C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEF6B03B-4A67-4E3E-BDE8-A98044C848C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEF6B03B-4A67-4E3E-BDE8-A98044C848C1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {99718A14-82FD-432E-B3D9-06A31B025CE5}
+	EndGlobalSection
+EndGlobal
