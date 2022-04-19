@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solutio
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cortside.AspNetCore.Common", "Cortside.AspNetCore.Common\Cortside.AspNetCore.Common.csproj", "{E12E0DF0-AC62-4D37-AD14-8D916736A4FA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +48,10 @@ Global
 		{BEF6B03B-4A67-4E3E-BDE8-A98044C848C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEF6B03B-4A67-4E3E-BDE8-A98044C848C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEF6B03B-4A67-4E3E-BDE8-A98044C848C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E12E0DF0-AC62-4D37-AD14-8D916736A4FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E12E0DF0-AC62-4D37-AD14-8D916736A4FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E12E0DF0-AC62-4D37-AD14-8D916736A4FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E12E0DF0-AC62-4D37-AD14-8D916736A4FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
