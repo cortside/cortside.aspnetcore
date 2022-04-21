@@ -1,9 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using Cortside.Common.Messages.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System.Net;
 
 namespace Cortside.AspNetCore.Swagger.Filters {
     public class AuthorizeOperationFilter : IOperationFilter {

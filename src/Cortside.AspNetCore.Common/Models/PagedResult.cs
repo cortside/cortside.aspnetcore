@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace Cortside.AspNetCore.Common.Models {
     public class PagedResult<T> {
         public PagedResult() { }
