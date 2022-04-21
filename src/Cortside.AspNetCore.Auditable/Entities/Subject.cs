@@ -31,5 +31,12 @@ namespace Cortside.AspNetCore.Auditable.Entities {
         public string UserPrincipalName { get; private set; }
 
         public DateTime CreatedDate { get; private set; }
+
+        public void Update(string givenName, string familyName, string name, string userPrincipalName) {
+            GivenName = givenName;
+            FamilyName = familyName;
+            Name = name;
+            UserPrincipalName = userPrincipalName;
+        }
     }
 }
