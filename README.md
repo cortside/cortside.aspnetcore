@@ -46,6 +46,7 @@ services.AddAccessControl(Configuration);
 
 ```csharp
 // Add swagger with versioning and OpenID Connect configuration using Newtonsoft
+var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
 var versions = new List<OpenApiInfo> {
     new OpenApiInfo {
         Version = "v1",
@@ -58,7 +59,7 @@ var versions = new List<OpenApiInfo> {
         Description = "Acme.ShoppingCart API",
     }
 };
-services.AddSwagger(Configuration, versions);
+services.AddSwagger(Configuration, xmlFile, versions);
 ```
 
 ```csharp
