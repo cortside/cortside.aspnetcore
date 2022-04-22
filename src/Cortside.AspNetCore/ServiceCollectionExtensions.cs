@@ -1,5 +1,8 @@
 using System;
+using System.IO.Compression;
 using Cortside.Common.BootStrap;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -28,6 +31,22 @@ namespace Cortside.AspNetCore {
                 bootstrapper.AddInstaller(installer);
             }
             bootstrapper.InitIoCContainer(configuration as IConfigurationRoot, services);
+            return services;
+        }
+
+        public static IServiceCollection AddDefaultResponseCompression(this IServiceCollection services, CompressionLevel compressionLevel) {
+            services.AddResponseCompression(options => {
+                options.EnableForHttps = true;
+                options.Providers.Add<BrotliCompressionProvider>();
+                options.Providers.Add<GzipCompressionProvider>();
+            });
+            services.Configure<BrotliCompressionProviderOptions>(options => {
+                options.Level = compressionLevel;
+            });
+            services.Configure<GzipCompressionProviderOptions>(options => {
+                options.Level = compressionLevel;
+            });
+
             return services;
         }
     }

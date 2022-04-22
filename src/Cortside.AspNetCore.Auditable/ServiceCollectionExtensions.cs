@@ -1,10 +1,10 @@
-﻿using Cortside.Common.Security;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Cortside.Common.Security;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Cortside.AspNetCore.Auditable {
     public static class ServiceCollectionExtensions {
@@ -12,7 +12,8 @@ namespace Cortside.AspNetCore.Auditable {
         /// Adds the subject principal.
         /// </summary>
         /// <param name="services">The services.</param>
-        public static IServiceCollection AddSubjectPrincipal(this IServiceCollection services) =>
+        public static IServiceCollection AddSubjectPrincipal(this IServiceCollection services) {
+            services.AddHttpContextAccessor();
             services.AddScoped<ISubjectPrincipal, SubjectPrincipal>((sp) => {
                 var httpContextAccessor = sp.GetRequiredService<IHttpContextAccessor>();
 
@@ -31,5 +32,7 @@ namespace Cortside.AspNetCore.Auditable {
 
                 return system;
             });
+            return services;
+        }
     }
 }
