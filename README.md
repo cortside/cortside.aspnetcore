@@ -46,7 +46,23 @@ services.AddAccessControl(Configuration);
 
 ```csharp
 // Add swagger with versioning and OpenID Connect configuration using Newtonsoft
-services.AddSwagger(Configuration);
+var versions = new List<OpenApiInfo> {
+    new OpenApiInfo {
+        Version = "v1",
+        Title = "Acme.ShoppingCart API",
+        Description = "Acme.ShoppingCart API",
+    },
+    new OpenApiInfo {
+        Version = "v2",
+        Title = "Acme.ShoppingCart API",
+        Description = "Acme.ShoppingCart API",
+    }
+};
+services.AddSwagger(Configuration, versions);
+```
+
+```csharp
+app.UseSwagger("Acme.ShoppingCart Api", provider);
 ```
 
 ## Cortside.AspNetCore.Auditable
@@ -56,6 +72,11 @@ Contains base class AuditableEntity for domain entities as well as Subject domai
 ```csharp
 // add SubjectPrincipal for auditing
 services.AddSubjectPrincipal();
+```
+
+```csharp
+// intentionally set after UseAuthentication
+app.UseMiddleware<SubjectMiddleware>();
 ```
 
 ## Cortside.AspNetCore.EntityFramework

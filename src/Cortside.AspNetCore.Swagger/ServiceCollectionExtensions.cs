@@ -13,7 +13,7 @@ namespace Cortside.AspNetCore.Swagger {
     /// Adds swagger with versioning and OpenID Connect configuration using Newtonsoft
     /// </summary>
     public static class ServiceCollectionExtensions {
-        public static IServiceCollection AddSwagger(this IServiceCollection services, IConfiguration configuration) {
+        public static IServiceCollection AddSwagger(this IServiceCollection services, IConfiguration configuration, List<OpenApiInfo> versions) {
             services.AddApiVersioning(o => {
                 o.ReportApiVersions = true;
                 o.AssumeDefaultVersionWhenUnspecified = false;
@@ -27,17 +27,9 @@ namespace Cortside.AspNetCore.Swagger {
             });
 
             services.AddSwaggerGen(c => {
-                c.SwaggerDoc("v1", new OpenApiInfo {
-                    Version = "v1",
-                    Title = "Acme.ShoppingCart API",
-                    Description = "Acme.ShoppingCart API",
-                });
-
-                c.SwaggerDoc("v2", new OpenApiInfo {
-                    Version = "v2",
-                    Title = "Acme.ShoppingCart API",
-                    Description = "Acme.ShoppingCart API",
-                });
+                foreach (var version in versions) {
+                    c.SwaggerDoc(version.Version, version);
+                }
 
                 // Set the comments path for the Swagger JSON and UI.
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
