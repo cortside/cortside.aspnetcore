@@ -42,6 +42,32 @@ This contains model classes that are common, i.e:
 services.AddAccessControl(Configuration);
 ```
 
+This is the expected shape of settings in appsettings.json:
+
+```json
+    "IdentityServer": {
+        "Authority": "http://localhost:5001",
+        "ApiName": "shoppingcart-api",
+        "ApiSecret": "apiresource-secret",
+        "RequireHttpsMetadata": false,
+        "CacheDuration": "00:10:00",
+        "CacheEnabled": true,
+        "Authentication": {
+            "GrantType": "client_credentials",
+            "Scope": "catalog-api",
+            "ClientId": "shoppingcart-service",
+            "ClientSecret": "secret",
+            "SlidingExpiration": 30
+        }
+    },
+    "PolicyServer": {
+        "CacheDuration": "0.00:05:00",
+        "BasePolicy": "ShoppingCart",
+        "PolicyServerUrl": "http://localhost:5001",
+        "BasePolicyPrefix": "ShoppingCart"
+    },
+```
+
 ## Cortside.AspNetCore.Swagger
 
 ```csharp
