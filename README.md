@@ -26,6 +26,7 @@ services.AddDefaultResponseCompression(CompressionLevel.Optimal);
 ## Cortside.AspNetCore.ApplicationInsights
 
 ```csharp
+// add application insights telemetry
 services.AddApplicationInsights(serviceName, instrumentationKey);
 ```
 
