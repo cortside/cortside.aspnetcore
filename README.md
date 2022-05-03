@@ -99,6 +99,11 @@ Note: you may need to add the provider to the Configuration method like this:
 public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
 ```
 
+Also make sure that routes include the replacement token for the version number, like this:
+
+```csharp
+[Route("api/v{version:apiVersion}/customers")]
+```
 
 ## Cortside.AspNetCore.Auditable
 
