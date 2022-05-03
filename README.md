@@ -93,6 +93,13 @@ services.AddSwagger(Configuration, xmlFile, versions);
 app.UseSwagger("Acme.ShoppingCart Api", provider);
 ```
 
+Note: you may need to add the provider to the Configuration method like this:
+
+```csharp
+public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
+```
+
+
 ## Cortside.AspNetCore.Auditable
 
 Contains base class AuditableEntity for domain entities as well as Subject domain entity needed by it.
