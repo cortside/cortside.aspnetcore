@@ -17,7 +17,7 @@ namespace Cortside.AspNetCore.Builder {
     public class WebApiBuilder {
         private IWebApiStartup startup;
         private IConfiguration config;
-        private string[] args;
+        private readonly string[] args;
         private WebApplication webApplication;
         private Bowdlerizer.Bowdlerizer bowdlerizer;
         private LoggerConfiguration loggerConfiguration;
@@ -40,10 +40,6 @@ namespace Cortside.AspNetCore.Builder {
                 .Build();
         }
 
-        public IWebApiStartup Startup => startup;
-        public IConfiguration Configuration => config;
-        public string[] Args => args;
-
         public bool ExecutingIsEntryAssembly => executingIsEntryAssembly;
 
         public string Service => service;
@@ -51,11 +47,11 @@ namespace Cortside.AspNetCore.Builder {
         public WebApplication WebApplication => webApplication;
 
         private void CreateWebApplication() {
-            var appBuilder = WebApplication.CreateBuilder(Args);
+            var appBuilder = WebApplication.CreateBuilder(args);
             appBuilder.Host.UseSerilog(Log.Logger);
 
-            appBuilder.WebHost.ConfigureAppConfiguration(b => b.AddConfiguration(Configuration));
-            appBuilder.WebHost.UseConfiguration(Configuration);
+            appBuilder.WebHost.ConfigureAppConfiguration(b => b.AddConfiguration(config));
+            appBuilder.WebHost.UseConfiguration(config);
             appBuilder.WebHost.UseShutdownTimeout(TimeSpan.FromSeconds(10));
             appBuilder.WebHost.ConfigureKestrel(options => {
                 options.AddServerHeader = false;
@@ -66,14 +62,14 @@ namespace Cortside.AspNetCore.Builder {
 
             appBuilder.Services.AddSingleton(bowdlerizer);
 
-            Startup.ConfigureServices(appBuilder.Services);
+            startup.ConfigureServices(appBuilder.Services);
 
             var app = appBuilder.Build();
 
             var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
-            Startup.Configure(app, app.Environment, provider);
+            startup.Configure(app, app.Environment, provider);
 
-            this.webApplication = app;
+            webApplication = app;
         }
 
         public IServiceCollection Services { get; }
@@ -82,7 +78,7 @@ namespace Cortside.AspNetCore.Builder {
         public ConfigureHostBuilder Host { get; }
 
         public WebApiBuilder UseConfiguration() {
-            this.config = GetConfiguration();
+            config = GetConfiguration();
             return this;
         }
 
@@ -92,7 +88,7 @@ namespace Cortside.AspNetCore.Builder {
         }
 
         public WebApiBuilder UseStartup<TStartup>() where TStartup : IWebApiStartup, new() {
-            this.startup = new TStartup();
+            startup = new TStartup();
             return this;
         }
 

@@ -15,7 +15,7 @@ namespace Cortside.AspNetCore.Builder {
         }
 
         public static WebApiBuilder CreateBuilder() {
-            return new WebApiBuilder(new string[] { });
+            return new WebApiBuilder(Array.Empty<string>());
         }
 
         public static WebApiBuilder CreateBuilder(string[] args) {
