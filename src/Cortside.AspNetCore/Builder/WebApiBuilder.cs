@@ -6,9 +6,12 @@ using Cortside.Bowdlerizer;
 using Cortside.Health.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Bowdlerizer;
@@ -58,18 +61,30 @@ namespace Cortside.AspNetCore.Builder {
                 options.Limits.MaxRequestLineSize = int.MaxValue;
                 options.Limits.MaxRequestBufferSize = int.MaxValue;
             });
+            appBuilder.WebHost.UseKestrel();
             appBuilder.WebHost.UseDefaultServiceProvider(options => options.ValidateScopes = false);
 
             appBuilder.Services.AddSingleton(bowdlerizer);
 
-            startup.ConfigureServices(appBuilder.Services);
+            startup?.ConfigureServices(appBuilder.Services);
 
             var app = appBuilder.Build();
 
             var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
-            startup.Configure(app, app.Environment, provider);
+            startup?.Configure(app, app.Environment, provider);
+
+            app.Lifetime.ApplicationStarted.Register(() => LogAddresses(app.Services, app.Logger, app.Environment));
 
             webApplication = app;
+        }
+
+        static void LogAddresses(IServiceProvider services, Microsoft.Extensions.Logging.ILogger logger, IWebHostEnvironment env) {
+            logger.LogInformation($"Service {env.ApplicationName} started with environment {env.EnvironmentName}");
+            var server = services.GetRequiredService<IServer>();
+            var addressFeature = server.Features.Get<IServerAddressesFeature>();
+            foreach (var address in addressFeature.Addresses) {
+                logger.LogInformation("Listing on address: " + address);
+            }
         }
 
         public IServiceCollection Services { get; }
@@ -95,9 +110,7 @@ namespace Cortside.AspNetCore.Builder {
         public WebApi Build() {
             config ??= GetConfiguration();
 
-            if (startup != null) {
-                startup.UseConfiguration(config);
-            }
+            startup?.UseConfiguration(config);
 
             var build = config.GetSection("Build").Get<BuildModel>();
             service = Assembly.GetEntryAssembly().GetName().FullName;
