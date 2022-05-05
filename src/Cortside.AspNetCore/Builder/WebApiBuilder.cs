@@ -56,7 +56,10 @@ namespace Cortside.AspNetCore.Builder {
             appBuilder.WebHost.ConfigureAppConfiguration(b => b.AddConfiguration(config));
             appBuilder.WebHost.UseConfiguration(config);
             appBuilder.WebHost.UseShutdownTimeout(TimeSpan.FromSeconds(10));
+
             appBuilder.WebHost.ConfigureKestrel(options => {
+                options.ConfigureEndpointDefaults(listenOptions => {
+                });
                 options.AddServerHeader = false;
                 options.Limits.MaxRequestLineSize = int.MaxValue;
                 options.Limits.MaxRequestBufferSize = int.MaxValue;
@@ -73,17 +76,17 @@ namespace Cortside.AspNetCore.Builder {
             var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
             startup?.Configure(app, app.Environment, provider);
 
-            app.Lifetime.ApplicationStarted.Register(() => LogAddresses(app.Services, app.Logger, app.Environment));
+            app.Logger.LogInformation($"Service {app.Environment.ApplicationName} started with environment {app.Environment.EnvironmentName}");
+            app.Lifetime.ApplicationStarted.Register(() => LogAddresses(app.Services, app.Logger));
 
             webApplication = app;
         }
 
-        static void LogAddresses(IServiceProvider services, Microsoft.Extensions.Logging.ILogger logger, IWebHostEnvironment env) {
-            logger.LogInformation($"Service {env.ApplicationName} started with environment {env.EnvironmentName}");
+        static void LogAddresses(IServiceProvider services, Microsoft.Extensions.Logging.ILogger logger) {
             var server = services.GetRequiredService<IServer>();
             var addressFeature = server.Features.Get<IServerAddressesFeature>();
             foreach (var address in addressFeature.Addresses) {
-                logger.LogInformation("Listing on address: " + address);
+                logger.LogInformation($"Listing on address: {address}");
             }
         }
 
