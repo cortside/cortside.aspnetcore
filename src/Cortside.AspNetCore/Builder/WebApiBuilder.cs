@@ -57,6 +57,7 @@ namespace Cortside.AspNetCore.Builder {
             appBuilder.WebHost.UseConfiguration(config);
             appBuilder.WebHost.UseShutdownTimeout(TimeSpan.FromSeconds(10));
 
+            appBuilder.WebHost.UseKestrel();
             appBuilder.WebHost.ConfigureKestrel(options => {
                 options.ConfigureEndpointDefaults(listenOptions => {
                 });
@@ -64,7 +65,6 @@ namespace Cortside.AspNetCore.Builder {
                 options.Limits.MaxRequestLineSize = int.MaxValue;
                 options.Limits.MaxRequestBufferSize = int.MaxValue;
             });
-            appBuilder.WebHost.UseKestrel();
             appBuilder.WebHost.UseDefaultServiceProvider(options => options.ValidateScopes = false);
 
             appBuilder.Services.AddSingleton(bowdlerizer);
