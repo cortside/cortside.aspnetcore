@@ -50,30 +50,30 @@ namespace Cortside.AspNetCore.Builder {
         public WebApplication WebApplication => webApplication;
 
         private void CreateWebApplication() {
-            var appBuilder = WebApplication.CreateBuilder(args);
-            appBuilder.Host.UseSerilog(Log.Logger);
+            var builder = WebApplication.CreateBuilder(args);
+            builder.Host.UseSerilog(Log.Logger);
 
-            appBuilder.WebHost.ConfigureAppConfiguration(b => b.AddConfiguration(config));
-            appBuilder.WebHost.UseConfiguration(config);
-            appBuilder.WebHost.UseShutdownTimeout(TimeSpan.FromSeconds(10));
+            builder.WebHost.ConfigureAppConfiguration(b => b.AddConfiguration(config));
+            builder.WebHost.UseConfiguration(config);
+            builder.WebHost.UseShutdownTimeout(TimeSpan.FromSeconds(10));
 
-            appBuilder.WebHost.UseKestrel();
-            appBuilder.WebHost.ConfigureKestrel(options => {
+            builder.WebHost.UseKestrel();
+            builder.WebHost.ConfigureKestrel(options => {
                 options.ConfigureEndpointDefaults(listenOptions => {
                 });
                 options.AddServerHeader = false;
                 options.Limits.MaxRequestLineSize = int.MaxValue;
                 options.Limits.MaxRequestBufferSize = int.MaxValue;
             });
-            appBuilder.WebHost.UseDefaultServiceProvider(options => options.ValidateScopes = false);
+            builder.WebHost.UseDefaultServiceProvider(options => options.ValidateScopes = false);
 
-            appBuilder.Services.AddSingleton(bowdlerizer);
+            builder.Services.AddSingleton(bowdlerizer);
 
-            startup?.ConfigureServices(appBuilder.Services);
+            startup?.ConfigureServices(builder.Services);
 
-            var app = appBuilder.Build();
+            var app = builder.Build();
 
-            var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+            var provider = app.Services.GetService<IApiVersionDescriptionProvider>();
             startup?.Configure(app, app.Environment, provider);
 
             app.Logger.LogInformation($"Service {app.Environment.ApplicationName} started with environment {app.Environment.EnvironmentName}");
