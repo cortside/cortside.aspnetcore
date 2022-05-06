@@ -77,6 +77,9 @@ namespace Cortside.AspNetCore.Builder {
             startup?.Configure(app, app.Environment, provider);
 
             app.Logger.LogInformation($"Service {app.Environment.ApplicationName} started with environment {app.Environment.EnvironmentName}");
+            app.Logger.LogInformation($"args: [{string.Join(",", args)}]");
+            var urls = System.Environment.GetEnvironmentVariable("ASPNETCORE_URLS");
+            app.Logger.LogInformation($"ASPNETCORE_URLS: {urls}");
             app.Lifetime.ApplicationStarted.Register(() => LogAddresses(app.Services, app.Logger));
 
             webApplication = app;
