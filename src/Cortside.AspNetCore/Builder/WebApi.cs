@@ -42,7 +42,8 @@ namespace Cortside.AspNetCore.Builder {
                 var app = builder.WebApplication;
 
                 // start host along with any startup tasks
-                await app.RunWithTasksAsync().ConfigureAwait(false);
+                // passing url as workaround for https://github.com/dotnet/aspnetcore/issues/38185#issuecomment-963552844
+                await app.RunWithTasksAsync(builder.Url).ConfigureAwait(false);
 
                 return 0;
             } catch (Exception ex) when (ex is not OperationCanceledException && ex.GetType().Name != "StopTheHostException" && !builder.ExecutingIsEntryAssembly) {

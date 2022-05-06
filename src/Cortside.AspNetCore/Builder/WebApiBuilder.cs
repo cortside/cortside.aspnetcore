@@ -26,6 +26,7 @@ namespace Cortside.AspNetCore.Builder {
         private LoggerConfiguration loggerConfiguration;
         private string service;
         private bool executingIsEntryAssembly;
+        private string url;
 
         public WebApiBuilder(string[] args) {
             this.args = args;
@@ -46,10 +47,13 @@ namespace Cortside.AspNetCore.Builder {
         public bool ExecutingIsEntryAssembly => executingIsEntryAssembly;
 
         public string Service => service;
+        public string Url => url;
 
         public WebApplication WebApplication => webApplication;
 
         private void CreateWebApplication() {
+            url = System.Environment.GetEnvironmentVariable("ASPNETCORE_URLS");
+
             var builder = WebApplication.CreateBuilder(args);
             builder.Host.UseSerilog(Log.Logger);
 
@@ -78,8 +82,7 @@ namespace Cortside.AspNetCore.Builder {
 
             app.Logger.LogInformation($"Service {app.Environment.ApplicationName} started with environment {app.Environment.EnvironmentName}");
             app.Logger.LogInformation($"args: [{string.Join(",", args)}]");
-            var urls = System.Environment.GetEnvironmentVariable("ASPNETCORE_URLS");
-            app.Logger.LogInformation($"ASPNETCORE_URLS: {urls}");
+            app.Logger.LogInformation($"ASPNETCORE_URLS: {url}");
             app.Lifetime.ApplicationStarted.Register(() => LogAddresses(app.Services, app.Logger));
 
             webApplication = app;
