@@ -11,12 +11,12 @@ namespace Cortside.AspNetCore.Auditable.Entities {
 
         [ForeignKey("CreateSubjectId")]
         [Required]
-        public Subject CreatedSubject { get; set; }
+        public virtual Subject CreatedSubject { get; set; }
 
         public DateTime LastModifiedDate { get; set; }
 
         [ForeignKey("LastModifiedSubjectId")]
         [Required]
-        public Subject LastModifiedSubject { get; set; }
+        public virtual Subject LastModifiedSubject { get; set; }
     }
 }
