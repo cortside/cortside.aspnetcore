@@ -12,9 +12,9 @@ namespace Cortside.AspNetCore.EntityFramework {
             return Database.BeginTransactionAsync(System.Data.IsolationLevel.ReadUncommitted);
         }
 
-        public IUnitOfWork BeginNoTracking() {
+        public IDbContextTransaction BeginNoTracking() {
             ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-            return this;
+            return new NoOpTransaction();
         }
 
         public Task<IDbContextTransaction> BeginTransactionAsync(System.Data.IsolationLevel isolationLevel) {
