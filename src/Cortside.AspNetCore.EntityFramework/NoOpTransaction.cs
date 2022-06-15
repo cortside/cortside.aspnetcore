@@ -26,11 +26,12 @@ namespace Cortside.AspNetCore.EntityFramework {
         }
 
         public void Rollback() {
-            throw new NotImplementedException();
+            // Method intentionally left empty.
         }
 
         public Task RollbackAsync(CancellationToken cancellationToken = default) {
-            throw new NotImplementedException();
+            // Method intentionally left empty.
+            return Task.CompletedTask;
         }
     }
 }
