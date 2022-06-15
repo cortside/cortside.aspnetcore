@@ -1,3 +1,7 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/pmatnuh14eo9sqe3?svg=true)](https://ci.appveyor.com/project/cortside/cortside-aspnetcore)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cortside_cortside.aspnetcore&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=cortside_cortside.aspnetcore)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=cortside_cortside.aspnetcore&metric=coverage)](https://sonarcloud.io/summary/new_code?id=cortside_cortside.aspnetcore)
+
 # Cortside.AspNetCore
 
 ## Cortside.AspNetCore
