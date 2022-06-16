@@ -12,18 +12,19 @@ namespace Cortside.AspNetCore.EntityFramework {
             return Database.BeginTransactionAsync(System.Data.IsolationLevel.ReadUncommitted);
         }
 
-        public IUnitOfWork BeginNoTracking() {
-            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-            return this;
+        public IDbContextTransaction BeginNoTracking() {
+            return new NoTrackingTransaction(ChangeTracker, new NoOpTransaction());
         }
 
-        public Task<IDbContextTransaction> BeginTransactionAsync(System.Data.IsolationLevel isolationLevel) {
+        public async Task<IDbContextTransaction> BeginTransactionAsync(System.Data.IsolationLevel isolationLevel) {
+            var tx = await Database.BeginTransactionAsync(isolationLevel);
+
             // default to no tracking when reading uncommitted with assumption/expectation that data will be used in read only fashion
             if (isolationLevel == System.Data.IsolationLevel.ReadUncommitted) {
-                ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+                return new NoTrackingTransaction(ChangeTracker, tx);
             }
 
-            return Database.BeginTransactionAsync(isolationLevel);
+            return tx;
         }
 
         public IExecutionStrategy CreateExecutionStrategy() {
