@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Cortside.AspNetCore.EntityFramework {
     public class NoOpTransaction : IDbContextTransaction {
-        public Guid TransactionId => throw new NotImplementedException();
+        public Guid TransactionId { get; } = Guid.NewGuid();
 
         public void Commit() {
             // Method intentionally left empty.
