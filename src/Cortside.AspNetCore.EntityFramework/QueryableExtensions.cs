@@ -5,8 +5,8 @@ using System.Reflection;
 
 namespace Cortside.AspNetCore.EntityFramework {
     public static class QueryableExtensions {
-        public static IQueryable<T> ToPagedQuery<T>(this IQueryable<T> query, int page, int pageSize) {
-            return query.Skip(pageSize * (page - 1)).Take(pageSize);
+        public static IQueryable<T> ToPagedQuery<T>(this IQueryable<T> query, int page, int pageSize, int skipAdditionalRowsCount = 0) {
+            return query.Skip(pageSize * (page - 1) + skipAdditionalRowsCount).Take(pageSize);
         }
 
         public static IOrderedQueryable<TSource> OrderBy<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, bool orderByDescending) {

@@ -9,7 +9,7 @@ namespace Cortside.AspNetCore.EntityFramework {
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
         Task<IDbContextTransaction> BeginTransactionAsync(IsolationLevel isolationLevel);
         Task<IDbContextTransaction> BeginReadUncommitedAsync();
-        IUnitOfWork BeginNoTracking();
+        IDbContextTransaction BeginNoTracking();
         IExecutionStrategy CreateExecutionStrategy();
     }
 }
