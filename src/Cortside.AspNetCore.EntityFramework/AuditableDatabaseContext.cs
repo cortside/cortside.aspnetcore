@@ -3,20 +3,23 @@ using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Cortside.AspNetCore.Auditable;
 using Cortside.AspNetCore.Auditable.Entities;
 using Cortside.Common.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Cortside.AspNetCore.EntityFramework {
-    public class AuditableDatabaseContext : DbContext {
+    public class AuditableDatabaseContext<TSubject> : DbContext where TSubject : Subject {
         private readonly ISubjectPrincipal subjectPrincipal;
+        private readonly ISubjectFactory<TSubject> _subjectFactory;
 
-        public AuditableDatabaseContext(DbContextOptions options, ISubjectPrincipal subjectPrincipal) : base(options) {
+        public AuditableDatabaseContext(DbContextOptions options, ISubjectPrincipal subjectPrincipal, ISubjectFactory<TSubject> subjectFactory) : base(options) {
             this.subjectPrincipal = subjectPrincipal;
+            _subjectFactory = subjectFactory;
         }
 
-        public DbSet<Subject> Subjects { get; set; }
+        public DbSet<TSubject> Subjects { get; set; }
 
         public Task<int> SaveChangesAsync() {
             SetAuditableEntityValues();
@@ -74,7 +77,7 @@ namespace Cortside.AspNetCore.EntityFramework {
 
             // create new subject if one is not found
             if (subject == null) {
-                subject = new Subject(subjectId, subjectPrincipal.GivenName, subjectPrincipal.FamilyName, subjectPrincipal.Name, subjectPrincipal.UserPrincipalName);
+                subject = _subjectFactory.CreateSubject(subjectPrincipal);
                 Subjects.Add(subject);
             }
             return subject;
