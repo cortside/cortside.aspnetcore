@@ -100,5 +100,21 @@ namespace Cortside.AspNetCore {
 
             return services;
         }
+
+        public static IServiceCollection AddApiDefaults(this IServiceCollection services) {
+            // add response compression using gzip and brotli compression
+            services.AddDefaultResponseCompression(CompressionLevel.Optimal);
+
+            services.AddResponseCaching();
+            services.AddMemoryCache();
+            services.AddDistributedMemoryCache();
+            services.AddCors();
+            services.AddOptions();
+            services.AddApiControllers();
+
+            // warm all the serivces up, can chain these together if needed
+            services.AddStartupTask<WarmupServicesStartupTask>();
+
+            return services;
+        }
     }
-}
