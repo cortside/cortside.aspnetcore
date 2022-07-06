@@ -118,3 +118,4 @@ namespace Cortside.AspNetCore {
             return services;
         }
     }
+}
