@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
 using Serilog;
 
 namespace Cortside.AspNetCore.Builder {
@@ -21,6 +22,10 @@ namespace Cortside.AspNetCore.Builder {
         public static WebApiBuilder CreateBuilder(string[] args) {
             return new WebApiBuilder(args);
         }
+
+        public WebApplication WebApplication => builder.WebApplication;
+
+        public IServiceProvider Services => builder.WebApplication.Services;
 
         /// <summary>
         /// Starts the webapi
