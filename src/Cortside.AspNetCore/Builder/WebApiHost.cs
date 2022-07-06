@@ -8,10 +8,10 @@ namespace Cortside.AspNetCore.Builder {
     /// <summary>
     /// Adapter class for WebApplication that will start up with common configuration
     /// </summary>
-    public class WebApi {
+    public class WebApiHost {
         private readonly WebApiBuilder builder;
 
-        public WebApi(WebApiBuilder builder) {
+        public WebApiHost(WebApiBuilder builder) {
             this.builder = builder;
         }
 
