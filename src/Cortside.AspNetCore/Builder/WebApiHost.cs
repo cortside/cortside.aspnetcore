@@ -1,16 +1,17 @@
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
 using Serilog;
 
 namespace Cortside.AspNetCore.Builder {
     /// <summary>
     /// Adapter class for WebApplication that will start up with common configuration
     /// </summary>
-    public class WebApi {
+    public class WebApiHost {
         private readonly WebApiBuilder builder;
 
-        public WebApi(WebApiBuilder builder) {
+        public WebApiHost(WebApiBuilder builder) {
             this.builder = builder;
         }
 
@@ -21,6 +22,10 @@ namespace Cortside.AspNetCore.Builder {
         public static WebApiBuilder CreateBuilder(string[] args) {
             return new WebApiBuilder(args);
         }
+
+        public WebApplication WebApplication => builder.WebApplication;
+
+        public IServiceProvider Services => builder.WebApplication.Services;
 
         /// <summary>
         /// Starts the webapi
