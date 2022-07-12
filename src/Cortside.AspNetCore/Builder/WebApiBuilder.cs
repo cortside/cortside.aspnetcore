@@ -116,7 +116,7 @@ namespace Cortside.AspNetCore.Builder {
             return this;
         }
 
-        public WebApi Build() {
+        public WebApiHost Build() {
             config ??= GetConfiguration();
 
             startup?.UseConfiguration(config);
@@ -132,7 +132,7 @@ namespace Cortside.AspNetCore.Builder {
             Log.Logger = loggerConfiguration.CreateLogger();
 
             CreateWebApplication();
-            return new WebApi(this);
+            return new WebApiHost(this);
         }
 
         private static bool GetExecutingIsEntryAssembly() {

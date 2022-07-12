@@ -31,7 +31,7 @@ namespace Cortside.AspNetCore.EntityFramework {
         }
 
         public async Task CommitAsync(CancellationToken cancellationToken = default) {
-            await innerTx.CommitAsync(cancellationToken);
+            await innerTx.CommitAsync(cancellationToken).ConfigureAwait(false);
             tracker.QueryTrackingBehavior = initialQueryTrackingBehavior;
         }
 
@@ -41,7 +41,7 @@ namespace Cortside.AspNetCore.EntityFramework {
         }
 
         public async ValueTask DisposeAsync() {
-            await innerTx.DisposeAsync();
+            await innerTx.DisposeAsync().ConfigureAwait(false);
             tracker.QueryTrackingBehavior = initialQueryTrackingBehavior;
         }
 
@@ -51,7 +51,7 @@ namespace Cortside.AspNetCore.EntityFramework {
         }
 
         public async Task RollbackAsync(CancellationToken cancellationToken = default) {
-            await innerTx.RollbackAsync(cancellationToken);
+            await innerTx.RollbackAsync(cancellationToken).ConfigureAwait(false);
             tracker.QueryTrackingBehavior = initialQueryTrackingBehavior;
         }
     }
