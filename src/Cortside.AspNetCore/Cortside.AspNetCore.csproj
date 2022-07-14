@@ -10,9 +10,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Cortside.Bowdlerizer" Version="1.0.17" />
-    <PackageReference Include="Cortside.Common.BootStrap" Version="1.1.272" />
-    <PackageReference Include="Cortside.Common.Json" Version="1.1.272" />
-    <PackageReference Include="Cortside.Common.Messages" Version="1.1.272" />
+    <PackageReference Include="Cortside.Common.BootStrap" Version="1.1.278" />
+    <PackageReference Include="Cortside.Common.Json" Version="1.1.278" />
+    <PackageReference Include="Cortside.Common.Messages" Version="1.1.278" />
     <PackageReference Include="Cortside.Health" Version="1.0.51" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.2.0" />
