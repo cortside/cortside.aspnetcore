@@ -75,8 +75,8 @@ deploy:
   api_key:
     secure: NK6JEky2i7+06Ij+PlJX7X0xlKT4fg2zDIFP5fiFSy6EqxcIYThFBkzzqpQTUnsO
 
-notifications:
-  - provider: Slack
-    auth_token:
-      secure: FVXgg84ZoPEr5+K8mFmTTkfqwoP0M0jKuokVHfP4g5yDAE1AU3mIrGAfyPXFfu8tlwo3Migsg92SYdhZCVeXRp4CFCbv3IrfH1wDQINi00INR3C7GPkD8Y0QYpXGdCTfeHf9GKDin4nRtVahRnmPjw==
-    channel: '#appveyor'
+#notifications:
+#  - provider: Slack
+#    auth_token:
+#      secure: FVXgg84ZoPEr5+K8mFmTTkfqwoP0M0jKuokVHfP4g5yDAE1AU3mIrGAfyPXFfu8tlwo3Migsg92SYdhZCVeXRp4CFCbv3IrfH1wDQINi00INR3C7GPkD8Y0QYpXGdCTfeHf9GKDin4nRtVahRnmPjw==
+#    channel: '#appveyor'
