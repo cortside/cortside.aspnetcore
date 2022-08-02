@@ -68,7 +68,6 @@ namespace Cortside.AspNetCore {
                     Location = ResponseCacheLocation.Any
                 });
                 options.Filters.Add<MessageExceptionResponseFilter>();
-                options.Filters.Add<UnhandledExceptionFilter>();
                 options.Conventions.Add(new ApiControllerVersionConvention());
             })
                 .ConfigureApiBehaviorOptions(options => {
