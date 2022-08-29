@@ -61,46 +61,46 @@ namespace Cortside.AspNetCore {
             return services;
         }
 
-        public static IServiceCollection AddApiControllers(this IServiceCollection services) {
-            services.AddControllers(options => {
+        public static IMvcBuilder AddApiControllers(this IServiceCollection services) {
+            var mvcBuilder = services.AddControllers(options => {
                 options.CacheProfiles.Add("Default", new CacheProfile {
                     Duration = 30,
                     Location = ResponseCacheLocation.Any
                 });
                 options.Filters.Add<MessageExceptionResponseFilter>();
                 options.Conventions.Add(new ApiControllerVersionConvention());
-            })
-                .ConfigureApiBehaviorOptions(options => {
-                    options.InvalidModelStateResponseFactory = context => {
-                        var result = new ValidationFailedResult(context.ModelState);
-                        result.ContentTypes.Add(MediaTypeNames.Application.Json);
-                        return result;
-                    };
-                })
-                .AddNewtonsoftJson(options => {
-                    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                    options.SerializerSettings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
+            });
+            mvcBuilder.ConfigureApiBehaviorOptions(options => {
+                options.InvalidModelStateResponseFactory = context => {
+                    var result = new ValidationFailedResult(context.ModelState);
+                    result.ContentTypes.Add(MediaTypeNames.Application.Json);
+                    return result;
+                };
+            });
+            mvcBuilder.AddNewtonsoftJson(options => {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                options.SerializerSettings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
 
-                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                    options.SerializerSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
-                    options.SerializerSettings.NullValueHandling = NullValueHandling.Include;
-                    options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Include;
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                options.SerializerSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
+                options.SerializerSettings.NullValueHandling = NullValueHandling.Include;
+                options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Include;
 
-                    options.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
-                    options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
-                    options.SerializerSettings.DateParseHandling = DateParseHandling.DateTimeOffset;
-                    options.SerializerSettings.Converters.Add(new IsoTimeSpanConverter());
-                })
-                .PartManager.ApplicationParts.Add(new AssemblyPart(typeof(HealthController).Assembly));
+                options.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+                options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+                options.SerializerSettings.DateParseHandling = DateParseHandling.DateTimeOffset;
+                options.SerializerSettings.Converters.Add(new IsoTimeSpanConverter());
+            });
+            mvcBuilder.PartManager.ApplicationParts.Add(new AssemblyPart(typeof(HealthController).Assembly));
 
             services.AddRouting(options => {
                 options.LowercaseUrls = true;
             });
 
-            return services;
+            return mvcBuilder;
         }
 
-        public static IServiceCollection AddApiDefaults(this IServiceCollection services) {
+        public static IMvcBuilder AddApiDefaults(this IServiceCollection services) {
             // add response compression using gzip and brotli compression
             services.AddDefaultResponseCompression(CompressionLevel.Optimal);
 
@@ -109,12 +109,12 @@ namespace Cortside.AspNetCore {
             services.AddDistributedMemoryCache();
             services.AddCors();
             services.AddOptions();
-            services.AddApiControllers();
+            var mvcBuilder = services.AddApiControllers();
 
             // warm all the serivces up, can chain these together if needed
             services.AddStartupTask<WarmupServicesStartupTask>();
 
-            return services;
+            return mvcBuilder;
         }
     }
 }
