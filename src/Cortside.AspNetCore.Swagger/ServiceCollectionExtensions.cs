@@ -37,7 +37,6 @@ namespace Cortside.AspNetCore.Swagger {
                 c.OperationFilter<RemoveVersionFromParameter>();
                 c.OperationFilter<AuthorizeOperationFilter>();
                 c.DocumentFilter<ReplaceVersionWithExactValueInPath>();
-                c.IgnoreObsoleteActions();
                 c.TagActionsBy(c => new[] { c.RelativePath });
 
                 var identityServerConfiguration = configuration.GetSection("IdentityServer").Get<IdentityServerConfiguration>();
