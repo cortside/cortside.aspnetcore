@@ -46,7 +46,7 @@ namespace Cortside.AspNetCore.ApplicationInsights {
         /// </summary>
         /// <param name="services"></param>
         /// <param name="cloudRoleName"></param>
-        /// <param name="instrumentationKey"></param>
+        /// <param name="options"></param>
         /// <returns></returns>
         public static IServiceCollection AddApplicationInsights(this IServiceCollection services, string cloudRoleName, ApplicationInsightsServiceOptions options) {
             Guard.From.NullOrWhitespace(cloudRoleName, nameof(cloudRoleName));
