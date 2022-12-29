@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using Cortside.AspNetCore.Enrichers;
 using Cortside.Bowdlerizer;
 using Cortside.Health.Models;
 using Microsoft.AspNetCore.Builder;
@@ -144,25 +145,26 @@ namespace Cortside.AspNetCore.Builder {
         }
 
         private LoggerConfiguration GetLoggerConfiguration(BuildModel build, string service, Bowdlerizer.Bowdlerizer bowdlerizer) {
-            var loggerConfiguration = new LoggerConfiguration()
+            var configuration = new LoggerConfiguration()
                 .ReadFrom.Configuration(config)
                 .Enrich.FromLogContext()
                 .Enrich.WithProperty("Environment", Environment)
                 .Enrich.WithProperty("Service", service)
                 .Enrich.WithProperty("BuildVersion", build.Version)
                 .Enrich.WithProperty("BuildTag", build.Tag)
-                .Enrich.WithBowdlerizer(bowdlerizer);
+                .Enrich.WithBowdlerizer(bowdlerizer)
+                .Enrich.With<OperationIdEnricher>();
 
             var serverUrl = config["Seq:ServerUrl"];
             if (!string.IsNullOrWhiteSpace(serverUrl)) {
-                loggerConfiguration.WriteTo.Seq(serverUrl);
+                configuration.WriteTo.Seq(serverUrl);
             }
             var logFile = config["LogFile:Path"];
             if (!string.IsNullOrWhiteSpace(logFile)) {
-                loggerConfiguration.WriteTo.File(logFile);
+                configuration.WriteTo.File(logFile);
             }
 
-            return loggerConfiguration;
+            return configuration;
         }
     }
 }
