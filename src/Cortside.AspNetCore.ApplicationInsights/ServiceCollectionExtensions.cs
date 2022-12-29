@@ -54,7 +54,7 @@ namespace Cortside.AspNetCore.ApplicationInsights {
             // TODO: add logging stating missing connection string or instrumentation key
 
             services.AddApplicationInsightsTelemetry(o => {
-                o = options;
+                o.ConnectionString = options.ConnectionString;
                 o.EnableAdaptiveSampling = false;
                 o.EnableActiveTelemetryConfigurationSetup = true;
             });

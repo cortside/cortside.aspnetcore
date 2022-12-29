@@ -118,6 +118,9 @@ namespace Cortside.AspNetCore.Builder {
         }
 
         public WebApiHost Build() {
+            // TODO: use bootstraplogger
+            //https://nblumhardt.com/2020/10/bootstrap-logger/
+
             config ??= GetConfiguration();
 
             startup?.UseConfiguration(config);
