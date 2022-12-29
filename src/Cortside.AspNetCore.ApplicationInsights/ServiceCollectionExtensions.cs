@@ -30,7 +30,7 @@ namespace Cortside.AspNetCore.ApplicationInsights {
         [Obsolete("Use of InstrumentationKey has been obsoleted, use override with ")]
         public static IServiceCollection AddApplicationInsights(this IServiceCollection services, string cloudRoleName, string instrumentationKey) {
             Guard.From.NullOrWhitespace(cloudRoleName, nameof(cloudRoleName));
-            Guard.From.Null(instrumentationKey, nameof(instrumentationKey));
+            // TODO: add logging stating missing connection string or instrumentation key
 
             services.AddApplicationInsightsTelemetry(o => {
                 o.InstrumentationKey = instrumentationKey;
@@ -51,7 +51,7 @@ namespace Cortside.AspNetCore.ApplicationInsights {
         public static IServiceCollection AddApplicationInsights(this IServiceCollection services, string cloudRoleName, ApplicationInsightsServiceOptions options) {
             Guard.From.NullOrWhitespace(cloudRoleName, nameof(cloudRoleName));
             Guard.From.Null(options, nameof(options));
-            Guard.From.NullOrWhitespace(options.ConnectionString, nameof(options.ConnectionString));
+            // TODO: add logging stating missing connection string or instrumentation key
 
             services.AddApplicationInsightsTelemetry(o => {
                 o = options;
