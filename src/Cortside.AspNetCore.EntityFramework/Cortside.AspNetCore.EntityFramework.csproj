@@ -9,7 +9,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Cortside.Common.Security" Version="1.1.296" />
+		<PackageReference Include="Cortside.Common.Security" Version="1.2.318" />
 		<PackageReference Include="Cortside.DomainEvent.EntityFramework" Version="1.1.227" />
 		<PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.12" />
