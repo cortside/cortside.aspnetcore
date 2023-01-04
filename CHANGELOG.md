@@ -1,5 +1,38 @@
-# Release 1.0
+# Release 1.2
 
+|Commit|Date|Author|Message|
+|---|---|---|---|
+| e9eaacd | <span style="white-space:nowrap;">2022-07-13</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  [feature/BOT-20220713] updated nuget packages
+| c25f868 | <span style="white-space:nowrap;">2022-07-13</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  handle git flow named branches
+| 238d8cd | <span style="white-space:nowrap;">2022-07-13</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  handle git flow named branches
+| 02e7244 | <span style="white-space:nowrap;">2022-07-13</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  handle git flow named branches
+| b8e9b67 | <span style="white-space:nowrap;">2022-07-13</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge pull request #9 from cortside/feature/BOT-20220713
+| aa0de6c | <span style="white-space:nowrap;">2022-07-13</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  [feature/BOT-20220713] updated nuget packages
+| 8d2b1eb | <span style="white-space:nowrap;">2022-07-29</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  add exception handler to complete task so that correlationId still happens in response headers
+| 72cc454 | <span style="white-space:nowrap;">2022-07-29</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge branch 'develop' of github.com:cortside/Cortside.AspNetCore into develop
+| 56c4c77 | <span style="white-space:nowrap;">2022-08-02</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  remove registration of unneeded filter
+| a10950e | <span style="white-space:nowrap;">2022-08-02</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  add sonar to build
+| bb1a562 | <span style="white-space:nowrap;">2022-08-02</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  add sonar to build
+| 4a8d8ff | <span style="white-space:nowrap;">2022-08-02</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  add sonar to build
+| fc4a83b | <span style="white-space:nowrap;">2022-08-29</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  have AddApiDefaults and AddApiControllers return IMvcBuilder so that other builder related things are possible
+| af4b3b6 | <span style="white-space:nowrap;">2022-09-26</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  can't ignore obsolete actions or it will show as breaking change with swagger diff when it's not really yet
+| 965b637 | <span style="white-space:nowrap;">2022-10-10</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  add validation of configuration for AddAccessControl along with tests
+| ef59cdc | <span style="white-space:nowrap;">2022-12-21</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update nuget api key
+| 34dfb33 | <span style="white-space:nowrap;">2022-12-28</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update nuget packages; use connectionstring for applicationInsights configuration
+| 1251660 | <span style="white-space:nowrap;">2022-12-28</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update nuget packages; use connectionstring for applicationInsights configuration
+| c809243 | <span style="white-space:nowrap;">2022-12-28</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update nuget packages; use connectionstring for applicationInsights configuration
+| 831631e | <span style="white-space:nowrap;">2022-12-28</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update nuget packages; use connectionstring for applicationInsights configuration
+| 49cba9c | <span style="white-space:nowrap;">2022-12-29</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  add prebuild
+| 14dc3da | <span style="white-space:nowrap;">2023-01-02</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  [feature/BOT-20230102] updated nuget packages
+| 162677d | <span style="white-space:nowrap;">2023-01-03</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update helper scripts; update nuget packages
+| ecb640d | <span style="white-space:nowrap;">2023-01-03</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update version in prep for next release
+| 57bc332 | <span style="white-space:nowrap;">2023-01-03</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  (origin/feature/BOT-20230102, feature/BOT-20230102) update to vs2022 for .net 6 builds
+| 20b10db | <span style="white-space:nowrap;">2023-01-03</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge pull request #10 from cortside/feature/BOT-20230102
+| bc6beeb | <span style="white-space:nowrap;">2023-01-04</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update to latest nuget packages
+| a7936d2 | <span style="white-space:nowrap;">2023-01-04</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  (HEAD -> release/1.2, origin/develop, origin/HEAD, develop) initial changelog
+****
+
+# Release 1.0
 |Commit|Date|Author|Message|
 |---|---|---|---|
 | 8301d90 | <span style="white-space:nowrap;">2022-04-18</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Initial commit
