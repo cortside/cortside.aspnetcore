@@ -56,7 +56,7 @@ namespace Cortside.AspNetCore.Builder {
                 Log.Fatal(ex, "Host terminated unexpectedly");
                 return 1;
             } finally {
-                Log.CloseAndFlush();
+                await Log.CloseAndFlushAsync();
             }
         }
     }

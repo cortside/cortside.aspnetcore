@@ -1,4 +1,6 @@
+using System;
 using System.IdentityModel.Tokens.Jwt;
+using Cortside.Common.Validation;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -14,9 +16,17 @@ namespace Cortside.AspNetCore.AccessControl {
         /// <param name="configuration">The configuration.</param>
         /// <returns></returns>
         public static IServiceCollection AddAccessControl(this IServiceCollection services, IConfiguration configuration) {
+            Guard.From.Null(configuration, nameof(configuration));
+            Guard.Against(() => !configuration.GetSection("IdentityServer").Exists(), () => throw new ArgumentException("Configuration section named 'IdentityServer' is missing"));
+            Guard.Against(() => !configuration.GetSection("PolicyServer").Exists(), () => throw new ArgumentException("Configuration section named 'PolicyServer' is missing"));
+
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             var identityServerConfiguration = configuration.GetSection("IdentityServer").Get<IdentityServerConfiguration>();
+            Guard.From.NullOrWhitespace(identityServerConfiguration.Authority, nameof(identityServerConfiguration.Authority), "IdentityServer:Authority is null");
+            Guard.From.NullOrWhitespace(identityServerConfiguration.Authentication?.ClientId, nameof(identityServerConfiguration.Authentication.ClientId), "IdentityServer:Authentication:ClientId is null");
+            Guard.From.NullOrWhitespace(identityServerConfiguration.Authentication?.ClientSecret, nameof(identityServerConfiguration.Authentication.ClientSecret), "IdentityServer:Authentication:ClientSecret is null");
+
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options => {
                     // base-address of your identityserver
