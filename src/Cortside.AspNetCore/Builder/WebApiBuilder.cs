@@ -147,15 +147,15 @@ namespace Cortside.AspNetCore.Builder {
             return calling == entry && entry == executing;
         }
 
-        private LoggerConfiguration GetLoggerConfiguration(BuildModel build, string service, Bowdlerizer.Bowdlerizer bowdlerizer) {
+        private LoggerConfiguration GetLoggerConfiguration(BuildModel build, string serviceName, Bowdlerizer.Bowdlerizer bowdlerizer) {
             var configuration = new LoggerConfiguration()
                 .ReadFrom.Configuration(config)
+                .UsingBowdlerizer(bowdlerizer)
                 .Enrich.FromLogContext()
                 .Enrich.WithProperty("Environment", Environment)
-                .Enrich.WithProperty("Service", service)
+                .Enrich.WithProperty("Service", serviceName)
                 .Enrich.WithProperty("BuildVersion", build.Version)
                 .Enrich.WithProperty("BuildTag", build.Tag)
-                .Enrich.WithBowdlerizer(bowdlerizer)
                 .Enrich.With<OperationIdEnricher>();
 
             var serverUrl = config["Seq:ServerUrl"];
