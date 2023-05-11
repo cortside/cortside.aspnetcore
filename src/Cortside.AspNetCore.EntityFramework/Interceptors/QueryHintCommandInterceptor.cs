@@ -21,7 +21,7 @@ namespace Cortside.AspNetCore.EntityFramework.Interceptors {
             const string prefix = "-- Use option: ";
             var s = command.CommandText.Split(Environment.NewLine).FirstOrDefault();
 
-            if (s?.StartsWith(prefix, StringComparison.Ordinal) == false) {
+            if (!s!.StartsWith(prefix, StringComparison.Ordinal)) {
                 return;
             }
 
