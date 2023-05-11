@@ -134,3 +134,21 @@ Contains the following:
 * UnitOfWorkContext
 * IUnitOfWork
 * QueryableExtensions for getting paged results
+* QueryHintCommandInterceptor
+
+```csharp
+public class DatabaseContext : DbContext {
+    public DbSet<Person> People { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
+        optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=EFQuerying.Tags;Trusted_Connection=True")
+            .AddInterceptors(new QueryHintCommandInterceptor());
+    }
+}
+```
+
+```csharp
+using (var context = new DatabaseContext()) {
+    var results = context.People.TagWith("Use option: RECOMPILE").ToList();
+}
+```

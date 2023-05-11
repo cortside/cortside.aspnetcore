@@ -16,10 +16,10 @@ namespace Cortside.AspNetCore.EntityFramework {
         /// <summary>
         /// the sortParameters must have the next format:
         /// if want to sort by descending use '-', for example: -ColumnName, if want to sort ascending use just the name of the column, for example: ColumnName
-        /// if want to sot by multiple parameters separarate them with a comma, for example ColumnName1,ColumnName2
+        /// if want to sot by multiple parameters separate them with a comma, for example ColumnName1,ColumnName2
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="query">the IQUERABLE send from the persistence class</param>
+        /// <param name="query">the IQUERYABLE send from the persistence class</param>
         /// <param name="sortParameters">the name of the sort parameters</param>
         /// <returns></returns>
         public static IOrderedQueryable<T> ToSortedQuery<T>(this IQueryable<T> query, string sortParameters) {
