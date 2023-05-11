@@ -4,7 +4,7 @@ using Cortside.AspNetCore.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace Cortside.AspNetCore.Auditable.Middleware {
+namespace Cortside.AspNetCore.Middleware {
     public class RequestIpAddressLoggingMiddleware {
         private const string PROPERTY_KEY = "RequestIpAddress";
         private readonly ILogger<RequestIpAddressLoggingMiddleware> logger;

@@ -9,7 +9,7 @@ namespace Cortside.AspNetCore.Common {
             }
 
             var ip = httpContext?.Connection?.RemoteIpAddress?.ToString();
-            if (httpContext?.Request?.Headers?.ContainsKey("REMOTE_ADDR") == true) {
+            if (httpContext!.Request?.Headers?.ContainsKey("REMOTE_ADDR") == true) {
                 ip = httpContext.Request.Headers["REMOTE_ADDR"].ToString();
             }
 
