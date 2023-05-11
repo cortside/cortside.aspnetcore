@@ -13,7 +13,7 @@ namespace Cortside.AspNetCore.EntityFramework {
         /// <param name="services"></param>
         /// <param name="configuration"></param>
         /// <returns></returns>
-        public static IServiceCollection AddDatabaseContext<TInterface, TImplementation>(this IServiceCollection services, IConfigurationRoot configuration)
+        public static IServiceCollection AddDatabaseContext<TInterface, TImplementation>(this IServiceCollection services, IConfiguration configuration)
                 where TImplementation : DbContext, TInterface, IUnitOfWork
                 where TInterface : class {
             services.AddDbContext<TImplementation>(opt => {
