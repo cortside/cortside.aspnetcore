@@ -16,8 +16,26 @@ namespace Cortside.AspNetCore.EntityFramework {
         public static IServiceCollection AddDatabaseContext<TInterface, TImplementation>(this IServiceCollection services, IConfiguration configuration)
                 where TImplementation : DbContext, TInterface, IUnitOfWork
                 where TInterface : class {
+
+            var connectionString = configuration.GetSection("Database").GetValue<string>("ConnectionString");
+            services.AddDatabaseContext<TInterface, TImplementation>(connectionString);
+
+            return services;
+        }
+
+        /// <summary>
+        /// Registers sql server database context with connection string passed in
+        /// </summary>
+        /// <typeparam name="TInterface"></typeparam>
+        /// <typeparam name="TImplementation"></typeparam>
+        /// <param name="services"></param>
+        /// <param name="connectionString"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddDatabaseContext<TInterface, TImplementation>(this IServiceCollection services, string connectionString)
+                where TImplementation : DbContext, TInterface, IUnitOfWork
+                where TInterface : class {
             services.AddDbContext<TImplementation>(opt => {
-                opt.UseSqlServer(configuration.GetSection("Database").GetValue<string>("ConnectionString"),
+                opt.UseSqlServer(connectionString,
                     sqlServerOptionsAction: sqlOptions => {
                         // can not use EnableRetryOnFailure because of the use of user initiated transactions
 
