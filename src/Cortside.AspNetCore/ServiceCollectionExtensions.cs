@@ -116,5 +116,16 @@ namespace Cortside.AspNetCore {
 
             return mvcBuilder;
         }
+
+        public static IServiceCollection AddRestApiClient<TInterface, TImplementation, TConfiguration>(this IServiceCollection services, IConfiguration configuration, string key)
+            where TImplementation : class, TInterface
+            where TInterface : class
+            where TConfiguration : class {
+            var hartConfiguration = configuration.GetSection(key).Get<TConfiguration>();
+            services.AddSingleton(hartConfiguration);
+            services.AddTransient<TInterface, TImplementation>();
+
+            return services;
+        }
     }
 }

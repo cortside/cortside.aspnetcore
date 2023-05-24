@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using Cortside.AspNetCore.AccessControl;
 using Cortside.AspNetCore.Swagger.Filters;
 using Microsoft.Extensions.Configuration;
@@ -12,6 +13,22 @@ namespace Cortside.AspNetCore.Swagger {
     /// Adds swagger with versioning and OpenID Connect configuration using Newtonsoft
     /// </summary>
     public static class ServiceCollectionExtensions {
+        public static IServiceCollection AddSwagger(this IServiceCollection services, IConfiguration configuration, string title, string description, string[] versions) {
+            var apiversions = new List<OpenApiInfo>();
+            foreach (var version in versions) {
+                apiversions.Add(new OpenApiInfo {
+                    Version = version,
+                    Title = title,
+                    Description = description
+                });
+            }
+
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            services.AddSwagger(configuration, xmlFile, apiversions);
+
+            return services;
+        }
+
         public static IServiceCollection AddSwagger(this IServiceCollection services, IConfiguration configuration, string xmlFile, List<OpenApiInfo> versions) {
             services.AddApiVersioning(o => {
                 o.ReportApiVersions = true;
