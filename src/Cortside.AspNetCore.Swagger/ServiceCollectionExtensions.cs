@@ -23,7 +23,7 @@ namespace Cortside.AspNetCore.Swagger {
                 });
             }
 
-            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlFile = $"{Assembly.GetEntryAssembly()?.GetName().Name}.xml";
             services.AddSwagger(configuration, xmlFile, apiversions);
 
             return services;
