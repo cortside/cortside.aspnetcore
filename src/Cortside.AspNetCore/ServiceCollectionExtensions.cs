@@ -3,6 +3,7 @@ using System.IO.Compression;
 using System.Net.Mime;
 using Cortside.AspNetCore.Filters;
 using Cortside.Common.BootStrap;
+using Cortside.Common.Cryptography;
 using Cortside.Common.Json;
 using Cortside.Common.Messages.Filters;
 using Cortside.Common.Messages.Results;
@@ -25,13 +26,15 @@ namespace Cortside.AspNetCore {
         /// <typeparam name="T"></typeparam>
         /// <param name="services">The services.</param>
         /// <returns></returns>
-        public static IServiceCollection AddStartupTask<T>(this IServiceCollection services) where T : class, IStartupTask {
+        public static IServiceCollection AddStartupTask<T>(this IServiceCollection services)
+            where T : class, IStartupTask {
             services.AddTransient<IStartupTask, T>();
             services.AddSingleton(services);
             return services;
         }
 
-        public static IServiceCollection AddBootStrapper<T>(this IServiceCollection services, IConfiguration configuration, Action<BootStrapperOptions> options) where T : BootStrapper, new() {
+        public static IServiceCollection AddBootStrapper<T>(this IServiceCollection services,
+            IConfiguration configuration, Action<BootStrapperOptions> options) where T : BootStrapper, new() {
             services.AddSingleton(configuration);
             var bootstrapper = new T();
 
@@ -41,22 +44,20 @@ namespace Cortside.AspNetCore {
             foreach (var installer in o.Installers) {
                 bootstrapper.AddInstaller(installer);
             }
+
             bootstrapper.InitIoCContainer(configuration as IConfigurationRoot, services);
             return services;
         }
 
-        public static IServiceCollection AddDefaultResponseCompression(this IServiceCollection services, CompressionLevel compressionLevel) {
+        public static IServiceCollection AddDefaultResponseCompression(this IServiceCollection services,
+            CompressionLevel compressionLevel) {
             services.AddResponseCompression(options => {
                 options.EnableForHttps = true;
                 options.Providers.Add<BrotliCompressionProvider>();
                 options.Providers.Add<GzipCompressionProvider>();
             });
-            services.Configure<BrotliCompressionProviderOptions>(options => {
-                options.Level = compressionLevel;
-            });
-            services.Configure<GzipCompressionProviderOptions>(options => {
-                options.Level = compressionLevel;
-            });
+            services.Configure<BrotliCompressionProviderOptions>(options => { options.Level = compressionLevel; });
+            services.Configure<GzipCompressionProviderOptions>(options => { options.Level = compressionLevel; });
 
             return services;
         }
@@ -93,9 +94,7 @@ namespace Cortside.AspNetCore {
             });
             mvcBuilder.PartManager.ApplicationParts.Add(new AssemblyPart(typeof(HealthController).Assembly));
 
-            services.AddRouting(options => {
-                options.LowercaseUrls = true;
-            });
+            services.AddRouting(options => { options.LowercaseUrls = true; });
 
             return mvcBuilder;
         }
@@ -117,13 +116,20 @@ namespace Cortside.AspNetCore {
             return mvcBuilder;
         }
 
-        public static IServiceCollection AddRestApiClient<TInterface, TImplementation, TConfiguration>(this IServiceCollection services, IConfiguration configuration, string key)
+        public static IServiceCollection AddRestApiClient<TInterface, TImplementation, TConfiguration>(
+            this IServiceCollection services, IConfiguration configuration, string key)
             where TImplementation : class, TInterface
             where TInterface : class
             where TConfiguration : class {
             var hartConfiguration = configuration.GetSection(key).Get<TConfiguration>();
             services.AddSingleton(hartConfiguration);
             services.AddTransient<TInterface, TImplementation>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddEncryptionService(this IServiceCollection services, string secret) {
+            services.AddSingleton<IEncryptionService>(new EncryptionService(secret));
 
             return services;
         }
