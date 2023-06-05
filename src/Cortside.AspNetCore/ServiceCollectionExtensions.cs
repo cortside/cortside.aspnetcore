@@ -11,6 +11,7 @@ using Cortside.Health.Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -62,13 +63,13 @@ namespace Cortside.AspNetCore {
             return services;
         }
 
-        public static IMvcBuilder AddApiControllers(this IServiceCollection services) {
+        public static IMvcBuilder AddApiControllers<T>(this IServiceCollection services) where T : IActionFilter {
             var mvcBuilder = services.AddControllers(options => {
                 options.CacheProfiles.Add("Default", new CacheProfile {
                     Duration = 30,
                     Location = ResponseCacheLocation.Any
                 });
-                options.Filters.Add<MessageExceptionResponseFilter>();
+                options.Filters.Add<T>();
                 options.Conventions.Add(new ApiControllerVersionConvention());
             });
             mvcBuilder.ConfigureApiBehaviorOptions(options => {
@@ -99,7 +100,7 @@ namespace Cortside.AspNetCore {
             return mvcBuilder;
         }
 
-        public static IMvcBuilder AddApiDefaults(this IServiceCollection services) {
+        public static IMvcBuilder AddApiDefaults<T>(this IServiceCollection services) where T : IActionFilter {
             // add response compression using gzip and brotli compression
             services.AddDefaultResponseCompression(CompressionLevel.Optimal);
 
@@ -108,10 +109,16 @@ namespace Cortside.AspNetCore {
             services.AddDistributedMemoryCache();
             services.AddCors();
             services.AddOptions();
-            var mvcBuilder = services.AddApiControllers();
+            var mvcBuilder = services.AddApiControllers<T>();
 
             // warm all the serivces up, can chain these together if needed
             services.AddStartupTask<WarmupServicesStartupTask>();
+
+            return mvcBuilder;
+        }
+
+        public static IMvcBuilder AddApiDefaults(this IServiceCollection services) {
+            var mvcBuilder = services.AddApiDefaults<MessageExceptionResponseFilter>();
 
             return mvcBuilder;
         }
