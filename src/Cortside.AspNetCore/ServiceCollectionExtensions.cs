@@ -108,6 +108,10 @@ namespace Cortside.AspNetCore {
         }
 
         public static IMvcBuilder AddApiDefaults<T>(this IServiceCollection services) where T : IActionFilter {
+            return services.AddApiDefaults(new List<Type>() { typeof(T) });
+        }
+
+        public static IMvcBuilder AddApiDefaults(this IServiceCollection services, List<Type> filters) {
             // add response compression using gzip and brotli compression
             services.AddDefaultResponseCompression(CompressionLevel.Optimal);
 
@@ -116,7 +120,7 @@ namespace Cortside.AspNetCore {
             services.AddDistributedMemoryCache();
             services.AddCors();
             services.AddOptions();
-            var mvcBuilder = services.AddApiControllers<T>();
+            var mvcBuilder = services.AddApiControllers(filters);
 
             // warm all the serivces up, can chain these together if needed
             services.AddStartupTask<WarmupServicesStartupTask>();
