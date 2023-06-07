@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -65,10 +66,10 @@ namespace Cortside.AspNetCore {
         }
 
         public static IMvcBuilder AddApiControllers<T>(this IServiceCollection services) where T : IActionFilter {
-            return services.AddApiControllers(new List<Type>() { typeof(T) });
+            return services.AddApiControllers(new List<Type>() { typeof(T) }, new List<IOutputFormatter>());
         }
 
-        public static IMvcBuilder AddApiControllers(this IServiceCollection services, List<Type> filters) {
+        public static IMvcBuilder AddApiControllers(this IServiceCollection services, List<Type> filters, List<IOutputFormatter> outputFormatters) {
             var mvcBuilder = services.AddControllers(options => {
                 options.CacheProfiles.Add("Default", new CacheProfile {
                     Duration = 30,
@@ -76,6 +77,9 @@ namespace Cortside.AspNetCore {
                 });
                 foreach (var filter in filters) {
                     options.Filters.Add(filter);
+                }
+                foreach (var formatter in outputFormatters) {
+                    options.OutputFormatters.Add(formatter);
                 }
                 options.Conventions.Add(new ApiControllerVersionConvention());
             });
@@ -112,6 +116,10 @@ namespace Cortside.AspNetCore {
         }
 
         public static IMvcBuilder AddApiDefaults(this IServiceCollection services, List<Type> filters) {
+            return services.AddApiDefaults(filters, new List<IOutputFormatter>());
+        }
+
+        public static IMvcBuilder AddApiDefaults(this IServiceCollection services, List<Type> filters, List<IOutputFormatter> outputFormatters) {
             // add response compression using gzip and brotli compression
             services.AddDefaultResponseCompression(CompressionLevel.Optimal);
 
@@ -120,7 +128,7 @@ namespace Cortside.AspNetCore {
             services.AddDistributedMemoryCache();
             services.AddCors();
             services.AddOptions();
-            var mvcBuilder = services.AddApiControllers(filters);
+            var mvcBuilder = services.AddApiControllers(filters, outputFormatters);
 
             // warm all the serivces up, can chain these together if needed
             services.AddStartupTask<WarmupServicesStartupTask>();
