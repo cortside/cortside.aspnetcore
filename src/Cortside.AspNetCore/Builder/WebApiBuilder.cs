@@ -62,7 +62,7 @@ namespace Cortside.AspNetCore.Builder {
             builder.WebHost.UseConfiguration(config);
             builder.WebHost.UseShutdownTimeout(TimeSpan.FromSeconds(10));
 
-            builder.WebHost.UseKestrel();
+            builder.WebHost.UseKestrel(o => o.AddServerHeader = false);
             builder.WebHost.ConfigureKestrel(options => {
                 options.ConfigureEndpointDefaults(listenOptions => {
                 });

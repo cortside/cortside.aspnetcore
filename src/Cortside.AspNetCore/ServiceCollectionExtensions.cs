@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO.Compression;
 using System.Net.Mime;
 using Cortside.AspNetCore.Filters;
@@ -64,12 +65,18 @@ namespace Cortside.AspNetCore {
         }
 
         public static IMvcBuilder AddApiControllers<T>(this IServiceCollection services) where T : IActionFilter {
+            return services.AddApiControllers(new List<Type>() { typeof(T) });
+        }
+
+        public static IMvcBuilder AddApiControllers(this IServiceCollection services, List<Type> filters) {
             var mvcBuilder = services.AddControllers(options => {
                 options.CacheProfiles.Add("Default", new CacheProfile {
                     Duration = 30,
                     Location = ResponseCacheLocation.Any
                 });
-                options.Filters.Add<T>();
+                foreach (var filter in filters) {
+                    options.Filters.Add(filter);
+                }
                 options.Conventions.Add(new ApiControllerVersionConvention());
             });
             mvcBuilder.ConfigureApiBehaviorOptions(options => {
