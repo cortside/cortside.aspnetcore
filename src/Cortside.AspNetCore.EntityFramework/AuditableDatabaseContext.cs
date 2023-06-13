@@ -12,28 +12,28 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cortside.AspNetCore.EntityFramework {
     public class AuditableDatabaseContext<TSubject> : DbContext where TSubject : Subject {
         private readonly ISubjectPrincipal subjectPrincipal;
-        private readonly ISubjectFactory<TSubject> _subjectFactory;
+        private readonly ISubjectFactory<TSubject> subjectFactory;
 
         public AuditableDatabaseContext(DbContextOptions options, ISubjectPrincipal subjectPrincipal, ISubjectFactory<TSubject> subjectFactory) : base(options) {
             this.subjectPrincipal = subjectPrincipal;
-            _subjectFactory = subjectFactory;
+            this.subjectFactory = subjectFactory;
         }
 
         public DbSet<TSubject> Subjects { get; set; }
 
         public async Task<int> SaveChangesAsync() {
-            await SetAuditableEntityValues();
-            return await base.SaveChangesAsync(default);
+            await SetAuditableEntityValuesAsync();
+            return await base.SaveChangesAsync(default).ConfigureAwait(false);
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) {
-            await SetAuditableEntityValues();
-            return await base.SaveChangesAsync(true, cancellationToken);
+            await SetAuditableEntityValuesAsync();
+            return await base.SaveChangesAsync(true, cancellationToken).ConfigureAwait(false);
         }
 
         public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default) {
-            await SetAuditableEntityValues();
-            return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+            await SetAuditableEntityValuesAsync();
+            return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -42,12 +42,12 @@ namespace Cortside.AspNetCore.EntityFramework {
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
         public override int SaveChanges() {
-            throw new NotImplementedException("intentially not implemented, use Async methods");
+            throw new NotImplementedException("intentionally not implemented, use Async methods");
         }
 
-        private async Task SetAuditableEntityValues() {
+        private async Task SetAuditableEntityValuesAsync() {
             // check for subject in subjects set and either create or get to attach to AudibleEntity
-            var updatingSubject = await GetCurrentSubject();
+            var updatingSubject = await GetCurrentSubjectAsync();
             ChangeTracker.DetectChanges();
             var modified = ChangeTracker.Entries().Where(x => x.Entity is AuditableEntity && (x.State == EntityState.Modified || x.State == EntityState.Added));
             var added = ChangeTracker.Entries().Where(x => x.Entity is AuditableEntity && x.State == EntityState.Added);
@@ -64,7 +64,7 @@ namespace Cortside.AspNetCore.EntityFramework {
             }
 #pragma warning restore S3267 // Loops should be simplified with "LINQ" expressions
 
-            await OnBeforeSaveChanges(updatingSubject);
+            await OnBeforeSaveChangesAsync(updatingSubject);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace Cortside.AspNetCore.EntityFramework {
         /// This method can be used to save way that SaveChangesAsync could have been
         /// </remarks>
         /// <returns></returns>
-        protected virtual Task OnBeforeSaveChanges(Subject updatingSubject) {
+        protected virtual Task OnBeforeSaveChangesAsync(Subject updatingSubject) {
             return Task.CompletedTask;
         }
 
@@ -82,18 +82,18 @@ namespace Cortside.AspNetCore.EntityFramework {
         /// Gets or creates the current subject record.
         /// </summary>
         /// <returns></returns>
-        private async Task<Subject> GetCurrentSubject() {
+        private async Task<Subject> GetCurrentSubjectAsync() {
             var subjectId = Guid.Parse(subjectPrincipal.SubjectId);
 
             var subject = Subjects.Local.FirstOrDefault(s => s.SubjectId == subjectId);
-            subject ??= await Subjects.FirstOrDefaultAsync(s => s.SubjectId == subjectId);
+            subject ??= await Subjects.FirstOrDefaultAsync(s => s.SubjectId == subjectId).ConfigureAwait(false);
 
             if (subject != null) {
                 return subject;
             }
 
             // create new subject if one is not found
-            subject = _subjectFactory.CreateSubject(subjectPrincipal);
+            subject = subjectFactory.CreateSubject(subjectPrincipal);
             Subjects.Add(subject);
             return subject;
         }
@@ -126,7 +126,7 @@ namespace Cortside.AspNetCore.EntityFramework {
             }
         }
 
-        public static void SetCascadeDelete(ModelBuilder builder) {
+        protected static void SetCascadeDelete(ModelBuilder builder) {
             var fks = builder.Model.GetEntityTypes().SelectMany(t => t.GetDeclaredForeignKeys());
             foreach (var fk in fks) {
                 fk.DeleteBehavior = DeleteBehavior.NoAction;
