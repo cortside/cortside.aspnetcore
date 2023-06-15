@@ -1,5 +1,41 @@
-# Release 1.2
+# Release 1.3
 
+|Commit|Date|Author|Message|
+|---|---|---|---|
+| 1883d1b | <span style="white-space:nowrap;">2023-01-04</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update version
+| fd1a71c | <span style="white-space:nowrap;">2023-01-09</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge branch 'master' into develop
+| e7289d3 | <span style="white-space:nowrap;">2023-02-16</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge branch 'master' into develop
+| 7948ac9 | <span style="white-space:nowrap;">2023-02-16</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  add dto classes to go with auditable entity classes
+| 3e9c1a3 | <span style="white-space:nowrap;">2023-02-16</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge branch 'master' into develop
+| 77901a3 | <span style="white-space:nowrap;">2023-03-01</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  [SVC-1237] use new LoggerConfiguration extension method that has more setup for bowdlerizer
+| a9994b1 | <span style="white-space:nowrap;">2023-03-01</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  [SVC-1237] use previous build image
+| 68ad7cb | <span style="white-space:nowrap;">2023-03-06</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  (origin/SVC-1237, SVC-1237) [SVC-1237] update to use merged serilog.bowdlerizer
+| 28965b6 | <span style="white-space:nowrap;">2023-03-06</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge pull request #12 from cortside/SVC-1237
+| 5697de8 | <span style="white-space:nowrap;">2023-04-10</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  add entity comments for data dictionary
+| 10477b1 | <span style="white-space:nowrap;">2023-04-11</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  [ARC-120] add new logging middleware and app insights telementy initializer for logging request ip address
+| 468a7a2 | <span style="white-space:nowrap;">2023-05-11</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  [ARC-136] add ef core interceptor to add query hints
+| 9a32184 | <span style="white-space:nowrap;">2023-05-11</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  (origin/ARC-136, ARC-136) [ARC-136] add ef core interceptor to add query hints
+| c3118a3 | <span style="white-space:nowrap;">2023-05-11</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge pull request #13 from cortside/ARC-136
+| 984ea18 | <span style="white-space:nowrap;">2023-05-11</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  [ARC-136] add service colleciton extention method to register database context
+| 0fdf15f | <span style="white-space:nowrap;">2023-05-11</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  [ARC-136] add service colleciton extention method to register database context
+| 66a3286 | <span style="white-space:nowrap;">2023-05-11</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  [ARC-136] add service colleciton extention method to register database context
+| fe28a85 | <span style="white-space:nowrap;">2023-05-24</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  add additional extention methods to make registrations easier
+| e65bd6a | <span style="white-space:nowrap;">2023-05-24</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  add additional extention methods to make registrations easier
+| 58db718 | <span style="white-space:nowrap;">2023-05-24</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  add additional extention methods to make registrations easier
+| f845963 | <span style="white-space:nowrap;">2023-05-31</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  add extention method for EncryptionService
+| b4a4cad | <span style="white-space:nowrap;">2023-06-05</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  allow for specifying MessageExceptionResponseFilter
+| 8962e99 | <span style="white-space:nowrap;">2023-06-05</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  add virtual method that can be overridden to add more pre-save logic
+| 76e0ee7 | <span style="white-space:nowrap;">2023-06-06</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  allow for list of filters when creating api controllers
+| 0e3f2cf | <span style="white-space:nowrap;">2023-06-06</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  allow for list of filters when creating api controllers
+| bb4936d | <span style="white-space:nowrap;">2023-06-07</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  allow for output formatters
+| 5870e95 | <span style="white-space:nowrap;">2023-06-12</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Create codeql.yml
+| 36e6bbd | <span style="white-space:nowrap;">2023-06-13</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  add github actions for lint analysis
+| b126e18 | <span style="white-space:nowrap;">2023-06-13</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  address lint warnings
+| 80b9158 | <span style="white-space:nowrap;">2023-06-15</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update powershell scripts
+| da5f5e7 | <span style="white-space:nowrap;">2023-06-15</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  (HEAD -> release/1.3, origin/develop, origin/HEAD, develop) update to latest cortside libraries
+****
+
+# Release 1.2
 |Commit|Date|Author|Message|
 |---|---|---|---|
 | e9eaacd | <span style="white-space:nowrap;">2022-07-13</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  [feature/BOT-20220713] updated nuget packages
@@ -31,7 +67,6 @@
 | bc6beeb | <span style="white-space:nowrap;">2023-01-04</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update to latest nuget packages
 | a7936d2 | <span style="white-space:nowrap;">2023-01-04</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  (HEAD -> release/1.2, origin/develop, origin/HEAD, develop) initial changelog
 ****
-
 # Release 1.0
 |Commit|Date|Author|Message|
 |---|---|---|---|
