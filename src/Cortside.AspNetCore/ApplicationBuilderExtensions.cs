@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Cortside.AspNetCore.Middleware;
 using Cortside.Common.Correlation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -8,6 +9,7 @@ namespace Cortside.AspNetCore {
     public static class ApplicationBuilderExtensions {
         public static IApplicationBuilder UseApiDefaults(this IApplicationBuilder app, IConfiguration config) {
             app.UseMiddleware<CorrelationMiddleware>();
+            app.UseMiddleware<RequestIpAddressLoggingMiddleware>();
             app.UseExceptionHandler(error => error.Run(_ => Task.CompletedTask));
             app.UseResponseCompression();
             app.UseResponseCaching();

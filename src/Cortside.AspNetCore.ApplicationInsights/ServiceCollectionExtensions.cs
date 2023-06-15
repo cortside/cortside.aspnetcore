@@ -17,6 +17,7 @@ namespace Cortside.AspNetCore.ApplicationInsights {
             Guard.From.NullOrWhitespace(cloudRoleName, nameof(cloudRoleName));
 
             services.AddSingleton<ITelemetryInitializer>(_ => new CloudRoleNameTelemetryInitializer(cloudRoleName));
+            services.AddSingleton<ITelemetryInitializer, RequestIpAddressTelemetryInitializer>();
             return services;
         }
 
