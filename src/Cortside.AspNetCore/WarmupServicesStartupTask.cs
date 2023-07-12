@@ -21,7 +21,11 @@ namespace Cortside.AspNetCore {
             timer.Start();
             logger.LogInformation("starting warmup task");
             foreach (var singleton in GetSingletons(provider.GetRequiredService<IServiceCollection>())) {
-                provider.GetServices(singleton);
+                try {
+                    provider.GetServices(singleton);
+                } catch (Exception ex) {
+                    logger.LogError(ex, $"Unable to resolve type {singleton.FullName} during warmup");
+                }
             }
             timer.Stop();
             logger.LogInformation("warmup took {elapsedMilliseconds} ms", timer.ElapsedMilliseconds);
