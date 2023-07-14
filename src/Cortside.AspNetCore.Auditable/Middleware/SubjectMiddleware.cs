@@ -1,8 +1,8 @@
-﻿using Cortside.Common.Security;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Cortside.Common.Security;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Cortside.AspNetCore.Auditable.Middleware {
     public class SubjectMiddleware {
@@ -19,9 +19,9 @@ namespace Cortside.AspNetCore.Auditable.Middleware {
             var clientId = subject.FindFirst("client_id")?.Value;
 
             var properties = new Dictionary<string, object> {
-                ["ClientId"] = clientId ?? string.Empty,
-                ["UserPrincipalName"] = subject.UserPrincipalName,
-                ["SubjectId"] = subject.SubjectId ?? "anonymous"
+                ["RequestClientId"] = clientId ?? string.Empty,
+                ["RequestUserPrincipalName"] = subject.UserPrincipalName,
+                ["RequestSubjectId"] = subject.SubjectId ?? string.Empty
             };
 
             using (logger.BeginScope(properties)) {
