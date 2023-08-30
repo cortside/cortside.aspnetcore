@@ -3,7 +3,6 @@ using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 
 namespace Cortside.AspNetCore.ApplicationInsights.TelemetryInitializers {
     public class RequestBodyTelemetryInitializer : ITelemetryInitializer {
@@ -15,22 +14,26 @@ namespace Cortside.AspNetCore.ApplicationInsights.TelemetryInitializers {
         }
 
         public void Initialize(ITelemetry telemetry) {
-            if (telemetry is RequestTelemetry requestTelemetry) {
-                if ((httpContextAccessor.HttpContext.Request.Method == HttpMethods.Post ||
-                        httpContextAccessor.HttpContext.Request.Method == HttpMethods.Put) &&
-                        httpContextAccessor.HttpContext.Request.Body.CanRead) {
+            var request = httpContextAccessor?.HttpContext?.Request;
 
-                    if (requestTelemetry.Properties.ContainsKey(PROPERTY_KEY)) {
-                        return;
-                    }
-
-                    httpContextAccessor.HttpContext.Request.EnableRewind();
-                    var sr = new StreamReader(httpContextAccessor.HttpContext.Request.Body);
-                    var bodyContent = sr.ReadToEnd();
-                    httpContextAccessor.HttpContext.Request.Body.Position = 0;
-                    requestTelemetry.Properties.Add(PROPERTY_KEY, bodyContent);
-                }
+            var hasReadableBody = request != null && (request.Method == HttpMethods.Post || request.Method == HttpMethods.Put) && request.Body.CanRead;
+            if (!hasReadableBody) {
+                return;
             }
+
+            if (telemetry is not RequestTelemetry requestTelemetry) {
+                return;
+            }
+
+            if (requestTelemetry.Properties.ContainsKey(PROPERTY_KEY)) {
+                return;
+            }
+
+            request.EnableBuffering();
+            var sr = new StreamReader(request.Body);
+            var bodyContent = sr.ReadToEnd();
+            request.Body.Position = 0;
+            requestTelemetry.Properties.Add(PROPERTY_KEY, bodyContent);
         }
     }
 }
