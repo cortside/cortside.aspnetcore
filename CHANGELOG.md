@@ -1,3 +1,16 @@
+# Release 6.0
+
+|Commit|Date|Author|Message|
+|---|---|---|---|
+| 88b7b7f | <span style="white-space:nowrap;">2023-06-15</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update version
+| c0c273e | <span style="white-space:nowrap;">2023-06-20</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge branch 'master' into develop
+| 55a03e2 | <span style="white-space:nowrap;">2023-07-12</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  wip logging notes
+| 52fb52e | <span style="white-space:nowrap;">2023-07-12</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge branch 'master' into develop
+| cab7c5b | <span style="white-space:nowrap;">2023-07-14</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  prefix subject middleware with Request for logged values
+| 678c40a | <span style="white-space:nowrap;">2023-07-17</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update version to 6.x to be in line with dotnet and net6 version numbers
+| 314b133 | <span style="white-space:nowrap;">2023-08-30</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  (HEAD -> release/6.0, origin/develop, origin/HEAD, develop) update to latest nuget packages
+****
+
 # Release 1.3
 
 |Commit|Date|Author|Message|
