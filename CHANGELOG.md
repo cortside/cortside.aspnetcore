@@ -1,5 +1,9 @@
 # Release 6.0
 
+* Update version number to match framework version (6.x)
+* Update nuget dependencies to latest stable versions
+* Cleanup of deprecated dependencies
+
 |Commit|Date|Author|Message|
 |---|---|---|---|
 | 88b7b7f | <span style="white-space:nowrap;">2023-06-15</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update version
