@@ -3,6 +3,7 @@
 * Update version number to match framework version (6.x)
 * Update nuget dependencies to latest stable versions
 * Cleanup of deprecated dependencies
+* Change log properties to RequestClientId, RequestUserPrincipalName, RequestSubjectId from ClientId, UserPrincipalName, SubjectId to make them more clear and less likely to conflict with other logging properties
 
 |Commit|Date|Author|Message|
 |---|---|---|---|
