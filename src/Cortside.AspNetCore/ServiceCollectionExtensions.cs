@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO.Compression;
 using System.Net.Mime;
 using Cortside.AspNetCore.Filters;
+using Cortside.AspNetCore.ModelBinding;
 using Cortside.Common.BootStrap;
 using Cortside.Common.Cryptography;
 using Cortside.Common.Json;
@@ -65,11 +66,11 @@ namespace Cortside.AspNetCore {
             return services;
         }
 
-        public static IMvcBuilder AddApiControllers<T>(this IServiceCollection services) where T : IActionFilter {
-            return services.AddApiControllers(new List<Type>() { typeof(T) }, new List<IOutputFormatter>());
+        public static IMvcBuilder AddApiControllers<T>(this IServiceCollection services, DateTimeHandling dateTimeHandling) where T : IActionFilter {
+            return services.AddApiControllers(new List<Type>() { typeof(T) }, new List<IOutputFormatter>(), dateTimeHandling);
         }
 
-        public static IMvcBuilder AddApiControllers(this IServiceCollection services, List<Type> filters, List<IOutputFormatter> outputFormatters) {
+        public static IMvcBuilder AddApiControllers(this IServiceCollection services, List<Type> filters, List<IOutputFormatter> outputFormatters, DateTimeHandling dateTimeHandling) {
             var mvcBuilder = services.AddControllers(options => {
                 options.CacheProfiles.Add("Default", new CacheProfile {
                     Duration = 30,
@@ -81,7 +82,9 @@ namespace Cortside.AspNetCore {
                 foreach (var formatter in outputFormatters) {
                     options.OutputFormatters.Add(formatter);
                 }
+
                 options.Conventions.Add(new ApiControllerVersionConvention());
+                options.ModelBinderProviders.Insert(0, new UtcDateTimeModelBinderProvider(dateTimeHandling));
             });
             mvcBuilder.ConfigureApiBehaviorOptions(options => {
                 options.InvalidModelStateResponseFactory = context => {
@@ -103,6 +106,23 @@ namespace Cortside.AspNetCore {
                 options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
                 options.SerializerSettings.DateParseHandling = DateParseHandling.DateTimeOffset;
                 options.SerializerSettings.Converters.Add(new IsoTimeSpanConverter());
+
+
+
+
+
+
+                //options.SerializerSettings.Converters.Add(new IsoDateTimeConverter());
+
+                //options.SerializerSettings.Converters.Add(new IsoDateTimeConverter {
+                //    DateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
+                //});
+
+
+                // no isodatetimeconverter
+                // pass in settings to method??
+
+
             });
             mvcBuilder.PartManager.ApplicationParts.Add(new AssemblyPart(typeof(HealthController).Assembly));
 
@@ -111,15 +131,15 @@ namespace Cortside.AspNetCore {
             return mvcBuilder;
         }
 
-        public static IMvcBuilder AddApiDefaults<T>(this IServiceCollection services) where T : IActionFilter {
-            return services.AddApiDefaults(new List<Type>() { typeof(T) });
+        public static IMvcBuilder AddApiDefaults<T>(this IServiceCollection services, DateTimeHandling dateTimeHandling) where T : IActionFilter {
+            return services.AddApiDefaults(new List<Type>() { typeof(T) }, dateTimeHandling);
         }
 
-        public static IMvcBuilder AddApiDefaults(this IServiceCollection services, List<Type> filters) {
-            return services.AddApiDefaults(filters, new List<IOutputFormatter>());
+        public static IMvcBuilder AddApiDefaults(this IServiceCollection services, List<Type> filters, DateTimeHandling dateTimeHandling) {
+            return services.AddApiDefaults(filters, new List<IOutputFormatter>(), dateTimeHandling);
         }
 
-        public static IMvcBuilder AddApiDefaults(this IServiceCollection services, List<Type> filters, List<IOutputFormatter> outputFormatters) {
+        public static IMvcBuilder AddApiDefaults(this IServiceCollection services, List<Type> filters, List<IOutputFormatter> outputFormatters, DateTimeHandling dateTimeHandling) {
             // add response compression using gzip and brotli compression
             services.AddDefaultResponseCompression(CompressionLevel.Optimal);
 
@@ -128,16 +148,16 @@ namespace Cortside.AspNetCore {
             services.AddDistributedMemoryCache();
             services.AddCors();
             services.AddOptions();
-            var mvcBuilder = services.AddApiControllers(filters, outputFormatters);
+            var mvcBuilder = services.AddApiControllers(filters, outputFormatters, dateTimeHandling);
 
-            // warm all the serivces up, can chain these together if needed
+            // warm all the services up, can chain these together if needed
             services.AddStartupTask<WarmupServicesStartupTask>();
 
             return mvcBuilder;
         }
 
-        public static IMvcBuilder AddApiDefaults(this IServiceCollection services) {
-            var mvcBuilder = services.AddApiDefaults<MessageExceptionResponseFilter>();
+        public static IMvcBuilder AddApiDefaults(this IServiceCollection services, DateTimeHandling dateTimeHandling = DateTimeHandling.Utc) {
+            var mvcBuilder = services.AddApiDefaults<MessageExceptionResponseFilter>(dateTimeHandling);
 
             return mvcBuilder;
         }

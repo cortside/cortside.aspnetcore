@@ -17,9 +17,9 @@ namespace Cortside.AspNetCore {
             };
 
             settings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
-            settings.Converters.Add(new IsoDateTimeConverter {
-                DateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
-            });
+            //settings.Converters.Add(new IsoDateTimeConverter {
+            //    DateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
+            //});
             // intentionally commented out because of conflict with
             // Microsoft.AspNetCore.Mvc.Testing > 6.0.7 and Microsoft.NET.Test.Sdk > 17.2.0
             //settings.Converters.Add(new IsoTimeSpanConverter());
