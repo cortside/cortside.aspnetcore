@@ -19,8 +19,6 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 
 namespace Cortside.AspNetCore {
     public static class ServiceCollectionExtensions {
@@ -94,35 +92,11 @@ namespace Cortside.AspNetCore {
                 };
             });
             mvcBuilder.AddNewtonsoftJson(options => {
-                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                options.SerializerSettings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
-
-                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                options.SerializerSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
-                options.SerializerSettings.NullValueHandling = NullValueHandling.Include;
-                options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Include;
-
-                options.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
-                options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
-                options.SerializerSettings.DateParseHandling = DateParseHandling.DateTimeOffset;
+                JsonNetUtility.ApplyGlobalDefaultSettings(options.SerializerSettings);
+                if (dateTimeHandling == DateTimeHandling.Local) {
+                    options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Local;
+                }
                 options.SerializerSettings.Converters.Add(new IsoTimeSpanConverter());
-
-
-
-
-
-
-                //options.SerializerSettings.Converters.Add(new IsoDateTimeConverter());
-
-                //options.SerializerSettings.Converters.Add(new IsoDateTimeConverter {
-                //    DateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
-                //});
-
-
-                // no isodatetimeconverter
-                // pass in settings to method??
-
-
             });
             mvcBuilder.PartManager.ApplicationParts.Add(new AssemblyPart(typeof(HealthController).Assembly));
 

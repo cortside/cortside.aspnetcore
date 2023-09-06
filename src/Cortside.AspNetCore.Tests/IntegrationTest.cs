@@ -15,28 +15,31 @@ using Xunit;
 
 namespace Cortside.AspNetCore.Tests {
     public class IntegrationTest {
-        private readonly TestServer server;
+        private TestServer server;
+        private readonly Dictionary<string, string> configurationValues;
 
         public IntegrationTest() {
-            var values = new Dictionary<string, string> {
+            configurationValues = new Dictionary<string, string> {
                 {"Key1", "Value1"},
                 {"Nested:Key1", "NestedValue1"},
                 {"Nested:Key2", "NestedValue2"}
             };
+        }
 
+        private TestServer CreateTestServer(DateTimeHandling dateTimeHandling) {
             var builder = new WebHostBuilder()
                 .ConfigureAppConfiguration(config => {
-                    config.AddInMemoryCollection(values);
+                    config.AddInMemoryCollection(configurationValues);
                 })
                 .ConfigureServices(services => {
-                    services.AddApiDefaults(DateTimeHandling.Utc);
+                    services.AddApiDefaults(dateTimeHandling);
                 })
                 .Configure(app => {
                     app.UseRouting();
                     app.UseEndpoints(endpoints => endpoints.MapControllers());
                 });
 
-            server = new TestServer(builder);
+            return new TestServer(builder);
         }
 
         private async Task<HttpResponseMessage> SendAsync(HttpRequestMessage requestMessage) {
@@ -61,10 +64,13 @@ namespace Cortside.AspNetCore.Tests {
         }
 
         [Theory]
-        [InlineData("2000-10-02 12:00:00 AM", "2000-10-02T00:00:00Z")]
-        [InlineData("2000-10-02T00:00:00-5:00", "2000-10-02T05:00:00Z")]
-        public async void Should_Redirect_Permanently(string value, string expected) {
+        [InlineData(DateTimeHandling.Utc, "2000-10-02 12:00:00 AM", "2000-10-02T00:00:00Z")]
+        [InlineData(DateTimeHandling.Utc, "2000-10-02T00:00:00-5:00", "2000-10-02T05:00:00Z")]
+        [InlineData(DateTimeHandling.Local, "2000-10-02 12:00:00 AM", "2000-10-02T00:00:00-06:00")]
+        [InlineData(DateTimeHandling.Local, "2000-10-02T00:00:00-5:00", "2000-10-01T23:00:00-06:00")]
+        public async void Should_Redirect_Permanently(DateTimeHandling dateTimeHandling, string value, string expected) {
             // Arrange
+            server = CreateTestServer(dateTimeHandling);
             var requestMessage = new HttpRequestMessage(new HttpMethod("GET"), $"/api/echo/echo-date/{value}");
 
             // Act
@@ -77,10 +83,15 @@ namespace Cortside.AspNetCore.Tests {
             responseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
-        [Fact]
-        public async void ShouldPost() {
+        [Theory]
+        [InlineData(DateTimeHandling.Utc, "2000-10-02 12:00:00 AM", "2000-10-02T00:00:00.0000000Z")]
+        [InlineData(DateTimeHandling.Utc, "2000-10-02T00:00:00-5:00", "2000-10-02T05:00:00.0000000Z")]
+        [InlineData(DateTimeHandling.Local, "2000-10-02 12:00:00 AM", "2000-10-02T00:00:00.0000000-06:00")]
+        [InlineData(DateTimeHandling.Local, "2000-10-02T00:00:00-5:00", "2000-10-01T23:00:00.0000000-06:00")]
+        public async void ShouldPost(DateTimeHandling dateTimeHandling, string value, string expected) {
             // Arrange
-            var json = "{\"DateFrom\":\"2000-10-02 12:00:00 AM\",\"DateTo\":\"2000-10-03\"}";
+            server = CreateTestServer(dateTimeHandling);
+            var json = "{\"DateFrom\":\"" + value + "\",\"DateTo\":\"2000-10-03\"}";
 
             // Act
             var responseMessage = await PostAsync("/api/echo/echo-model", json);
@@ -88,10 +99,8 @@ namespace Cortside.AspNetCore.Tests {
             // Assert
             var content = await responseMessage.Content.ReadAsStringAsync();
             var data = JsonConvert.DeserializeObject<PostData>(content);
-            data.DateFrom.Kind.Should().Be(DateTimeKind.Utc);
-            data.DateFrom.ToString("O").Should().Be("2000-10-02T00:00:00.0000000Z");
-            data.DateTo.Value.Kind.Should().Be(DateTimeKind.Utc);
-            data.DateTo.Value.ToString("O").Should().Be("2000-10-03T00:00:00.0000000Z");
+            data.DateFrom.Kind.Should().Be(dateTimeHandling == DateTimeHandling.Utc ? DateTimeKind.Utc : DateTimeKind.Local);
+            data.DateFrom.ToString("O").Should().Be(expected);
             responseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
         }
     }

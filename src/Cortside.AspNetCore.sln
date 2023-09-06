@@ -28,7 +28,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cortside.AspNetCore.EntityF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cortside.AspNetCore.AccessControl.Tests", "Cortside.AspNetCore.AccessControl.Tests\Cortside.AspNetCore.AccessControl.Tests.csproj", "{3A845CD5-35FE-4088-A8E4-8FB0E1CFF5D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cortside.AspNetCore.Tests", "Cortside.AspNetCore.Tests\Cortside.AspNetCore.Tests.csproj", "{4488849A-D0FE-47C7-BAB7-00F94364913E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cortside.AspNetCore.Tests", "Cortside.AspNetCore.Tests\Cortside.AspNetCore.Tests.csproj", "{4488849A-D0FE-47C7-BAB7-00F94364913E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
