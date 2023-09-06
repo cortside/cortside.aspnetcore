@@ -19,18 +19,21 @@ namespace Cortside.AspNetCore.Tests {
             var settings = JsonNetUtility.GlobalDefaultSettings();
             settings.Converters.Add(new IsoTimeSpanConverter());
 
-            Flight flight = new Flight {
-                Destination = "Dubai",
-                DepartureDate = new DateTime(2013, 1, 21, 0, 0, 0, DateTimeKind.Unspecified),
-                DepartureDateUtc = new DateTime(2013, 1, 21, 0, 0, 0, DateTimeKind.Utc),
-                DepartureDateLocal = new DateTime(2013, 1, 21, 0, 0, 0, DateTimeKind.Local),
-                Duration = TimeSpan.FromHours(5.5)
-            };
+            using (new ScopedLocalTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Mountain Standard Time"))) {
+                Flight flight = new Flight {
+                    Destination = "Dubai",
+                    DepartureDate = new DateTime(2013, 1, 21, 0, 0, 0, DateTimeKind.Unspecified),
+                    DepartureDateUtc = new DateTime(2013, 1, 21, 0, 0, 0, DateTimeKind.Utc),
+                    DepartureDateLocal = new DateTime(2013, 1, 21, 0, 0, 0, DateTimeKind.Local),
+                    Duration = TimeSpan.FromHours(5.5)
+                };
 
 
-            string json = JsonConvert.SerializeObject(flight, Formatting.None, settings);
-            string expected = """{"destination":"Dubai","departureDate":"2013-01-21T00:00:00Z","departureDateUtc":"2013-01-21T00:00:00Z","departureDateLocal":"2013-01-21T07:00:00Z","duration":"P0Y0M0DT5H30M0S"}""";
-            Assert.Equal(expected, json);
+                string json = JsonConvert.SerializeObject(flight, Formatting.None, settings);
+                string expected =
+                    """{"destination":"Dubai","departureDate":"2013-01-21T00:00:00Z","departureDateUtc":"2013-01-21T00:00:00Z","departureDateLocal":"2013-01-21T07:00:00Z","duration":"P0Y0M0DT5H30M0S"}""";
+                Assert.Equal(expected, json);
+            }
         }
 
         [Fact]
