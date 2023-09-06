@@ -55,9 +55,7 @@ namespace Cortside.AspNetCore.Tests {
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             HttpResponseMessage responseMessage;
-            using (new ScopedLocalTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Mountain Standard Time"))) {
-                responseMessage = await server.CreateClient().PostAsync(uri, content);
-            }
+            responseMessage = await server.CreateClient().PostAsync(uri, content);
 
             return responseMessage;
 
@@ -84,24 +82,27 @@ namespace Cortside.AspNetCore.Tests {
         }
 
         [Theory]
-        [InlineData(DateTimeHandling.Utc, "2000-10-02 12:00:00 AM", "2000-10-02T00:00:00.0000000Z")]
-        [InlineData(DateTimeHandling.Utc, "2000-10-02T00:00:00-5:00", "2000-10-02T05:00:00.0000000Z")]
-        [InlineData(DateTimeHandling.Local, "2000-10-02 12:00:00 AM", "2000-10-02T00:00:00.0000000-06:00")]
-        [InlineData(DateTimeHandling.Local, "2000-10-02T00:00:00-5:00", "2000-10-01T23:00:00.0000000-06:00")]
-        public async void ShouldPost(DateTimeHandling dateTimeHandling, string value, string expected) {
+        [InlineData("Mountain Standard Time", DateTimeHandling.Utc, "2000-10-02 12:00:00 AM", "2000-10-02T00:00:00.0000000Z")]
+        [InlineData("Mountain Standard Time", DateTimeHandling.Utc, "2000-10-02T00:00:00-5:00", "2000-10-02T05:00:00.0000000Z")]
+        [InlineData("Mountain Standard Time", DateTimeHandling.Local, "2000-10-02 12:00:00 AM", "2000-10-02T00:00:00.0000000-06:00")]
+        [InlineData("Mountain Standard Time", DateTimeHandling.Local, "2000-10-02T00:00:00-5:00", "2000-10-01T23:00:00.0000000-06:00")]
+        public async void ShouldPost(string timezone, DateTimeHandling dateTimeHandling, string value, string expected) {
             // Arrange
             server = CreateTestServer(dateTimeHandling);
             var json = "{\"DateFrom\":\"" + value + "\",\"DateTo\":\"2000-10-03\"}";
 
-            // Act
-            var responseMessage = await PostAsync("/api/echo/echo-model", json);
+            using (new ScopedLocalTimeZone(TimeZoneInfo.FindSystemTimeZoneById(timezone))) {
+                // Act
+                var responseMessage = await PostAsync("/api/echo/echo-model", json);
 
-            // Assert
-            var content = await responseMessage.Content.ReadAsStringAsync();
-            var data = JsonConvert.DeserializeObject<PostData>(content);
-            data.DateFrom.Kind.Should().Be(dateTimeHandling == DateTimeHandling.Utc ? DateTimeKind.Utc : DateTimeKind.Local);
-            data.DateFrom.ToString("O").Should().Be(expected);
-            responseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
+                // Assert
+                var content = await responseMessage.Content.ReadAsStringAsync();
+                var data = JsonConvert.DeserializeObject<PostData>(content);
+                data.DateFrom.Kind.Should()
+                    .Be(dateTimeHandling == DateTimeHandling.Utc ? DateTimeKind.Utc : DateTimeKind.Local);
+                data.DateFrom.ToString("O").Should().Be(expected);
+                responseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
+            }
         }
     }
 }
