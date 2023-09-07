@@ -22,7 +22,7 @@ namespace Cortside.AspNetCore.Tests {
         [MemberData(nameof(Data))]
         public async Task BindModelAsync_returns_success_with_with_expected_value(string modelValue, DateTime expectedResult) {
             // Arrange
-            var modelBinder = new UtcDateTimeModelBinder(DateTimeStyles.AssumeUniversal);
+            var modelBinder = new UtcDateTimeModelBinder(InternalDateTimeHandling.Utc);
             var bindingContext = BuildBindingContext(modelValue);
 
             // Act
@@ -38,7 +38,7 @@ namespace Cortside.AspNetCore.Tests {
         [Fact]
         public async Task BindModelAsync_invalid() {
             // Arrange
-            var modelBinder = new UtcDateTimeModelBinder(DateTimeStyles.AssumeUniversal);
+            var modelBinder = new UtcDateTimeModelBinder(InternalDateTimeHandling.Utc);
             var bindingContext = BuildBindingContext("invalid");
 
             // Act

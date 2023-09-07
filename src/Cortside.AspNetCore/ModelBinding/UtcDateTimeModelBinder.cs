@@ -13,10 +13,10 @@ namespace Cortside.AspNetCore.ModelBinding {
     /// </summary>
     public class UtcDateTimeModelBinder : IModelBinder {
         public static readonly Type[] SUPPORTED_TYPES = new Type[] { typeof(DateTime), typeof(DateTime?) };
-        private readonly DateTimeStyles dateTimeStyle;
+        private readonly InternalDateTimeHandling internalDateTimeHandling;
 
-        public UtcDateTimeModelBinder(DateTimeStyles style) {
-            this.dateTimeStyle = style;
+        public UtcDateTimeModelBinder(InternalDateTimeHandling internalDateTimeHandling) {
+            this.internalDateTimeHandling = internalDateTimeHandling;
         }
 
         public Task BindModelAsync(ModelBindingContext bindingContext) {
@@ -33,8 +33,6 @@ namespace Cortside.AspNetCore.ModelBinding {
             if (valueProviderResult == ValueProviderResult.None) {
                 return Task.CompletedTask;
             }
-
-            //bindingContext.ModelState.SetModelValue(modelName, valueProviderResult);
 
             var modelState = bindingContext.ModelState;
             modelState.SetModelValue(modelName, valueProviderResult);
@@ -101,10 +99,13 @@ namespace Cortside.AspNetCore.ModelBinding {
                 //}
 
                 //var dateTime = Helper.ParseDateTime(dateToParse);
-                var dateTime = DateTime.Parse(dateToParse, CultureInfo.CurrentCulture, dateTimeStyle);
-                if (dateTimeStyle == DateTimeStyles.AssumeUniversal) {
+                var dateTime = DateTime.Parse(dateToParse, CultureInfo.CurrentCulture, DateTimeStyles.AssumeUniversal); //dateTimeStyle);
+                if (internalDateTimeHandling == InternalDateTimeHandling.Utc) {
                     dateTime = dateTime.ToUniversalTime();
                 }
+                //if (dateTimeStyle == DateTimeStyles.AssumeUniversal) {
+                //    dateTime = dateTime.ToUniversalTime();
+                //}
 
                 bindingContext.Result = ModelBindingResult.Success(dateTime);
 

@@ -1,27 +1,21 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Cortside.AspNetCore.ModelBinding {
     /// <summary>
-    /// Converts UTC datetimes in query params to local time
-    /// Should remove this if product-api is ever fully converted to run in utc timezone in kubernetes cluster
+    /// Converts DateTIme values in models to utc or local time based on InternalDateTimeHandling
     /// </summary>
     public class UtcDateTimeModelBinderProvider : IModelBinderProvider {
-        private readonly DateTimeHandling dateTimeHandling;
+        private readonly InternalDateTimeHandling internalDateTimeHandling;
 
-        public UtcDateTimeModelBinderProvider(DateTimeHandling dateTimeHandling) {
-            this.dateTimeHandling = dateTimeHandling;
+        public UtcDateTimeModelBinderProvider(InternalDateTimeHandling internalDateTimeHandling) {
+            this.internalDateTimeHandling = internalDateTimeHandling;
         }
 
         public IModelBinder GetBinder(ModelBinderProviderContext context) {
             if (UtcDateTimeModelBinder.SUPPORTED_TYPES.Contains(context.Metadata.ModelType)) {
-                if (dateTimeHandling == DateTimeHandling.Utc) {
-                    return new UtcDateTimeModelBinder(DateTimeStyles.AssumeUniversal);
-                } else {
-                    return new UtcDateTimeModelBinder(DateTimeStyles.AssumeLocal);
-                }
+                return new UtcDateTimeModelBinder(internalDateTimeHandling);
             }
 
             return null;
