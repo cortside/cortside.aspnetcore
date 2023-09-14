@@ -64,8 +64,7 @@ namespace Cortside.AspNetCore.Builder {
 
             builder.WebHost.UseKestrel(o => o.AddServerHeader = false);
             builder.WebHost.ConfigureKestrel(options => {
-                options.ConfigureEndpointDefaults(listenOptions => {
-                });
+                options.ConfigureEndpointDefaults(_ => { });
                 options.AddServerHeader = false;
                 options.Limits.MaxRequestLineSize = int.MaxValue;
                 options.Limits.MaxRequestBufferSize = int.MaxValue;

@@ -94,7 +94,7 @@ namespace Cortside.AspNetCore.EntityFramework {
                 }
 
                 var conv = Expression.Convert(body, propertyType);
-                var exp = Expression.Lambda(conv, new ParameterExpression[] { arg });
+                var exp = Expression.Lambda(conv, arg);
                 return (exp, propertyType);
             } else {
                 var propertyInfo = typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
@@ -107,7 +107,7 @@ namespace Cortside.AspNetCore.EntityFramework {
 
                 //return the property as object
                 var conv = Expression.Convert(property, propertyType);
-                var exp = Expression.Lambda(conv, new ParameterExpression[] { arg });
+                var exp = Expression.Lambda(conv, arg);
                 return (exp, propertyType);
             }
         }

@@ -5,24 +5,37 @@ using Newtonsoft.Json.Serialization;
 namespace Cortside.AspNetCore {
     public static class JsonNetUtility {
         public static JsonSerializerSettings GlobalDefaultSettings() {
-            var settings = new JsonSerializerSettings {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                MissingMemberHandling = MissingMemberHandling.Ignore,
-                NullValueHandling = NullValueHandling.Include,
-                DefaultValueHandling = DefaultValueHandling.Include,
-                DateFormatHandling = DateFormatHandling.IsoDateFormat,
-                DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-                DateParseHandling = DateParseHandling.DateTimeOffset
-            };
+            return ApplyGlobalDefaultSettings(new JsonSerializerSettings(), InternalDateTimeHandling.Utc);
+        }
+
+        public static JsonSerializerSettings GlobalDefaultSettings(InternalDateTimeHandling internalDateTimeHandling) {
+            return ApplyGlobalDefaultSettings(new JsonSerializerSettings(), internalDateTimeHandling);
+        }
+
+        public static JsonSerializerSettings ApplyGlobalDefaultSettings(JsonSerializerSettings settings, InternalDateTimeHandling internalDateTimeHandling) {
+            settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            settings.MissingMemberHandling = MissingMemberHandling.Ignore;
+            settings.NullValueHandling = NullValueHandling.Include;
+            settings.DefaultValueHandling = DefaultValueHandling.Include;
+
+            // datetime specific handling
+            // always output ISO-8601 format
+            settings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+
+            // parse using DateTimeOffset so that ISO-8601 with timezone is used
+            settings.DateParseHandling = DateParseHandling.DateTimeOffset;
 
             settings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
-            settings.Converters.Add(new IsoDateTimeConverter {
-                DateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
-            });
+
             // intentionally commented out because of conflict with
             // Microsoft.AspNetCore.Mvc.Testing > 6.0.7 and Microsoft.NET.Test.Sdk > 17.2.0
+            // https://github.com/Microsoft/testfx/issues/566
             //settings.Converters.Add(new IsoTimeSpanConverter());
+
+            // setting to control how DateTime and DateTimeOffset are serialized.
+            // always serialize to utc
+            settings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
 
             return settings;
         }

@@ -100,8 +100,11 @@ namespace Cortside.AspNetCore.EntityFramework {
 
         protected static void SetDateTime(ModelBuilder builder) {
             // 1/1/1753 12:00:00 AM and 12/31/9999 11:59:59 PM
-            var min = new DateTime(1753, 1, 1, 0, 0, 0);
-            var max = new DateTime(9999, 12, 31, 23, 59, 59);
+            // using local as default with the assumption that most of the time local will be utc and expected
+            // OR it's not utc and that local timezone is expected to be persisted.  potential for future other configuration
+            // value or use of DateTimeHandling
+            var min = new DateTime(1753, 1, 1, 0, 0, 0, DateTimeKind.Local);
+            var max = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Local);
 
             var dateTimeConverter = new ValueConverter<DateTime, DateTime>(
 #pragma warning disable S3358 // Ternary operators should not be nested
