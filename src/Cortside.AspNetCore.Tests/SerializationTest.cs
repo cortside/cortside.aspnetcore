@@ -1,5 +1,6 @@
 ﻿using System;
 using Cortside.Common.Json;
+using Cortside.Common.Testing;
 using Newtonsoft.Json;
 using Xunit;
 

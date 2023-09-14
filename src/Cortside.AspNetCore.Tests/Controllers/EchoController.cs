@@ -10,34 +10,34 @@ namespace Cortside.AspNetCore.Tests.Controllers {
 
         [Route("echo-date/{date}")]
         [HttpGet]
-        public async Task<IActionResult> EchoDate(DateTime? date) {
+        public Task<IActionResult> EchoDate(DateTime? date) {
             if (!ModelState.IsValid) {
-                return BadRequest(ModelState);
+                return Task.FromResult<IActionResult>(BadRequest(ModelState));
             }
 
-            return Ok(date);
+            return Task.FromResult<IActionResult>(Ok(date));
         }
 
         [Route("echo-custom-date/{date}")]
         [HttpGet]
-        public async Task<IActionResult> EchoCustomDateFormat(
+        public Task<IActionResult> EchoCustomDateFormat(
             [DateTimeModelBinder(DateFormat = "yyyyMMdd")]
             DateTime? date) {
             if (!ModelState.IsValid) {
-                return BadRequest(ModelState);
+                return Task.FromResult<IActionResult>(BadRequest(ModelState));
             }
 
-            return Ok(date);
+            return Task.FromResult<IActionResult>(Ok(date));
         }
 
         [Route("echo-model")]
         [HttpPost]
-        public async Task<IActionResult> EchoModel([FromBody] PostData model) {
+        public Task<IActionResult> EchoModel([FromBody] PostData model) {
             if (!ModelState.IsValid) {
-                return BadRequest(ModelState);
+                return Task.FromResult<IActionResult>(BadRequest(ModelState));
             }
 
-            return Ok(model);
+            return Task.FromResult<IActionResult>(Ok(model));
         }
     }
 }

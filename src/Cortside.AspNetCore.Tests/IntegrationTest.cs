@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Cortside.AspNetCore.Tests.Controllers;
+using Cortside.Common.Testing;
 using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -68,7 +69,7 @@ namespace Cortside.AspNetCore.Tests {
         [InlineData(InternalDateTimeHandling.Utc, "2000-10-02T00:00:00-5:00", "2000-10-02T05:00:00Z")]
         [InlineData(InternalDateTimeHandling.Local, "2000-10-02 12:00:00 AM", "2000-10-02T00:00:00Z")]
         [InlineData(InternalDateTimeHandling.Local, "2000-10-02T00:00:00-5:00", "2000-10-02T05:00:00Z")]
-        public async void ShouldGet(InternalDateTimeHandling internalDateTimeHandling, string value, string expected) {
+        public async Task ShouldGet(InternalDateTimeHandling internalDateTimeHandling, string value, string expected) {
             // Arrange
             server = CreateTestServer(internalDateTimeHandling);
             var requestMessage = new HttpRequestMessage(new HttpMethod("GET"), $"/api/echo/echo-date/{value}");
@@ -88,7 +89,7 @@ namespace Cortside.AspNetCore.Tests {
         [InlineData("Mountain Standard Time", InternalDateTimeHandling.Utc, "2000-10-02T00:00:00-5:00", "2000-10-02T05:00:00.0000000Z")]
         [InlineData("Mountain Standard Time", InternalDateTimeHandling.Local, "2000-10-02 12:00:00 AM", "2000-10-02T00:00:00.0000000Z")]
         [InlineData("Mountain Standard Time", InternalDateTimeHandling.Local, "2000-10-02T00:00:00-5:00", "2000-10-02T05:00:00.0000000Z")]
-        public async void ShouldPost(string timezone, InternalDateTimeHandling internalDateTimeHandling, string value, string expected) {
+        public async Task ShouldPost(string timezone, InternalDateTimeHandling internalDateTimeHandling, string value, string expected) {
             // Arrange
             server = CreateTestServer(internalDateTimeHandling);
             var json = "{\"DateFrom\":\"" + value + "\",\"DateTo\":\"2000-10-03\"}";
