@@ -39,13 +39,6 @@ namespace Cortside.AspNetCore.ApplicationInsights {
                 o.EnableActiveTelemetryConfigurationSetup = true;
             });
 
-            //builder.AddApplicationInsights(
-            //    options => options.TrackExceptionsAsExceptionTelemetry = false);
-
-            //// Capture all log-level entries from Startup
-            //builder.AddFilter<ApplicationInsightsLoggerProvider>(
-            //    typeof(Startup).FullName, LogLevel.Trace);
-
             services.AddCloudRoleNameInitializer(cloudRoleName);
             return services;
         }

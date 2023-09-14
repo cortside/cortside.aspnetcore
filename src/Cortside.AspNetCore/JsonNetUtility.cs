@@ -36,9 +36,6 @@ namespace Cortside.AspNetCore {
             // setting to control how DateTime and DateTimeOffset are serialized.
             // always serialize to utc
             settings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
-            //if (internalDateTimeHandling == InternalDateTimeHandling.Local) {
-            //    settings.DateTimeZoneHandling = DateTimeZoneHandling.Local;
-            //}
 
             return settings;
         }
