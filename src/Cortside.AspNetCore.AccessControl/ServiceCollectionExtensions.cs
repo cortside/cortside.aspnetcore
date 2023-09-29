@@ -45,8 +45,8 @@ namespace Cortside.AspNetCore.AccessControl {
 
             // policy server
             configuration["PolicyServer:TokenClient:Authority"] = identityServerConfiguration.Authority;
-            configuration["PolicyServer:TokenClient:ClientId"] = identityServerConfiguration.Authentication.ClientId;
-            configuration["PolicyServer:TokenClient:ClientSecret"] = identityServerConfiguration.Authentication.ClientSecret;
+            configuration["PolicyServer:TokenClient:ClientId"] = identityServerConfiguration.Authentication?.ClientId;
+            configuration["PolicyServer:TokenClient:ClientSecret"] = identityServerConfiguration.Authentication?.ClientSecret;
             services.AddPolicyServerRuntimeClient(configuration.GetSection("PolicyServer"))
                 .AddAuthorizationPermissionPolicies();
 
