@@ -27,8 +27,7 @@ namespace Cortside.AspNetCore {
         /// <typeparam name="T"></typeparam>
         /// <param name="services">The services.</param>
         /// <returns></returns>
-        public static IServiceCollection AddStartupTask<T>(this IServiceCollection services)
-            where T : class, IStartupTask {
+        public static IServiceCollection AddStartupTask<T>(this IServiceCollection services) where T : class, IStartupTask {
             services.AddTransient<IStartupTask, T>();
             services.AddSingleton(services);
             return services;
@@ -50,8 +49,7 @@ namespace Cortside.AspNetCore {
             return services;
         }
 
-        public static IServiceCollection AddDefaultResponseCompression(this IServiceCollection services,
-            CompressionLevel compressionLevel) {
+        public static IServiceCollection AddDefaultResponseCompression(this IServiceCollection services, CompressionLevel compressionLevel) {
             services.AddResponseCompression(options => {
                 options.EnableForHttps = true;
                 options.Providers.Add<BrotliCompressionProvider>();
@@ -73,6 +71,8 @@ namespace Cortside.AspNetCore {
                     Duration = 30,
                     Location = ResponseCacheLocation.Any
                 });
+                options.SuppressAsyncSuffixInActionNames = false;
+
                 foreach (var filter in filters) {
                     options.Filters.Add(filter);
                 }
@@ -132,11 +132,7 @@ namespace Cortside.AspNetCore {
             return mvcBuilder;
         }
 
-        public static IServiceCollection AddRestApiClient<TInterface, TImplementation, TConfiguration>(
-            this IServiceCollection services, IConfiguration configuration, string key)
-            where TImplementation : class, TInterface
-            where TInterface : class
-            where TConfiguration : class {
+        public static IServiceCollection AddRestApiClient<TInterface, TImplementation, TConfiguration>(this IServiceCollection services, IConfiguration configuration, string key) where TImplementation : class, TInterface where TInterface : class where TConfiguration : class {
             var hartConfiguration = configuration.GetSection(key).Get<TConfiguration>();
             services.AddSingleton(hartConfiguration);
             services.AddTransient<TInterface, TImplementation>();
