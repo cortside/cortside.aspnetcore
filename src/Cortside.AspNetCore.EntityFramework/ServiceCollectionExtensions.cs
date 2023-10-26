@@ -14,13 +14,15 @@ namespace Cortside.AspNetCore.EntityFramework {
         /// <typeparam name="TImplementation"></typeparam>
         /// <param name="services"></param>
         /// <param name="configuration"></param>
+        /// <param name="action"></param>
+        /// <param name="sqlAction"></param>
         /// <returns></returns>
-        public static IServiceCollection AddDatabaseContext<TInterface, TImplementation>(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddDatabaseContext<TInterface, TImplementation>(this IServiceCollection services, IConfiguration configuration, Action<DbContextOptionsBuilder> action = null, Action<SqlServerDbContextOptionsBuilder> sqlAction = null)
                 where TImplementation : DbContext, TInterface, IUnitOfWork
                 where TInterface : class {
 
             var connectionString = configuration.GetSection("Database").GetValue<string>("ConnectionString");
-            services.AddDatabaseContext<TInterface, TImplementation>(connectionString);
+            services.AddDatabaseContext<TInterface, TImplementation>(connectionString, action, sqlAction);
 
             return services;
         }
