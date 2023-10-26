@@ -1,5 +1,7 @@
-﻿using Cortside.AspNetCore.EntityFramework.Interceptors;
+﻿using System;
+using Cortside.AspNetCore.EntityFramework.Interceptors;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -30,8 +32,9 @@ namespace Cortside.AspNetCore.EntityFramework {
         /// <typeparam name="TImplementation"></typeparam>
         /// <param name="services"></param>
         /// <param name="connectionString"></param>
+        /// <param name="action"></param>
         /// <returns></returns>
-        public static IServiceCollection AddDatabaseContext<TInterface, TImplementation>(this IServiceCollection services, string connectionString)
+        public static IServiceCollection AddDatabaseContext<TInterface, TImplementation>(this IServiceCollection services, string connectionString, Action<DbContextOptionsBuilder> action = null, Action<SqlServerDbContextOptionsBuilder> sqlAction = null)
                 where TImplementation : DbContext, TInterface, IUnitOfWork
                 where TInterface : class {
             services.AddDbContext<TImplementation>(opt => {
@@ -41,9 +44,13 @@ namespace Cortside.AspNetCore.EntityFramework {
 
                         // instruct ef to use multiple queries instead of large joined queries
                         sqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+
+                        sqlAction?.Invoke(sqlOptions);
                     });
                 opt.EnableServiceProviderCaching();
                 opt.AddInterceptors(new QueryHintCommandInterceptor());
+
+                action?.Invoke(opt);
             });
 
             // register the dbcontext interface that is to be used

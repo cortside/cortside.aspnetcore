@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO.Compression;
 using System.Net.Mime;
 using Cortside.AspNetCore.Filters;
@@ -13,8 +12,6 @@ using Cortside.Health.Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -61,27 +58,36 @@ namespace Cortside.AspNetCore {
             return services;
         }
 
-        public static IMvcBuilder AddApiControllers<T>(this IServiceCollection services, InternalDateTimeHandling internalDateTimeHandling) where T : IActionFilter {
-            return services.AddApiControllers(new List<Type>() { typeof(T) }, new List<IOutputFormatter>(), internalDateTimeHandling);
+        public static IMvcBuilder AddApiDefaults(this IServiceCollection services, InternalDateTimeHandling internalDateTimeHandling = InternalDateTimeHandling.Utc, Action<MvcOptions> mvcAction = null) {
+            // add response compression using gzip and brotli compression
+            services.AddDefaultResponseCompression(CompressionLevel.Optimal);
+
+            services.AddResponseCaching();
+            services.AddMemoryCache();
+            services.AddDistributedMemoryCache();
+            services.AddCors();
+            services.AddOptions();
+
+            var mvcBuilder = services.AddApiControllers(internalDateTimeHandling, mvcAction);
+
+            // warm all the services up, can chain these together if needed
+            services.AddStartupTask<WarmupServicesStartupTask>();
+
+            return mvcBuilder;
         }
 
-        public static IMvcBuilder AddApiControllers(this IServiceCollection services, List<Type> filters, List<IOutputFormatter> outputFormatters, InternalDateTimeHandling internalDateTimeHandling) {
+        public static IMvcBuilder AddApiControllers(this IServiceCollection services, InternalDateTimeHandling internalDateTimeHandling = InternalDateTimeHandling.Utc, Action<MvcOptions> mvcAction = null) {
             var mvcBuilder = services.AddControllers(options => {
                 options.CacheProfiles.Add("Default", new CacheProfile {
                     Duration = 30,
                     Location = ResponseCacheLocation.Any
                 });
                 options.SuppressAsyncSuffixInActionNames = false;
-
-                foreach (var filter in filters) {
-                    options.Filters.Add(filter);
-                }
-                foreach (var formatter in outputFormatters) {
-                    options.OutputFormatters.Add(formatter);
-                }
-
                 options.Conventions.Add(new ApiControllerVersionConvention());
                 options.ModelBinderProviders.Insert(0, new UtcDateTimeModelBinderProvider(internalDateTimeHandling));
+
+                mvcAction ??= o => { o.Filters.Add<MessageExceptionResponseFilter>(); };
+                mvcAction.Invoke(options);
             });
             mvcBuilder.ConfigureApiBehaviorOptions(options => {
                 options.InvalidModelStateResponseFactory = context => {
@@ -97,37 +103,6 @@ namespace Cortside.AspNetCore {
             mvcBuilder.PartManager.ApplicationParts.Add(new AssemblyPart(typeof(HealthController).Assembly));
 
             services.AddRouting(options => { options.LowercaseUrls = true; });
-
-            return mvcBuilder;
-        }
-
-        public static IMvcBuilder AddApiDefaults<T>(this IServiceCollection services, InternalDateTimeHandling internalDateTimeHandling) where T : IActionFilter {
-            return services.AddApiDefaults(new List<Type>() { typeof(T) }, internalDateTimeHandling);
-        }
-
-        public static IMvcBuilder AddApiDefaults(this IServiceCollection services, List<Type> filters, InternalDateTimeHandling internalDateTimeHandling) {
-            return services.AddApiDefaults(filters, new List<IOutputFormatter>(), internalDateTimeHandling);
-        }
-
-        public static IMvcBuilder AddApiDefaults(this IServiceCollection services, List<Type> filters, List<IOutputFormatter> outputFormatters, InternalDateTimeHandling internalDateTimeHandling) {
-            // add response compression using gzip and brotli compression
-            services.AddDefaultResponseCompression(CompressionLevel.Optimal);
-
-            services.AddResponseCaching();
-            services.AddMemoryCache();
-            services.AddDistributedMemoryCache();
-            services.AddCors();
-            services.AddOptions();
-            var mvcBuilder = services.AddApiControllers(filters, outputFormatters, internalDateTimeHandling);
-
-            // warm all the services up, can chain these together if needed
-            services.AddStartupTask<WarmupServicesStartupTask>();
-
-            return mvcBuilder;
-        }
-
-        public static IMvcBuilder AddApiDefaults(this IServiceCollection services, InternalDateTimeHandling internalDateTimeHandling = InternalDateTimeHandling.Utc) {
-            var mvcBuilder = services.AddApiDefaults<MessageExceptionResponseFilter>(internalDateTimeHandling);
 
             return mvcBuilder;
         }
