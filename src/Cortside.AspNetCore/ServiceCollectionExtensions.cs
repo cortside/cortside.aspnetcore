@@ -107,14 +107,6 @@ namespace Cortside.AspNetCore {
             return mvcBuilder;
         }
 
-        public static IServiceCollection AddRestApiClient<TInterface, TImplementation, TConfiguration>(this IServiceCollection services, IConfiguration configuration, string key) where TImplementation : class, TInterface where TInterface : class where TConfiguration : class {
-            var config = configuration.GetSection(key).Get<TConfiguration>();
-            services.AddSingleton(config);
-            services.AddSingleton<TInterface, TImplementation>();
-
-            return services;
-        }
-
         public static IServiceCollection AddEncryptionService(this IServiceCollection services, string secret) {
             services.AddSingleton<IEncryptionService>(new EncryptionService(secret));
 

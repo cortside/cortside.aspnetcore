@@ -1,4 +1,5 @@
 using System;
+using Cortside.RestApiClient.Authenticators.OpenIDConnect;
 
 namespace Cortside.AspNetCore.AccessControl {
     public class IdentityServerConfiguration {
