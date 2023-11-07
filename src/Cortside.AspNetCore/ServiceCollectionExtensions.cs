@@ -108,9 +108,9 @@ namespace Cortside.AspNetCore {
         }
 
         public static IServiceCollection AddRestApiClient<TInterface, TImplementation, TConfiguration>(this IServiceCollection services, IConfiguration configuration, string key) where TImplementation : class, TInterface where TInterface : class where TConfiguration : class {
-            var hartConfiguration = configuration.GetSection(key).Get<TConfiguration>();
-            services.AddSingleton(hartConfiguration);
-            services.AddTransient<TInterface, TImplementation>();
+            var config = configuration.GetSection(key).Get<TConfiguration>();
+            services.AddSingleton(config);
+            services.AddSingleton<TInterface, TImplementation>();
 
             return services;
         }
