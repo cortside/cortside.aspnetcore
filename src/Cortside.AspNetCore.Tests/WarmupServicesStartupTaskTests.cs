@@ -1,15 +1,13 @@
+using System;
 using System.Linq;
-using Cortside.Common.Testing.Logging;
+using System.Threading;
+using System.Threading.Tasks;
+using Cortside.Common.Testing.Logging.LogEvent;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Xunit;
 
 namespace Cortside.AspNetCore.Tests {
-    using System;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Cortside.AspNetCore;
-    using Microsoft.Extensions.DependencyInjection;
-    using Xunit;
-
     public class WarmupServicesStartupTaskTests {
         [Fact]
         public async Task CanCallExecuteAsync() {

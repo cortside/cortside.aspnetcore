@@ -2,20 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
   </PropertyGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Cortside.Common.Validation" Version="6.0.376" />
-    <PackageReference Include="Cortside.RestApiClient" Version="6.0.133" />
+    <PackageReference Include="Cortside.Common.Validation" Version="6.1.390" />
+    <PackageReference Include="Cortside.RestApiClient" Version="6.1.151-develop" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.7.30">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.32.2" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.33.0" />
     <PackageReference Include="PolicyServer.Runtime.Client.AspNetCore" Version="4.3.0" />
   </ItemGroup>
 

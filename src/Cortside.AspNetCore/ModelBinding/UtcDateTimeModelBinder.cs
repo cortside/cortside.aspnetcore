@@ -1,6 +1,4 @@
-﻿// https://www.vickram.me/custom-datetime-model-binding-in-asp-net-core-web-api
-
-using System;
+﻿using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
