@@ -1,3 +1,50 @@
+# Release 6.1
+
+* Added delegates for DbContextOptionsBuilder and SqlServerDbContextOptionsBuilder to AddDbContext so that things could be customized
+	```csharp
+	// add database context with interfaces
+	services.AddDatabaseContext<IDatabaseContext, DatabaseContext>(Configuration, o => {
+		o.EnableSensitiveDataLogging(true);  // the default is actually false
+	});
+	```
+* Added support through InternalDateTimeHandling to control serializer settings and handling around datetimes.  The default is to handle as UTC, meaning that values in will be deserialized to a DateTimeKind.UTC.  This should be kept most of the time as services should run in and process datetimes as UTC.  For services that must run in a specific timezone, InternalDateTimeHandling.Local can be used.  Apis should accept any value ISO8601 datetime and convert to UTC or local as specified.  Api responses should be IS0-8601 in UTC (Z).
+	```csharp
+	// add controllers and all of the api defaults
+	services.AddApiDefaults(InternalDateTimeHandling.Utc, options => {
+		options.Filters.Add<MyResponseFilter>();
+	});
+	```
+* AddApiControllers/AddApiDefaults sets SuppressAsyncSuffixInActionNames to false to disable the name munging
+* Add customer model binder UtcDateTimeModelBinder to handle deserializing value based on InternalDateTimeHandling
+* WarmupServicesStartupTask now instantiates all controllers as well as anything registered as a singleton.  This was done to further bring forward DI registration issues to service starting rather than at request time.
+
+|Commit|Date|Author|Message|
+|---|---|---|---|
+| 502bb33 | <span style="white-space:nowrap;">2023-08-30</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  generate changelog
+| 74e3a08 | <span style="white-space:nowrap;">2023-08-30</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update version
+| 0be753d | <span style="white-space:nowrap;">2023-08-30</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update release notes
+| f5b8a31 | <span style="white-space:nowrap;">2023-08-30</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  (release/6.0) update release notes
+| f8f83ee | <span style="white-space:nowrap;">2023-08-30</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  (origin/release/6.0, origin/master) Merge pull request #15 from cortside/release/6.0
+| b26ef65 | <span style="white-space:nowrap;">2023-09-04</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge branch 'master' into develop
+| 34f3e54 | <span style="white-space:nowrap;">2023-09-06</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  [ISSUE-22] wip for timezone/date handling
+| 86e3f11 | <span style="white-space:nowrap;">2023-09-06</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  [ISSUE-22] wip for timezone/date handling
+| 3de1046 | <span style="white-space:nowrap;">2023-09-06</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  [ISSUE-22] timezone/date handling allowing for dates to be parsed as utc or local based on handling setting
+| 294036c | <span style="white-space:nowrap;">2023-09-06</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  [ISSUE-22] timezone/date handling allowing for dates to be parsed as utc or local based on handling setting
+| 8f023ec | <span style="white-space:nowrap;">2023-09-07</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  [ISSUE-17] timezone/date handling allowing for dates to be parsed as utc or local based on handling setting
+| 7d6e586 | <span style="white-space:nowrap;">2023-09-14</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  [ISSUE-17] cleanup
+| ec759b2 | <span style="white-space:nowrap;">2023-09-14</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  (origin/ISSUE-22) [ISSUE-17] cleanup
+| a26178e | <span style="white-space:nowrap;">2023-09-14</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge pull request #16 from cortside/ISSUE-22
+| 663f4b7 | <span style="white-space:nowrap;">2023-09-28</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  (ISSUE-22) [ISSUE-17] cleanup
+| 77d47ea | <span style="white-space:nowrap;">2023-09-28</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge branch 'ISSUE-22' into develop
+| be05251 | <span style="white-space:nowrap;">2023-10-11</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  add resolution of controllers to warmup task
+| 6343a42 | <span style="white-space:nowrap;">2023-10-12</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  use SuppressAsyncSuffixInActionNames to disable the name munging
+| 9c3da4d | <span style="white-space:nowrap;">2023-10-16</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  add success test for warmup task
+| b5c1b39 | <span style="white-space:nowrap;">2023-10-25</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  use Action delegates for options instead of passing in pieces parts
+| e976c86 | <span style="white-space:nowrap;">2023-10-25</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  use Action delegates for options instead of passing in pieces parts
+| 0af23fc | <span style="white-space:nowrap;">2023-11-07</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  make client registration a singleton per reshsharp recommendations
+| 4d55f62 | <span style="white-space:nowrap;">2023-11-07</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  (HEAD -> develop, origin/develop, origin/HEAD) move AddRestApiClient extention methods to Cortside.RestApiClient libary and remove duplicate of TokenRequest for one in OpenIdConnectAuthenticator
+****
+
 # Release 6.0
 
 * Update version number to match framework version (6.x)

@@ -7,10 +7,10 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Cortside.Common.Validation" Version="6.1.390" />
-    <PackageReference Include="Cortside.RestApiClient" Version="6.1.151-develop" />
+    <PackageReference Include="Cortside.Common.Validation" Version="6.1.397" />
+    <PackageReference Include="Cortside.RestApiClient" Version="6.1.159" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.7.30">
+    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.8.14">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

@@ -12,16 +12,16 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Cortside.Bowdlerizer" Version="6.0.59" />
-    <PackageReference Include="Cortside.Common.BootStrap" Version="6.1.390" />
-    <PackageReference Include="Cortside.Common.Cryptography" Version="6.1.390" />
-    <PackageReference Include="Cortside.Common.Json" Version="6.1.390" />
-    <PackageReference Include="Cortside.Common.Messages" Version="6.1.390" />
+    <PackageReference Include="Cortside.Common.BootStrap" Version="6.1.397" />
+    <PackageReference Include="Cortside.Common.Cryptography" Version="6.1.397" />
+    <PackageReference Include="Cortside.Common.Json" Version="6.1.397" />
+    <PackageReference Include="Cortside.Common.Messages" Version="6.1.397" />
     <PackageReference Include="Cortside.Health" Version="6.0.86" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.24" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.25" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.1.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.7.30">
+    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.8.14">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
