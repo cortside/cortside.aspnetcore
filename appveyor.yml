@@ -25,7 +25,6 @@ environment:
 init:
 - ps: $Env:LABEL = "CI" + $Env:APPVEYOR_BUILD_NUMBER.PadLeft(5, "0")
 - ps: Get-ChildItem "Env:"
-- ps: ./dotnet-install.ps1 -Channel 8.0 -Runtime aspnetcore
 
 assembly_info:
   patch: true
@@ -37,6 +36,7 @@ assembly_info:
 before_build:
 - appveyor-retry dotnet restore src -v Minimal
 - set DNX_BUILD_VERSION=%APPVEYOR_BUILD_NUMBER%
+- ps: ./dotnet-install.ps1 -Channel 8.0 -Runtime aspnetcore
 - dotnet --info
 - ps: ./prebuild.ps1
 
