@@ -38,9 +38,9 @@ before_build:
 - set DNX_BUILD_VERSION=%APPVEYOR_BUILD_NUMBER%
 - ps: Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1'
 - ps: ./dotnet-install.ps1 -Channel 8.0 -Runtime aspnetcore
-- ps: $env:DOTNET_ROOT = "C:\Users\appveyor\AppData\Local\Microsoft\dotnet\"
-- ps: echo $env:DOTNET_ROOT
-- ps: echo $env:PATH
+#- ps: $env:DOTNET_ROOT = "C:\Users\appveyor\AppData\Local\Microsoft\dotnet\"
+#- ps: echo $env:DOTNET_ROOT
+#- ps: echo $env:PATH
 - dotnet --info
 - ps: ./prebuild.ps1
 #- appveyor-retry dotnet restore src -v Minimal
