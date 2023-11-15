@@ -34,11 +34,11 @@ assembly_info:
   assembly_informational_version: '{version}'
 
 before_build:
-- appveyor-retry dotnet restore src -v Minimal
 - set DNX_BUILD_VERSION=%APPVEYOR_BUILD_NUMBER%
 - ps: ./dotnet-install.ps1 -Channel 8.0 -Runtime aspnetcore
 - dotnet --info
 - ps: ./prebuild.ps1
+- appveyor-retry dotnet restore src -v Minimal
 
 build:
   publish_nuget: true
