@@ -38,7 +38,7 @@ before_build:
 - ps: ./dotnet-install.ps1 -Channel 8.0 -Runtime aspnetcore
 - dotnet --info
 - ps: ./prebuild.ps1
-- appveyor-retry dotnet restore src -v Minimal
+#- appveyor-retry dotnet restore src -v Minimal
 
 build:
   publish_nuget: true
@@ -76,8 +76,8 @@ build_script:
 - echo "%SONAR_TOKEN%"
 - dotnet sonarscanner begin /n:"%SONAR_NAME%" /o:"cortside" /k:"%SONAR_PROJECT%" /v:"%APPVEYOR_BUILD_VERSION%" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="%SONAR_TOKEN%" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" %SONAR_ARGUMENTS%
 - dotnet build src --no-restore --configuration %Configuration% /property:"Version=%APPVEYOR_BUILD_VERSION%"
-- dotnet test --framework net6.0 src --no-restore --no-build --collect:"XPlat Code Coverage" --settings ./src/coverlet.runsettings.xml /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
-- dotnet test --framework net8.0 src --no-restore --no-build --collect:"XPlat Code Coverage" --settings ./src/coverlet.runsettings.xml /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+- dotnet test --framework net6.0 src --collect:"XPlat Code Coverage" --settings ./src/coverlet.runsettings.xml /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+- dotnet test --framework net8.0 src --collect:"XPlat Code Coverage" --settings ./src/coverlet.runsettings.xml /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
 - dotnet sonarscanner end /d:sonar.login="%SONAR_TOKEN%"
 
 after_build:
