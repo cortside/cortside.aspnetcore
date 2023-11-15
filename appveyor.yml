@@ -39,7 +39,7 @@ before_build:
 - dotnet tool install --global dotnet-sonarscanner
 - set DNX_BUILD_VERSION=%APPVEYOR_BUILD_NUMBER%
 - ps: Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1'
-- ps: ./dotnet-install.ps1 -Channel 8.0 -Runtime aspnetcore -InstallDir C:\Program Files\dotnet\
+- ps: ./dotnet-install.ps1 -Channel 8.0 -Runtime aspnetcore -InstallDir 'C:\Program Files\dotnet\'
 - ps: where.exe dotnet
 #- ps: $env:DOTNET_ROOT = "C:\Users\appveyor\AppData\Local\Microsoft\dotnet\"
 #- ps: echo $env:DOTNET_ROOT
