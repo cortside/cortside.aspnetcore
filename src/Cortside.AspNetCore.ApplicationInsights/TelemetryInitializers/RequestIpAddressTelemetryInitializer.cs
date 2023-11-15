@@ -14,10 +14,12 @@ namespace Cortside.AspNetCore.ApplicationInsights.TelemetryInitializers {
         }
 
         public void Initialize(ITelemetry telemetry) {
-            if (telemetry is RequestTelemetry requestTelemetry) {
-                if (telemetry is ISupportProperties propTelemetry && !propTelemetry.Properties.ContainsKey(PROPERTY_KEY)) {
-                    propTelemetry.Properties.Add(PROPERTY_KEY, HttpContextUtility.GetRequestIpAddress(httpContextAccessor.HttpContext));
-                }
+            if (telemetry is not RequestTelemetry requestTelemetry) {
+                return;
+            }
+
+            if (!requestTelemetry.Properties.ContainsKey(PROPERTY_KEY)) {
+                requestTelemetry.Properties.Add(PROPERTY_KEY, HttpContextUtility.GetRequestIpAddress(httpContextAccessor.HttpContext));
             }
         }
     }

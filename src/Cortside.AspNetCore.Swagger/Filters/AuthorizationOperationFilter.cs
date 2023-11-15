@@ -25,9 +25,7 @@ namespace Cortside.AspNetCore.Swagger.Filters {
                 return;
             }
 
-            if (operation.Parameters == null) {
-                operation.Parameters = new List<OpenApiParameter>();
-            }
+            operation.Parameters ??= new List<OpenApiParameter>();
 
             // display possible response status codes
             var code401 = ((int)HttpStatusCode.Unauthorized).ToString();

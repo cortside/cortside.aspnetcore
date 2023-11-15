@@ -16,6 +16,14 @@ namespace Cortside.AspNetCore.EntityFramework {
             return Task.CompletedTask;
         }
 
+
+
+
+        // https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-disposeasync
+
+
+
+
         public void Dispose() {
             // Method intentionally left empty.
         }

@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.IO.Compression;
 using System.Net.Mime;
 using Cortside.AspNetCore.Filters;
+using Cortside.AspNetCore.ModelBinding;
 using Cortside.Common.BootStrap;
 using Cortside.Common.Cryptography;
 using Cortside.Common.Json;
@@ -12,14 +12,9 @@ using Cortside.Health.Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 
 namespace Cortside.AspNetCore {
     public static class ServiceCollectionExtensions {
@@ -29,8 +24,7 @@ namespace Cortside.AspNetCore {
         /// <typeparam name="T"></typeparam>
         /// <param name="services">The services.</param>
         /// <returns></returns>
-        public static IServiceCollection AddStartupTask<T>(this IServiceCollection services)
-            where T : class, IStartupTask {
+        public static IServiceCollection AddStartupTask<T>(this IServiceCollection services) where T : class, IStartupTask {
             services.AddTransient<IStartupTask, T>();
             services.AddSingleton(services);
             return services;
@@ -52,8 +46,7 @@ namespace Cortside.AspNetCore {
             return services;
         }
 
-        public static IServiceCollection AddDefaultResponseCompression(this IServiceCollection services,
-            CompressionLevel compressionLevel) {
+        public static IServiceCollection AddDefaultResponseCompression(this IServiceCollection services, CompressionLevel compressionLevel) {
             services.AddResponseCompression(options => {
                 options.EnableForHttps = true;
                 options.Providers.Add<BrotliCompressionProvider>();
@@ -65,23 +58,36 @@ namespace Cortside.AspNetCore {
             return services;
         }
 
-        public static IMvcBuilder AddApiControllers<T>(this IServiceCollection services) where T : IActionFilter {
-            return services.AddApiControllers(new List<Type>() { typeof(T) }, new List<IOutputFormatter>());
+        public static IMvcBuilder AddApiDefaults(this IServiceCollection services, InternalDateTimeHandling internalDateTimeHandling = InternalDateTimeHandling.Utc, Action<MvcOptions> mvcAction = null) {
+            // add response compression using gzip and brotli compression
+            services.AddDefaultResponseCompression(CompressionLevel.Optimal);
+
+            services.AddResponseCaching();
+            services.AddMemoryCache();
+            services.AddDistributedMemoryCache();
+            services.AddCors();
+            services.AddOptions();
+
+            var mvcBuilder = services.AddApiControllers(internalDateTimeHandling, mvcAction);
+
+            // warm all the services up, can chain these together if needed
+            services.AddStartupTask<WarmupServicesStartupTask>();
+
+            return mvcBuilder;
         }
 
-        public static IMvcBuilder AddApiControllers(this IServiceCollection services, List<Type> filters, List<IOutputFormatter> outputFormatters) {
+        public static IMvcBuilder AddApiControllers(this IServiceCollection services, InternalDateTimeHandling internalDateTimeHandling = InternalDateTimeHandling.Utc, Action<MvcOptions> mvcAction = null) {
             var mvcBuilder = services.AddControllers(options => {
                 options.CacheProfiles.Add("Default", new CacheProfile {
                     Duration = 30,
                     Location = ResponseCacheLocation.Any
                 });
-                foreach (var filter in filters) {
-                    options.Filters.Add(filter);
-                }
-                foreach (var formatter in outputFormatters) {
-                    options.OutputFormatters.Add(formatter);
-                }
+                options.SuppressAsyncSuffixInActionNames = false;
                 options.Conventions.Add(new ApiControllerVersionConvention());
+                options.ModelBinderProviders.Insert(0, new UtcDateTimeModelBinderProvider(internalDateTimeHandling));
+
+                mvcAction ??= o => { o.Filters.Add<MessageExceptionResponseFilter>(); };
+                mvcAction.Invoke(options);
             });
             mvcBuilder.ConfigureApiBehaviorOptions(options => {
                 options.InvalidModelStateResponseFactory = context => {
@@ -91,17 +97,7 @@ namespace Cortside.AspNetCore {
                 };
             });
             mvcBuilder.AddNewtonsoftJson(options => {
-                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                options.SerializerSettings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
-
-                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                options.SerializerSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
-                options.SerializerSettings.NullValueHandling = NullValueHandling.Include;
-                options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Include;
-
-                options.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
-                options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
-                options.SerializerSettings.DateParseHandling = DateParseHandling.DateTimeOffset;
+                JsonNetUtility.ApplyGlobalDefaultSettings(options.SerializerSettings, internalDateTimeHandling);
                 options.SerializerSettings.Converters.Add(new IsoTimeSpanConverter());
             });
             mvcBuilder.PartManager.ApplicationParts.Add(new AssemblyPart(typeof(HealthController).Assembly));
@@ -109,49 +105,6 @@ namespace Cortside.AspNetCore {
             services.AddRouting(options => { options.LowercaseUrls = true; });
 
             return mvcBuilder;
-        }
-
-        public static IMvcBuilder AddApiDefaults<T>(this IServiceCollection services) where T : IActionFilter {
-            return services.AddApiDefaults(new List<Type>() { typeof(T) });
-        }
-
-        public static IMvcBuilder AddApiDefaults(this IServiceCollection services, List<Type> filters) {
-            return services.AddApiDefaults(filters, new List<IOutputFormatter>());
-        }
-
-        public static IMvcBuilder AddApiDefaults(this IServiceCollection services, List<Type> filters, List<IOutputFormatter> outputFormatters) {
-            // add response compression using gzip and brotli compression
-            services.AddDefaultResponseCompression(CompressionLevel.Optimal);
-
-            services.AddResponseCaching();
-            services.AddMemoryCache();
-            services.AddDistributedMemoryCache();
-            services.AddCors();
-            services.AddOptions();
-            var mvcBuilder = services.AddApiControllers(filters, outputFormatters);
-
-            // warm all the serivces up, can chain these together if needed
-            services.AddStartupTask<WarmupServicesStartupTask>();
-
-            return mvcBuilder;
-        }
-
-        public static IMvcBuilder AddApiDefaults(this IServiceCollection services) {
-            var mvcBuilder = services.AddApiDefaults<MessageExceptionResponseFilter>();
-
-            return mvcBuilder;
-        }
-
-        public static IServiceCollection AddRestApiClient<TInterface, TImplementation, TConfiguration>(
-            this IServiceCollection services, IConfiguration configuration, string key)
-            where TImplementation : class, TInterface
-            where TInterface : class
-            where TConfiguration : class {
-            var hartConfiguration = configuration.GetSection(key).Get<TConfiguration>();
-            services.AddSingleton(hartConfiguration);
-            services.AddTransient<TInterface, TImplementation>();
-
-            return services;
         }
 
         public static IServiceCollection AddEncryptionService(this IServiceCollection services, string secret) {
