@@ -116,6 +116,12 @@ namespace Cortside.AspNetCore.Builder {
             return this;
         }
 
+        public WebApiBuilder UseStartup<TStartup>(IConfiguration config) where TStartup : IWebApiStartup, new() {
+            this.config = config;
+            startup = new TStartup();
+            return this;
+        }
+
         public WebApiHost Build() {
             // TODO: use bootstraplogger
             //https://nblumhardt.com/2020/10/bootstrap-logger/
