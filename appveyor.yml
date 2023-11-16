@@ -34,17 +34,10 @@ assembly_info:
   assembly_informational_version: '{version}'
 
 before_build:
-#- dotnet --info
-#- ps: where.exe dotnet
-#- dotnet tool install --global dotnet-sonarscanner
 - set DNX_BUILD_VERSION=%APPVEYOR_BUILD_NUMBER%
 - ps: Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1'
 - ps: ./dotnet-install.ps1 -Channel 8.0 -Runtime aspnetcore -InstallDir 'C:\Program Files\dotnet\'
 - ps: ./dotnet-install.ps1 -Channel 8.0 -InstallDir 'C:\Program Files\dotnet\'
-#- ps: where.exe dotnet
-#- ps: $env:DOTNET_ROOT = "C:\Users\appveyor\AppData\Local\Microsoft\dotnet\"
-#- ps: echo $env:DOTNET_ROOT
-#- ps: echo $env:PATH
 - dotnet --info
 - ps: ./prebuild.ps1
 #- appveyor-retry dotnet restore src -v Minimal
@@ -84,8 +77,7 @@ build_script:
 - dotnet tool install --global dotnet-sonarscanner
 - dotnet sonarscanner begin /n:"%SONAR_NAME%" /o:"cortside" /k:"%SONAR_PROJECT%" /v:"%APPVEYOR_BUILD_VERSION%" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="%SONAR_TOKEN%" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" %SONAR_ARGUMENTS%
 - dotnet build src --configuration %Configuration% /property:"Version=%APPVEYOR_BUILD_VERSION%"
-- dotnet test --framework net6.0 src --collect:"XPlat Code Coverage" --settings ./src/coverlet.runsettings.xml /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
-- dotnet test --framework net8.0 src --collect:"XPlat Code Coverage" --settings ./src/coverlet.runsettings.xml /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+- dotnet test src --collect:"XPlat Code Coverage" --settings ./src/coverlet.runsettings.xml /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
 - dotnet sonarscanner end /d:sonar.login="%SONAR_TOKEN%"
 
 after_build:
