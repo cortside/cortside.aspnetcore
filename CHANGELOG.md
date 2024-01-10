@@ -1,3 +1,22 @@
+# Release 6.2
+
+* Update nuget dependencies to latest stable versions
+* Update serilog libraries to latest for better net6.0/net8.0 multitargeting 
+
+|Commit|Date|Author|Message|
+|---|---|---|---|
+| 68592f0 | <span style="white-space:nowrap;">2023-11-14</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update version
+| 9dfd443 | <span style="white-space:nowrap;">2023-11-14</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge branch 'release/6.1' into develop
+| 5f3e760 | <span style="white-space:nowrap;">2023-11-14</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge branch 'master' into develop
+| c194d0c | <span style="white-space:nowrap;">2023-11-15</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge branch 'master' into develop
+| aef12ea | <span style="white-space:nowrap;">2023-11-15</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge branch 'master' into develop
+| d1b799e | <span style="white-space:nowrap;">2023-11-15</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge branch 'master' into develop
+| c4e8aaf | <span style="white-space:nowrap;">2023-12-22</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update nuget package with updating to latest of serilog
+| 549a772 | <span style="white-space:nowrap;">2023-12-22</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update nuget package with updating to latest of serilog
+| 31dc1ba | <span style="white-space:nowrap;">2024-01-09</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  (origin/update-serilog, update-serilog) update nuget package vesions and latest powershell scripts
+| 2105387 | <span style="white-space:nowrap;">2024-01-09</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  (HEAD -> release/6.2, origin/develop, origin/HEAD, develop) Merge pull request #19 from cortside/update-serilog
+****
+
 # Release 6.1
 
 * Added delegates for DbContextOptionsBuilder and SqlServerDbContextOptionsBuilder to AddDbContext so that things could be customized

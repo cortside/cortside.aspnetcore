@@ -52,7 +52,7 @@ namespace Cortside.AspNetCore.Builder {
 
         public WebApplication WebApplication => webApplication;
 
-        private void CreateWebApplication() {
+        private void CreateWebApplication(string certificateThumbprint = null) {
             url = System.Environment.GetEnvironmentVariable("ASPNETCORE_URLS");
 
             var builder = WebApplication.CreateBuilder(args);
@@ -62,7 +62,14 @@ namespace Cortside.AspNetCore.Builder {
             builder.WebHost.UseConfiguration(config);
             builder.WebHost.UseShutdownTimeout(TimeSpan.FromSeconds(10));
 
-            builder.WebHost.UseKestrel(o => o.AddServerHeader = false);
+            builder.WebHost.UseKestrel(o => {
+                o.AddServerHeader = false;
+                if (!string.IsNullOrWhiteSpace(certificateThumbprint)) {
+                    o.ListenAnyIP(new Uri(url).Port, listenOptions => {
+                        listenOptions.UseHttps(X509.GetCertificate(certificateThumbprint));
+                    });
+                }
+            });
             builder.WebHost.ConfigureKestrel(options => {
                 options.ConfigureEndpointDefaults(_ => { });
                 options.AddServerHeader = false;
@@ -121,7 +128,6 @@ namespace Cortside.AspNetCore.Builder {
             //https://nblumhardt.com/2020/10/bootstrap-logger/
 
             config ??= GetConfiguration();
-
             startup?.UseConfiguration(config);
 
             var build = config.GetSection("Build").Get<BuildModel>();
