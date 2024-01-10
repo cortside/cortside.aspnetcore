@@ -11,6 +11,12 @@ platform: Any CPU
 
 pull_requests:  
   do_not_increment_build_number: true
+  
+skip_commits:
+  files:
+    - appveyor.yml
+    - repository.json
+    - src/version.json
 
 environment:
   # Don't report back to the mothership
