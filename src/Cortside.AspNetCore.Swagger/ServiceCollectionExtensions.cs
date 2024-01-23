@@ -55,6 +55,7 @@ namespace Cortside.AspNetCore.Swagger {
                 c.OperationFilter<AuthorizeOperationFilter>();
                 c.DocumentFilter<ReplaceVersionWithExactValueInPath>();
                 c.TagActionsBy(c => new[] { c.RelativePath });
+                c.CustomSchemaIds(type => type.ToString());
 
                 var identityServerConfiguration = configuration.GetSection("IdentityServer").Get<IdentityServerConfiguration>();
                 c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme {
