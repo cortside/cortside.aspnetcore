@@ -1,6 +1,7 @@
 using System;
 using System.IO.Compression;
 using System.Net.Mime;
+using Cortside.AspNetCore.Common;
 using Cortside.AspNetCore.Filters;
 using Cortside.AspNetCore.ModelBinding;
 using Cortside.Common.BootStrap;

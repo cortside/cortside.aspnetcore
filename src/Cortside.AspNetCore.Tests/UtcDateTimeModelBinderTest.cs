@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
+using Cortside.AspNetCore.Common;
 using Cortside.AspNetCore.ModelBinding;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
