@@ -42,6 +42,9 @@ namespace Cortside.AspNetCore.Builder {
                 .AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: true)
                 .AddJsonFile("build.json", true, true)
                 .AddEnvironmentVariables()
+                // https://github.com/dotnet/aspnetcore/issues/37680#issuecomment-1331559463
+                // This is the special line of code. It should be added in the place where you want to override configuration
+                .AddTestConfiguration()
                 .Build();
         }
 
@@ -61,10 +64,6 @@ namespace Cortside.AspNetCore.Builder {
             builder.WebHost.ConfigureAppConfiguration(b => b.AddConfiguration(config));
             builder.WebHost.UseConfiguration(config);
             builder.WebHost.UseShutdownTimeout(TimeSpan.FromSeconds(10));
-
-            // https://github.com/dotnet/aspnetcore/issues/37680#issuecomment-1331559463
-            // This is the special line of code. It should be added in the place where you want to override configuration
-            builder.Configuration.AddTestConfiguration();
 
             builder.WebHost.UseKestrel(o => {
                 o.AddServerHeader = false;
