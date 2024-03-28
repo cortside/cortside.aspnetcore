@@ -6,7 +6,7 @@ namespace Cortside.AspNetCore.Builder {
     /// <summary>
     /// https://github.com/dotnet/aspnetcore/issues/37680#issuecomment-1331559463
     /// </summary>
-    internal static class TestConfiguration {
+    public static class TestConfiguration {
         // This async local is set in from tests and it flows to main
         internal static readonly AsyncLocal<Action<IConfigurationBuilder>> current = new();
 
