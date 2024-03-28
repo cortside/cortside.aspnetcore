@@ -62,6 +62,10 @@ namespace Cortside.AspNetCore.Builder {
             builder.WebHost.UseConfiguration(config);
             builder.WebHost.UseShutdownTimeout(TimeSpan.FromSeconds(10));
 
+            // https://github.com/dotnet/aspnetcore/issues/37680#issuecomment-1331559463
+            // This is the special line of code. It should be added in the place where you want to override configuration
+            builder.Configuration.AddTestConfiguration();
+
             builder.WebHost.UseKestrel(o => {
                 o.AddServerHeader = false;
                 if (!string.IsNullOrWhiteSpace(certificateThumbprint)) {
