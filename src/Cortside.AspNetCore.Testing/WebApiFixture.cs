@@ -15,26 +15,22 @@ using Newtonsoft.Json;
 using Xunit.Abstractions;
 
 namespace Cortside.AspNetCore.Testing {
-    public abstract class WebApiIntegrationTest<TEntryPoint> : IDisposable where TEntryPoint : class {
+    public abstract class WebApiFixture<TEntryPoint> : IDisposable where TEntryPoint : class {
         private readonly WebApiFactory<TEntryPoint> api;
         private bool disposed;
 
-        public WebApiIntegrationTest() {
+        public WebApiFixture() {
             api = new WebApiFactory<TEntryPoint>(
-                configureConfiguration: builder => { ConfigureConfiguration(builder); },
-                configureServices: services => { ConfigureServices(services); },
-                configureMockHttpServer: builder => { ConfigureMockHttpServer(builder); }
-            );
+                configureMockHttpServer: ConfigureMockHttpServer,
+                configureConfiguration: ConfigureConfiguration,
+                configureServices: ConfigureServices);
         }
 
-        protected virtual void ConfigureConfiguration(IConfigurationBuilder builder) {
-        }
+        protected abstract void ConfigureConfiguration(IConfigurationBuilder builder);
 
-        protected virtual void ConfigureServices(IServiceCollection services) {
-        }
+        protected abstract void ConfigureServices(IServiceCollection services);
 
-        protected virtual void ConfigureMockHttpServer(IMockHttpServerBuilder builder) {
-        }
+        protected abstract void ConfigureMockHttpServer(IMockHttpServerBuilder builder);
 
         public WebApiFactory<TEntryPoint> Api => api;
 
