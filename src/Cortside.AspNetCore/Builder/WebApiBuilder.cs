@@ -29,6 +29,19 @@ namespace Cortside.AspNetCore.Builder {
         private bool executingIsEntryAssembly;
         private string url;
 
+        private Action<IHostBuilder> hostConfigurationAction = null;
+        private Action<IWebHostBuilder> webHostConfigurationAction = null;
+
+        public WebApiBuilder WithHostAction(Action<IHostBuilder> action) {
+            this.hostConfigurationAction = action;
+            return this;
+        }
+
+        public WebApiBuilder WithWebHostAction(Action<IWebHostBuilder> action) {
+            this.webHostConfigurationAction = action;
+            return this;
+        }
+
         public WebApiBuilder(string[] args) {
             this.args = args;
         }
@@ -59,6 +72,15 @@ namespace Cortside.AspNetCore.Builder {
             url = System.Environment.GetEnvironmentVariable("ASPNETCORE_URLS");
 
             var builder = WebApplication.CreateBuilder(args);
+
+            if (hostConfigurationAction != null) {
+                hostConfigurationAction(builder.Host);
+            }
+
+            if (webHostConfigurationAction != null) {
+                webHostConfigurationAction(builder.WebHost);
+            }
+
             builder.Host.UseSerilog(Log.Logger);
 
             builder.WebHost.ConfigureAppConfiguration(b => b.AddConfiguration(config));
