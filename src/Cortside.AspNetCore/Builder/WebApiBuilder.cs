@@ -32,13 +32,13 @@ namespace Cortside.AspNetCore.Builder {
         private Action<IHostBuilder> hostConfigurationAction = null;
         private Action<IWebHostBuilder> webHostConfigurationAction = null;
 
-        public WebApiBuilder WithHostAction(Action<IHostBuilder> action) {
-            this.hostConfigurationAction = action;
+        public WebApiBuilder WithHostBuilder(Action<IHostBuilder> configuration) {
+            this.hostConfigurationAction = configuration;
             return this;
         }
 
-        public WebApiBuilder WithWebHostAction(Action<IWebHostBuilder> action) {
-            this.webHostConfigurationAction = action;
+        public WebApiBuilder WithWebHostBuilder(Action<IWebHostBuilder> configuration) {
+            this.webHostConfigurationAction = configuration;
             return this;
         }
 
