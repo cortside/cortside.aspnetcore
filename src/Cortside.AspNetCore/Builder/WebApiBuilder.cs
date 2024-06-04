@@ -31,6 +31,7 @@ namespace Cortside.AspNetCore.Builder {
 
         private Action<IHostBuilder> hostConfigurationAction = null;
         private Action<IWebHostBuilder> webHostConfigurationAction = null;
+        private Action<LoggerConfiguration> loggerConfigurationAction = null;
 
         public WebApiBuilder WithHostBuilder(Action<IHostBuilder> configuration) {
             this.hostConfigurationAction = configuration;
@@ -39,6 +40,11 @@ namespace Cortside.AspNetCore.Builder {
 
         public WebApiBuilder WithWebHostBuilder(Action<IWebHostBuilder> configuration) {
             this.webHostConfigurationAction = configuration;
+            return this;
+        }
+
+        public WebApiBuilder WithLoggerConfiguration(Action<LoggerConfiguration> configuration) {
+            this.loggerConfigurationAction = configuration;
             return this;
         }
 
@@ -195,6 +201,10 @@ namespace Cortside.AspNetCore.Builder {
             var logFile = config["LogFile:Path"];
             if (!string.IsNullOrWhiteSpace(logFile)) {
                 configuration.WriteTo.File(logFile);
+            }
+
+            if (loggerConfigurationAction != null) {
+                loggerConfigurationAction(configuration);
             }
 
             return configuration;
