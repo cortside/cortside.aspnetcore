@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cortside.AspNetCore.Auditable;
 using Cortside.AspNetCore.Auditable.Entities;
+using Cortside.AspNetCore.EntityFramework.Conventions;
 using Cortside.Common.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -134,6 +135,18 @@ namespace Cortside.AspNetCore.EntityFramework {
             foreach (var fk in fks) {
                 fk.DeleteBehavior = DeleteBehavior.NoAction;
             }
+        }
+
+        /// <summary>
+        /// This adds a convention to apply HasTriggers to all tables in the model
+        /// </summary>
+        /// <remarks>
+        /// Cortside applies triggers to all tables by default, which require mitigation in EF7+
+        /// <see href="https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-7.0/breaking-changes?tabs=v7#mitigations-2"></see>
+        /// </remarks>
+        /// <param name="configurationBuilder"></param>
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder) {
+            configurationBuilder.Conventions.Add(_ => new BlankTriggerAddingConvention());
         }
     }
 }
