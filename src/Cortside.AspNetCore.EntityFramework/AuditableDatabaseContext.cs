@@ -5,7 +5,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cortside.AspNetCore.Auditable;
 using Cortside.AspNetCore.Auditable.Entities;
+#if (NET8_0_OR_GREATER)
 using Cortside.AspNetCore.EntityFramework.Conventions;
+#endif
 using Cortside.Common.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -137,6 +139,7 @@ namespace Cortside.AspNetCore.EntityFramework {
             }
         }
 
+#if (NET8_0_OR_GREATER)
         /// <summary>
         /// This adds a convention to apply HasTriggers to all tables in the model
         /// </summary>
@@ -148,5 +151,7 @@ namespace Cortside.AspNetCore.EntityFramework {
         protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder) {
             configurationBuilder.Conventions.Add(_ => new BlankTriggerAddingConvention());
         }
+#endif
+
     }
 }

@@ -25,6 +25,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.26" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.26" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.26" />
+    <Compile Remove="**\BlankTriggerAddingConvention.cs" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="8.0.1" />
