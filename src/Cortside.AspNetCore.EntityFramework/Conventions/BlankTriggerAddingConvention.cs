@@ -6,9 +6,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace Cortside.AspNetCore.EntityFramework.Conventions {
     public class BlankTriggerAddingConvention : IModelFinalizingConvention {
+
         public virtual void ProcessModelFinalizing(
             IConventionModelBuilder modelBuilder,
             IConventionContext<IConventionModelBuilder> context) {
+#if (NET8_0_OR_GREATER)
             foreach (var entityType in modelBuilder.Metadata.GetEntityTypes()) {
                 var table = StoreObjectIdentifier.Create(entityType, StoreObjectType.Table);
                 if (table != null
@@ -24,6 +26,7 @@ namespace Cortside.AspNetCore.EntityFramework.Conventions {
                     }
                 }
             }
+#endif
         }
     }
 }

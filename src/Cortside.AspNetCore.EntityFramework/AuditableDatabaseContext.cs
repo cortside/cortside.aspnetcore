@@ -5,9 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cortside.AspNetCore.Auditable;
 using Cortside.AspNetCore.Auditable.Entities;
-#if (NET8_0_OR_GREATER)
 using Cortside.AspNetCore.EntityFramework.Conventions;
-#endif
 using Cortside.Common.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
