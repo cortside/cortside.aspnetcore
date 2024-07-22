@@ -52,6 +52,8 @@ namespace Cortside.AspNetCore.Middleware.Tests {
             var header = response.Headers.GetValues("X-Correlation-Id").FirstOrDefault();
 
             Assert.Equal("ABC123", header);
+
+            request.Dispose();
         }
 
         [Fact]

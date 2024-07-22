@@ -12,10 +12,11 @@ using Newtonsoft.Json;
 using Xunit;
 
 namespace Cortside.Common.Messages.Tests.Filters {
-    public class MessageExceptionResponseFilterTest {
+    public class MessageExceptionResponseFilterTest : IDisposable {
         private readonly MessageExceptionResponseFilter filter = null;
+        private readonly LoggerFactory loggerFactory = new LoggerFactory();
         public MessageExceptionResponseFilterTest() {
-            filter = new MessageExceptionResponseFilter(new Logger<MessageExceptionResponseFilter>(new LoggerFactory()));
+            filter = new MessageExceptionResponseFilter(new Logger<MessageExceptionResponseFilter>(loggerFactory));
         }
 
         [Theory]
@@ -47,7 +48,7 @@ namespace Cortside.Common.Messages.Tests.Filters {
 
         [Fact]
         public void ShouldGenerateErrorModel() {
-            var filter = new MessageExceptionResponseFilter(new Logger<MessageExceptionResponseFilter>(new LoggerFactory()));
+            var filter = new MessageExceptionResponseFilter(new Logger<MessageExceptionResponseFilter>(loggerFactory));
 
             var messages = new MessageList() {
                 new MissingRequiredFieldError("property1"),
@@ -98,6 +99,11 @@ namespace Cortside.Common.Messages.Tests.Filters {
                 }
             };
             return new ActionExecutedContext(actionContext, filters, controllerMock.Object);
+        }
+
+        public void Dispose() {
+            GC.SuppressFinalize(this);
+            loggerFactory.Dispose();
         }
     }
 }
