@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
+using Cortside.AspNetCore.Filters;
 using Cortside.Common.Json;
-using Cortside.Common.Messages.Filters;
 using Cortside.Common.Messages.MessageExceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace Cortside.Common.Messages.Tests.Filters {
@@ -59,7 +60,15 @@ namespace Cortside.Common.Messages.Tests.Filters {
             Assert.NotEmpty(model.Errors);
             Assert.Equal(2, model.Errors.Count);
 
-            Assert.Equal("{\"Errors\":[{\"Type\":\"MissingRequiredFieldError\",\"Property\":\"property1\",\"Message\":\"property1 is required.\"},{\"Type\":\"InvalidTypeFormatError\",\"Property\":\"property2\",\"Message\":\"abc is not a valid value for property2.\"}]}", model.ToJson());
+            // check each one
+            Assert.Equal("MissingRequiredFieldError", model.Errors[0].Type);
+            Assert.Equal("property1", model.Errors[0].Property);
+            Assert.Equal("property1 is required.", model.Errors[0].Message);
+
+            // second
+            Assert.Equal("InvalidTypeFormatError", model.Errors[1].Type);
+            Assert.Equal("property2", model.Errors[1].Property);
+            Assert.Equal("abc is not a valid value for property2.", model.Errors[1].Message);
         }
 
         public static IEnumerable<object[]> GetCommonMessageExceptionScenarios() {
