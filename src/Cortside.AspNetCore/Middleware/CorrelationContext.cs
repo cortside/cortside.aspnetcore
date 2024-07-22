@@ -63,7 +63,17 @@ namespace Cortside.AspNetCore.Middleware {
             RequestId.Value = requestId;
         }
 
-        public static string GetCorrelationId(bool generateCorrelationId = true) {
+        public static string GetCorrelationId() {
+            var correlationId = CorrelationId.Value;
+            if (string.IsNullOrWhiteSpace(correlationId)) {
+                correlationId = Guid.NewGuid().ToString();
+                SetCorrelationId(correlationId);
+            }
+
+            return CorrelationId.Value;
+        }
+
+        public static string GetCorrelationId(bool generateCorrelationId) {
             var correlationId = CorrelationId.Value;
             if (generateCorrelationId && string.IsNullOrWhiteSpace(correlationId)) {
                 correlationId = Guid.NewGuid().ToString();

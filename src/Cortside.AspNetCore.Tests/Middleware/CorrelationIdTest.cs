@@ -65,7 +65,7 @@ namespace Cortside.AspNetCore.Middleware.Tests {
 
                    _ = app.Use((context, next) => {
                        if (DateTime.Now.Day > 0) {
-                           throw new Exception();
+                           throw new InvalidOperationException();
                        }
 
                        return next(context);

@@ -12,7 +12,7 @@ using Xunit;
 
 namespace Cortside.Common.Messages.Tests.Filters {
     public class MessageExceptionResponseFilterTest : IDisposable {
-        private readonly MessageExceptionResponseFilter filter = null;
+        private readonly MessageExceptionResponseFilter filter;
         private readonly LoggerFactory loggerFactory = new LoggerFactory();
         public MessageExceptionResponseFilterTest() {
             filter = new MessageExceptionResponseFilter(new Logger<MessageExceptionResponseFilter>(loggerFactory));
@@ -48,7 +48,7 @@ namespace Cortside.Common.Messages.Tests.Filters {
         [Fact]
         public void ShouldGenerateErrorModel() {
             // arrange
-            var messages = new MessageList() {
+            var messages = new MessageList {
                 new MissingRequiredFieldError("property1"),
                 new InvalidTypeFormatError("property2", "abc")
             };
@@ -91,10 +91,10 @@ namespace Cortside.Common.Messages.Tests.Filters {
         private static ActionExecutedContext GetActionExecutedContext() {
             var controllerMock = new Mock<Controller>();
             var filters = new List<IFilterMetadata>();
-            var actionContext = new ActionContext() {
+            var actionContext = new ActionContext {
                 HttpContext = new Mock<HttpContext>().Object,
                 RouteData = new Microsoft.AspNetCore.Routing.RouteData(),
-                ActionDescriptor = new Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor() {
+                ActionDescriptor = new Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor {
                     ActionName = "index",
                     ControllerName = "home"
                 }
