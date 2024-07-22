@@ -84,9 +84,7 @@ namespace Cortside.AspNetCore {
                 options.SuppressAsyncSuffixInActionNames = false;
                 options.Conventions.Add(new ApiControllerVersionConvention());
                 options.ModelBinderProviders.Insert(0, new UtcDateTimeModelBinderProvider(internalDateTimeHandling));
-                if (mvcAction == null) {
-                    mvcAction = (o) => { o.Filters.Add<Filters.MessageExceptionResponseFilter>(); };
-                }
+                mvcAction ??= (o) => { o.Filters.Add<MessageExceptionResponseFilter>(); };
                 mvcAction.Invoke(options);
             });
             mvcBuilder.ConfigureApiBehaviorOptions(options => {

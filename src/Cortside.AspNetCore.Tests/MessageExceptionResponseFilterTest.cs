@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using Cortside.AspNetCore.Filters;
-using Cortside.Common.Json;
 using Cortside.Common.Messages.MessageExceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Newtonsoft.Json;
 using Xunit;
 
 namespace Cortside.Common.Messages.Tests.Filters {
@@ -48,15 +47,17 @@ namespace Cortside.Common.Messages.Tests.Filters {
 
         [Fact]
         public void ShouldGenerateErrorModel() {
-            var filter = new MessageExceptionResponseFilter(new Logger<MessageExceptionResponseFilter>(loggerFactory));
-
+            // arrange
             var messages = new MessageList() {
                 new MissingRequiredFieldError("property1"),
                 new InvalidTypeFormatError("property2", "abc")
             };
+
+            // act
             var ex = new ValidationListException(messages);
             var model = filter.GetErrorsModel(ex);
 
+            // assert
             Assert.NotNull(model);
             Assert.NotEmpty(model.Errors);
             Assert.Equal(2, model.Errors.Count);
