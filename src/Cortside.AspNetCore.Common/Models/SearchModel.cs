@@ -1,4 +1,4 @@
-﻿namespace LiveTula.ConnectApi.WebApi.Models.Requests {
+﻿namespace Cortside.AspNetCore.Common.Models {
     public class SearchModel {
         /// <summary>
         /// Gets or sets the page number.

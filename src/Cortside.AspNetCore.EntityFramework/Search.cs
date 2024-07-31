@@ -1,4 +1,4 @@
-﻿namespace LiveTula.ConnectApi.Data.Searches {
+﻿namespace Cortside.AspNetCore.EntityFramework {
     public class Search : ISearch {
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 30;
