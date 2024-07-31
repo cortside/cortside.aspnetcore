@@ -1,4 +1,6 @@
-﻿namespace Cortside.AspNetCore.Common.Models {
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Cortside.AspNetCore.Common.Models {
     public class SearchModel {
         /// <summary>
         /// Gets or sets the page number.
@@ -6,6 +8,7 @@
         /// <value>
         /// The page number.
         /// </value>
+        [Range(1, int.MaxValue)]
         public int PageNumber { get; set; } = 1;
 
         /// <summary>
@@ -14,6 +17,7 @@
         /// <value>
         /// The size of the page.
         /// </value>
+        [Range(1, int.MaxValue)]
         public int PageSize { get; set; } = 30;
 
         /// <summary>
