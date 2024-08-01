@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Cortside.AspNetCore.Filters;
+using Cortside.AspNetCore.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,7 +11,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace Cortside.AspNetCore.Middleware.Tests {
+namespace Cortside.AspNetCore.Tests.Middleware {
     public class CorrelationIdTest {
         [Fact]
         public async Task ReturnsCorrelationIdInResponseHeader() {

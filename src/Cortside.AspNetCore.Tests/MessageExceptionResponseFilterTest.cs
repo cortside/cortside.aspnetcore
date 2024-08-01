@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using Cortside.AspNetCore.Filters;
+using Cortside.Common.Messages;
 using Cortside.Common.Messages.MessageExceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
-namespace Cortside.Common.Messages.Tests.Filters {
+namespace Cortside.AspNetCore.Tests {
     public class MessageExceptionResponseFilterTest : IDisposable {
         private readonly MessageExceptionResponseFilter filter;
         private readonly LoggerFactory loggerFactory = new LoggerFactory();
