@@ -1,6 +1,6 @@
-﻿using Cortside.Common.Messages;
+﻿using Cortside.AspNetCore.Filters.Models;
+using Cortside.Common.Messages;
 using Cortside.Common.Messages.MessageExceptions;
-using Cortside.Common.Messages.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
