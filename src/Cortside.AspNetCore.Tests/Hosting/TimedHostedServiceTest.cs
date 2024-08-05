@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Cortside.AspNetCore.Hosting;
+using Cortside.Common.Hosting;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;

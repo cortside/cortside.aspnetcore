@@ -19,7 +19,7 @@ namespace Cortside.AspNetCore.Middleware {
         }
 
         public async Task InvokeAsync(HttpContext context) {
-            var correlationId = CorrelationContext.SetFromHttpContext(context);
+            var correlationId = HttpCorrelationContext.SetFromHttpContext(context);
 
             var a = Activity.Current;
             if (a != null && a.ParentId == null) {

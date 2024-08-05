@@ -16,7 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Cortside.AspNetCore {
-    public static class ServiceCollectionExtensions {
+    public static class CorrelationContextExtensions {
         /// <summary>
         /// Adds a startup task
         /// </summary>

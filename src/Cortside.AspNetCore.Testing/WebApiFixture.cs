@@ -19,7 +19,7 @@ namespace Cortside.AspNetCore.Testing {
         private readonly WebApiFactory<TEntryPoint> api;
         private bool disposed;
 
-        public WebApiFixture() {
+        protected WebApiFixture() {
             api = new WebApiFactory<TEntryPoint>(
                 configureMockHttpServer: ConfigureMockHttpServer,
                 configureConfiguration: ConfigureConfiguration,
