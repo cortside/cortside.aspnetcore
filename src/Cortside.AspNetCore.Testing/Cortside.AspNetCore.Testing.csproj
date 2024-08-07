@@ -20,7 +20,7 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Cortside.Common.Testing" Version="6.3.410-develop" />
+    <PackageReference Include="Cortside.Common.Testing" Version="6.3.444-release-6.3" />
     <PackageReference Include="Cortside.Common.Testing.EntityFramework" Version="6.3.410-develop" />
     <PackageReference Include="Cortside.DomainEvent.Stub" Version="6.2.301" />
     <PackageReference Include="Cortside.MockServer.AccessControl" Version="6.1.62" />
