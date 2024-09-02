@@ -1,6 +1,7 @@
 using System;
 using System.IO.Compression;
 using System.Net.Mime;
+using Cortside.AspNetCore.Common;
 using Cortside.AspNetCore.Filters;
 using Cortside.AspNetCore.Filters.Results;
 using Cortside.AspNetCore.ModelBinding;
@@ -57,7 +58,7 @@ namespace Cortside.AspNetCore {
             return services;
         }
 
-        public static IMvcBuilder AddApiDefaults(this IServiceCollection services, InternalDateTimeHandling internalDateTimeHandling = InternalDateTimeHandling.Utc, Action<MvcOptions> mvcAction = null) {
+        public static IMvcBuilder AddApiDefaults(this IServiceCollection services, InternalDateTimeHandling internalDateTimeHandling = InternalDateTimeHandling.Utc, Action<MvcOptions> mvcAction = null, Action<MvcNewtonsoftJsonOptions> mvcNewtonsoftJsonOptions = null) {
             // add response compression using gzip and brotli compression
             services.AddDefaultResponseCompression(CompressionLevel.Optimal);
 
@@ -67,7 +68,7 @@ namespace Cortside.AspNetCore {
             services.AddCors();
             services.AddOptions();
 
-            var mvcBuilder = services.AddApiControllers(internalDateTimeHandling, mvcAction);
+            var mvcBuilder = services.AddApiControllers(internalDateTimeHandling, mvcAction, mvcNewtonsoftJsonOptions);
 
             // warm all the services up, can chain these together if needed
             services.AddStartupTask<WarmupServicesStartupTask>();
@@ -75,7 +76,7 @@ namespace Cortside.AspNetCore {
             return mvcBuilder;
         }
 
-        public static IMvcBuilder AddApiControllers(this IServiceCollection services, InternalDateTimeHandling internalDateTimeHandling = InternalDateTimeHandling.Utc, Action<MvcOptions> mvcAction = null) {
+        public static IMvcBuilder AddApiControllers(this IServiceCollection services, InternalDateTimeHandling internalDateTimeHandling = InternalDateTimeHandling.Utc, Action<MvcOptions> mvcAction = null, Action<MvcNewtonsoftJsonOptions> mvcNewtonsoftJsonOptions = null) {
             var mvcBuilder = services.AddControllers(options => {
                 options.CacheProfiles.Add("Default", new CacheProfile {
                     Duration = 30,
@@ -97,6 +98,8 @@ namespace Cortside.AspNetCore {
             mvcBuilder.AddNewtonsoftJson(options => {
                 JsonNetUtility.ApplyGlobalDefaultSettings(options.SerializerSettings, internalDateTimeHandling);
                 options.SerializerSettings.Converters.Add(new IsoTimeSpanConverter());
+
+                mvcNewtonsoftJsonOptions?.Invoke(options);
             });
             mvcBuilder.PartManager.ApplicationParts.Add(new AssemblyPart(typeof(HealthController).Assembly));
 

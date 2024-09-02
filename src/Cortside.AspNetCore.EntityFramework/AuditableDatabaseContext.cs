@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using Cortside.AspNetCore.Auditable;
 using Cortside.AspNetCore.Auditable.Entities;
 using Cortside.AspNetCore.EntityFramework.Conventions;
+using Cortside.AspNetCore.Common;
 using Cortside.Common.Security;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Cortside.AspNetCore.EntityFramework {
@@ -19,6 +21,11 @@ namespace Cortside.AspNetCore.EntityFramework {
             this.subjectPrincipal = subjectPrincipal;
             this.subjectFactory = subjectFactory;
         }
+
+        /// <summary>
+        /// Used to control the date
+        /// </summary>
+        public InternalDateTimeHandling DateTimeHandling { get; set; } = InternalDateTimeHandling.Utc;
 
         public DbSet<TSubject> Subjects { get; set; }
 
@@ -49,21 +56,22 @@ namespace Cortside.AspNetCore.EntityFramework {
         private async Task SetAuditableEntityValuesAsync() {
             // check for subject in subjects set and either create or get to attach to AudibleEntity
             var updatingSubject = await GetCurrentSubjectAsync();
+
+            var now = DateTimeHandling == InternalDateTimeHandling.Utc ? DateTime.UtcNow : DateTime.Now;
+
             ChangeTracker.DetectChanges();
-            var modified = ChangeTracker.Entries().Where(x => x.Entity is AuditableEntity && (x.State == EntityState.Modified || x.State == EntityState.Added));
-            var added = ChangeTracker.Entries().Where(x => x.Entity is AuditableEntity && x.State == EntityState.Added);
+            var entries = ChangeTracker.Entries()
+                .Where(e => e is { Entity: AuditableEntity, State: EntityState.Added or EntityState.Modified });
 
-#pragma warning disable S3267 // Loops should be simplified with "LINQ" expressions
-            foreach (var item in modified) {
-                ((AuditableEntity)item.Entity).LastModifiedSubject = updatingSubject;
-                ((AuditableEntity)item.Entity).LastModifiedDate = DateTime.Now.ToUniversalTime();
-            }
+            foreach (var entityEntry in entries) {
+                ((AuditableEntity)entityEntry.Entity).LastModifiedSubject = updatingSubject;
+                ((AuditableEntity)entityEntry.Entity).LastModifiedDate = now;
 
-            foreach (var item in added) {
-                ((AuditableEntity)item.Entity).CreatedSubject = updatingSubject;
-                ((AuditableEntity)item.Entity).CreatedDate = DateTime.Now.ToUniversalTime();
+                if (entityEntry.State == EntityState.Added) {
+                    ((AuditableEntity)entityEntry.Entity).CreatedSubject = updatingSubject;
+                    ((AuditableEntity)entityEntry.Entity).CreatedDate = now;
+                }
             }
-#pragma warning restore S3267 // Loops should be simplified with "LINQ" expressions
 
             await OnBeforeSaveChangesAsync(updatingSubject);
         }
@@ -99,6 +107,10 @@ namespace Cortside.AspNetCore.EntityFramework {
             return subject;
         }
 
+        /// <summary>
+        /// Use in OnModelCreating to set a ValueConverter on all DateTime/DateTime? properties for all entities
+        /// </summary>
+        /// <param name="builder"></param>
         protected static void SetDateTime(ModelBuilder builder) {
             // 1/1/1753 12:00:00 AM and 12/31/9999 11:59:59 PM
             // using local as default with the assumption that most of the time local will be utc and expected
@@ -130,6 +142,10 @@ namespace Cortside.AspNetCore.EntityFramework {
             }
         }
 
+        /// <summary>
+        /// Use in OnModelCreating to set DeleteBehavior to NoAction on all entity ForeignKeys
+        /// </summary>
+        /// <param name="builder"></param>
         protected static void SetCascadeDelete(ModelBuilder builder) {
             var fks = builder.Model.GetEntityTypes().SelectMany(t => t.GetDeclaredForeignKeys());
             foreach (var fk in fks) {

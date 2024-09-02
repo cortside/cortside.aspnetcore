@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Cortside.AspNetCore.Common;
 using Cortside.AspNetCore.Tests.Controllers;
 using Cortside.Common.Testing;
 using FluentAssertions;
