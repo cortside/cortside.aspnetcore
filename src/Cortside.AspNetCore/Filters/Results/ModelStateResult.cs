@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Cortside.Common.Messages.Models;
+using Cortside.AspNetCore.Filters.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 

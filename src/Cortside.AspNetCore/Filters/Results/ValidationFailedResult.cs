@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using Cortside.Common.Messages.Models;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Cortside.AspNetCore.Filters.Results {

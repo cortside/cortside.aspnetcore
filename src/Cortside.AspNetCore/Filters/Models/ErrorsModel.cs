@@ -17,6 +17,13 @@ namespace Cortside.AspNetCore.Filters.Models {
         }
 
         /// <summary>
+        /// Errors model constructor
+        /// </summary>
+        public ErrorsModel(List<ErrorModel> errors) {
+            Errors = errors ?? new List<ErrorModel>();
+        }
+
+        /// <summary>
         /// Create new instance of errors from model state
         /// </summary>
         /// <param name="modelState"></param>
