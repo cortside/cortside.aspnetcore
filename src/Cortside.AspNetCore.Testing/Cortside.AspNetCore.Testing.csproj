@@ -54,7 +54,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Cortside.AspNetCore.EntityFramework\Cortside.AspNetCore.EntityFramework.csproj" />
     <ProjectReference Include="..\Cortside.AspNetCore\Cortside.AspNetCore.csproj" />
   </ItemGroup>
 

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Cortside.Common.Messages;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Cortside.AspNetCore.Filters.Models {
     /// <summary>
@@ -21,16 +19,6 @@ namespace Cortside.AspNetCore.Filters.Models {
         /// </summary>
         public ErrorsModel(List<ErrorModel> errors) {
             Errors = errors ?? new List<ErrorModel>();
-        }
-
-        /// <summary>
-        /// Create new instance of errors from model state
-        /// </summary>
-        /// <param name="modelState"></param>
-        public ErrorsModel(ModelStateDictionary modelState) {
-            Errors = modelState.Keys
-                .SelectMany(key => modelState[key].Errors.Select(x => new ErrorModel(x.Exception?.GetType()?.Name ?? "ModelStateValidation", key, x.ErrorMessage)))
-                .ToList();
         }
 
         /// <summary>
