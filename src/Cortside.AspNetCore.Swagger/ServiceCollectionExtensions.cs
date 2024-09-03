@@ -38,9 +38,9 @@ namespace Cortside.AspNetCore.Swagger {
                                     // reporting api versions will return the headers
                                     // "api-supported-versions" and "api-deprecated-versions"
                                     options.ReportApiVersions = true;
+                                    options.AssumeDefaultVersionWhenUnspecified = false;
 
-                                    //    o.AssumeDefaultVersionWhenUnspecified = false;
-                                    //    o.UseApiBehavior = true;
+                                    //options.UseApiBehavior = true;
 
                                     options.Policies.Sunset(0.9)
                                                     .Effective(DateTimeOffset.Now.AddDays(60))
