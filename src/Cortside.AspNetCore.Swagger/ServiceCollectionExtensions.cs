@@ -7,9 +7,7 @@ using Cortside.AspNetCore.AccessControl;
 using Cortside.AspNetCore.Swagger.Filters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Cortside.AspNetCore.Swagger {
     /// <summary>
@@ -39,7 +37,6 @@ namespace Cortside.AspNetCore.Swagger {
                                     // "api-supported-versions" and "api-deprecated-versions"
                                     options.ReportApiVersions = true;
                                     options.AssumeDefaultVersionWhenUnspecified = false;
-
                                     //options.UseApiBehavior = true;
 
                                     options.Policies.Sunset(0.9)
@@ -63,7 +60,7 @@ namespace Cortside.AspNetCore.Swagger {
                                 });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+            //services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
             services.AddSwaggerGen(c => {
                 foreach (var version in versions) {
