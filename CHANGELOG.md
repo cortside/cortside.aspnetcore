@@ -1,3 +1,107 @@
+# Release 6.3
+
+## Breaking changes
+
+* AuditableEntity corrected FK column from CreateSubjectId to CreatedSubjectId
+    * Requires a migration to be created
+
+## Changes
+
+* Update nuget dependencies to latest stable versions
+* Add common model classes for searches
+* PageList calculates TotalPages
+* AuditableDatabaseContext adds BlankTriggerConversion to tables for EF 8+
+    * This is required by EF 8+ to know if there are triggers on EF tables
+* Change from Microsoft.AspNetCore.Mvc.Versioning to supported Asp.Versioning
+* Add WebApiFactory and WebApiFixture to simplify integration test fixture
+    * See example of use here: https://github.com/cortside/coeus/blob/develop/shoppingcart-api/src/Acme.ShoppingCart.WebApi.IntegrationTests/IntegrationFixture.cs
+* WebApiBuilder adds support for
+    * WithHostBuilder
+    * WithWebHostBuilder
+    * WithLoggerConfiguration
+    * Examples
+    ```csharp
+    var builder = WebApiHost.CreateBuilder(args)
+        .WithWebHostBuilder(builder => {
+            builder.UseSentry(o => {
+                o.Dsn = "<snip>.ingest.us.sentry.io/<snip>";
+                o.Environment = "dev";
+                o.Debug = true;
+                o.Release = "VeryGroovyService.0.0.1";
+                o.AddEntityFramework();
+                o.CaptureFailedRequests = true;
+                o.SendDefaultPii = true;
+                o.TracesSampleRate = 1.0; // Capture 100% of the application's transactions
+                o.ProfilesSampleRate = 1.0; // profile 100% of the captured transactions
+                o.AddIntegration(new ProfilingIntegration(
+                    TimeSpan.FromMilliseconds(500) // wait 500 ms for profiling to start
+                ));
+            });
+
+        })
+        .WithLoggerConfiguration(cfg => {
+            cfg.WriteTo.Sentry(s => {
+                s.InitializeSdk = false;
+                s.MinimumBreadcrumbLevel = LogEventLevel.Debug;
+                s.MinimumEventLevel = LogEventLevel.Warning;
+            });
+        })
+        .UseStartup<Startup>();
+    ```
+* Add MessageExceptionResponseFilter from Cortside.Common.Messages
+    * Along with ErrorsModel, ErrorModel
+* Add CorrelationMiddleware, moved from Cortside.Common.Messages
+* Add HttpCorrelationContext to help set CorrelationContext with information from request
+
+|Commit|Date|Author|Message|
+|---|---|---|---|
+| b8a4781 | <span style="white-space:nowrap;">2024-01-10</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update version
+| 66e3f9f | <span style="white-space:nowrap;">2024-01-10</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge branch 'master' into develop
+| c7748cd | <span style="white-space:nowrap;">2024-01-10</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  skip commits that only contain version changes (should avoid building develop after merge from master)
+| 3df3b35 | <span style="white-space:nowrap;">2024-01-10</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge branch 'master' into develop
+| 7032750 | <span style="white-space:nowrap;">2024-01-23</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge branch 'master' into develop
+| 3e22fee | <span style="white-space:nowrap;">2024-03-27</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  add support for WebApplicationFactory to be able to add configuration to the running application
+| 70f0e4c | <span style="white-space:nowrap;">2024-03-27</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  add support for WebApplicationFactory to be able to add configuration to the running application
+| 7aacc43 | <span style="white-space:nowrap;">2024-03-28</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  add support for WebApplicationFactory to be able to add configuration to the running application
+| b3ffeb7 | <span style="white-space:nowrap;">2024-03-28</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  move integration testing classes to package that can be shared
+| 2128807 | <span style="white-space:nowrap;">2024-03-29</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  move integration testing classes to package that can be shared
+| 6dfd460 | <span style="white-space:nowrap;">2024-03-29</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  move integration testing classes to package that can be shared
+| 75214e4 | <span style="white-space:nowrap;">2024-04-19</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  fix fk name from Create to Created
+| 0bf7ba8 | <span style="white-space:nowrap;">2024-06-03</span> | <span style="white-space:nowrap;">rosin</span> |  Configuration action injection idea
+| 70e32f1 | <span style="white-space:nowrap;">2024-06-03</span> | <span style="white-space:nowrap;">rosin</span> |  Rename methods to accord with .net official names
+| 16f84a7 | <span style="white-space:nowrap;">2024-06-03</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge pull request #22 from somniamble/fix/expose-host-builder
+| 0958a62 | <span style="white-space:nowrap;">2024-06-04</span> | <span style="white-space:nowrap;">rosin</span> |  Allow configuring Serilog using callable action
+| c26defb | <span style="white-space:nowrap;">2024-06-04</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge pull request #23 from somniamble/feature/configure-serilog
+| 9988b4d | <span style="white-space:nowrap;">2024-06-14</span> | <span style="white-space:nowrap;">Erik</span> |  mitigation for triggers in ef7+
+| dc8f6df | <span style="white-space:nowrap;">2024-07-17</span> | <span style="white-space:nowrap;">Erik</span> |  fix for net6
+| 944f52c | <span style="white-space:nowrap;">2024-07-17</span> | <span style="white-space:nowrap;">Erik</span> |  simplify a tad
+| 4b8accd | <span style="white-space:nowrap;">2024-07-22</span> | <span style="white-space:nowrap;">Braden Edmunds</span> |  Migrate asp.net code from common
+| 970a459 | <span style="white-space:nowrap;">2024-07-22</span> | <span style="white-space:nowrap;">Braden Edmunds</span> |  update package from common.messages, fix tests
+| b730e8a | <span style="white-space:nowrap;">2024-07-22</span> | <span style="white-space:nowrap;">Braden Edmunds</span> |  remove this unused code
+| 1ebfef1 | <span style="white-space:nowrap;">2024-07-22</span> | <span style="white-space:nowrap;">Braden Edmunds</span> |  fix codeql warnings
+| e182d53 | <span style="white-space:nowrap;">2024-07-22</span> | <span style="white-space:nowrap;">Braden Edmunds</span> |  minor cleanup
+| 34f8e1b | <span style="white-space:nowrap;">2024-07-22</span> | <span style="white-space:nowrap;">Braden Edmunds</span> |  codacy fixes
+| bc81ec4 | <span style="white-space:nowrap;">2024-07-23</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge pull request #25 from cortside/migrate-aspnetcore
+| 01b43f7 | <span style="white-space:nowrap;">2024-07-25</span> | <span style="white-space:nowrap;">Braden Edmunds</span> |  Add TotalPages to PagedList<> DTO
+| d4d4de3 | <span style="white-space:nowrap;">2024-07-25</span> | <span style="white-space:nowrap;">Braden Edmunds</span> |  Add test
+| 2419896 | <span style="white-space:nowrap;">2024-07-25</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge pull request #26 from cortside/feature/total-pages
+| c53c52e | <span style="white-space:nowrap;">2024-07-26</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge pull request #24 from cortside/feature/hastriggersconvention
+| 443bdf5 | <span style="white-space:nowrap;">2024-07-31</span> | <span style="white-space:nowrap;">Erik</span> |  search & paginated request stuff
+| a5bde22 | <span style="white-space:nowrap;">2024-07-31</span> | <span style="white-space:nowrap;">Erik</span> |  one more
+| 0c72877 | <span style="white-space:nowrap;">2024-07-31</span> | <span style="white-space:nowrap;">Erik</span> |  sync
+| ded0a41 | <span style="white-space:nowrap;">2024-07-31</span> | <span style="white-space:nowrap;">Erik</span> |  move
+| b0e2458 | <span style="white-space:nowrap;">2024-07-31</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  (origin/feature/search-models, feature/search-models) rename parameter to match shoppingcart-api
+| ff187aa | <span style="white-space:nowrap;">2024-07-31</span> | <span style="white-space:nowrap;">Erik</span> |  limit range for model validation
+| 557873f | <span style="white-space:nowrap;">2024-07-31</span> | <span style="white-space:nowrap;">Erik</span> |  Merge branch 'feature/search-models' of github.com:cortside/cortside.aspnetcore into feature/search-models
+| abdfef1 | <span style="white-space:nowrap;">2024-07-31</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge pull request #27 from cortside/feature/search-models
+| e6deac8 | <span style="white-space:nowrap;">2024-07-31</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  move TimedHostedService here
+| b436ce5 | <span style="white-space:nowrap;">2024-08-01</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  move error models from Cortside.Common.Messages
+| ea94fac | <span style="white-space:nowrap;">2024-08-05</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update nuget packages; move correlationcontext and hosting classes back to common and reference from there
+| 5563c1d | <span style="white-space:nowrap;">2024-08-07</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update nuget packages
+| f56ab3c | <span style="white-space:nowrap;">2024-09-02</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update scripts; update nuget packages
+| b4612c2 | <span style="white-space:nowrap;">2024-09-02</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  (HEAD -> release/6.3, origin/develop, origin/HEAD, develop) merge from master
+****
+
 # Release 6.2
 
 * Update nuget dependencies to latest stable versions

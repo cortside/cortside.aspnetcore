@@ -11,7 +11,7 @@ namespace Cortside.AspNetCore.Auditable.Entities {
         [Comment("Date and time entity was created")]
         public DateTime CreatedDate { get; set; }
 
-        [ForeignKey("CreateSubjectId")]
+        [ForeignKey("CreatedSubjectId")]
         [Required]
         [Comment("SubjectId that created entity")]
         public virtual Subject CreatedSubject { get; set; }

@@ -3,12 +3,11 @@ using System.IO.Compression;
 using System.Net.Mime;
 using Cortside.AspNetCore.Common;
 using Cortside.AspNetCore.Filters;
+using Cortside.AspNetCore.Filters.Results;
 using Cortside.AspNetCore.ModelBinding;
 using Cortside.Common.BootStrap;
 using Cortside.Common.Cryptography;
 using Cortside.Common.Json;
-using Cortside.Common.Messages.Filters;
-using Cortside.Common.Messages.Results;
 using Cortside.Health.Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Cortside.AspNetCore {
-    public static class ServiceCollectionExtensions {
+    public static class CorrelationContextExtensions {
         /// <summary>
         /// Adds a startup task
         /// </summary>
@@ -86,8 +85,7 @@ namespace Cortside.AspNetCore {
                 options.SuppressAsyncSuffixInActionNames = false;
                 options.Conventions.Add(new ApiControllerVersionConvention());
                 options.ModelBinderProviders.Insert(0, new UtcDateTimeModelBinderProvider(internalDateTimeHandling));
-
-                mvcAction ??= o => { o.Filters.Add<MessageExceptionResponseFilter>(); };
+                mvcAction ??= (o) => { o.Filters.Add<MessageExceptionResponseFilter>(); };
                 mvcAction.Invoke(options);
             });
             mvcBuilder.ConfigureApiBehaviorOptions(options => {

@@ -30,9 +30,6 @@ namespace Cortside.AspNetCore.Builder {
         /// <summary>
         /// Starts the webapi
         /// </summary>
-        /// <param name="t">WebApiStartup</param>
-        /// <param name="args">The arguments.</param>
-        /// <param name="config">The configuration.</param>
         public async Task<int> StartAsync() {
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
 

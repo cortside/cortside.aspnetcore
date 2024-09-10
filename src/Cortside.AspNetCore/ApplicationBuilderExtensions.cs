@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using Cortside.AspNetCore.Middleware;
-using Cortside.Common.Correlation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Serilog;
