@@ -11,8 +11,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Cortside.Common.Security" Version="6.3.444-release-6.3" />
-    <PackageReference Include="Cortside.DomainEvent.EntityFramework" Version="6.2.301" />
+    <PackageReference Include="Cortside.Common.Security" Version="6.3.452" />
+    <PackageReference Include="Cortside.DomainEvent.EntityFramework" Version="6.3.327" />
     <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.11.20">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>

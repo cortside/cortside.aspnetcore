@@ -1,5 +1,58 @@
 # Release 6.3
 
+## Breaking changes
+
+* AuditableEntity corrected FK column from CreateSubjectId to CreatedSubjectId
+    * Requires a migration to be created
+
+## Changes
+
+* Update nuget dependencies to latest stable versions
+* Add common model classes for searches
+* PageList calculates TotalPages
+* AuditableDatabaseContext adds BlankTriggerConversion to tables for EF 8+
+    * This is required by EF 8+ to know if there are triggers on EF tables
+* Change from Microsoft.AspNetCore.Mvc.Versioning to supported Asp.Versioning
+* Add WebApiFactory and WebApiFixture to simplify integration test fixture
+    * See example of use here: https://github.com/cortside/coeus/blob/develop/shoppingcart-api/src/Acme.ShoppingCart.WebApi.IntegrationTests/IntegrationFixture.cs
+* WebApiBuilder adds support for
+    * WithHostBuilder
+    * WithWebHostBuilder
+    * WithLoggerConfiguration
+    * Examples
+    ```csharp
+    var builder = WebApiHost.CreateBuilder(args)
+        .WithWebHostBuilder(builder => {
+            builder.UseSentry(o => {
+                o.Dsn = "<snip>.ingest.us.sentry.io/<snip>";
+                o.Environment = "dev";
+                o.Debug = true;
+                o.Release = "VeryGroovyService.0.0.1";
+                o.AddEntityFramework();
+                o.CaptureFailedRequests = true;
+                o.SendDefaultPii = true;
+                o.TracesSampleRate = 1.0; // Capture 100% of the application's transactions
+                o.ProfilesSampleRate = 1.0; // profile 100% of the captured transactions
+                o.AddIntegration(new ProfilingIntegration(
+                    TimeSpan.FromMilliseconds(500) // wait 500 ms for profiling to start
+                ));
+            });
+
+        })
+        .WithLoggerConfiguration(cfg => {
+            cfg.WriteTo.Sentry(s => {
+                s.InitializeSdk = false;
+                s.MinimumBreadcrumbLevel = LogEventLevel.Debug;
+                s.MinimumEventLevel = LogEventLevel.Warning;
+            });
+        })
+        .UseStartup<Startup>();
+    ```
+* Add MessageExceptionResponseFilter from Cortside.Common.Messages
+    * Along with ErrorsModel, ErrorModel
+* Add CorrelationMiddleware, moved from Cortside.Common.Messages
+* Add HttpCorrelationContext to help set CorrelationContext with information from request
+
 |Commit|Date|Author|Message|
 |---|---|---|---|
 | b8a4781 | <span style="white-space:nowrap;">2024-01-10</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update version

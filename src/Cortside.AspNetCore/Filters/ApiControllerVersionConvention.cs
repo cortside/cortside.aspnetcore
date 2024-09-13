@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Reflection;
-using Microsoft.AspNetCore.Mvc;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 namespace Cortside.AspNetCore.Filters {
