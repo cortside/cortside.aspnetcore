@@ -1,4 +1,4 @@
-﻿using Cortside.AspNetCore.Filters.Models;
+﻿using Cortside.AspNetCore.Common.Models;
 using Cortside.Common.Messages;
 using Cortside.Common.Messages.MessageExceptions;
 using Microsoft.AspNetCore.Http;

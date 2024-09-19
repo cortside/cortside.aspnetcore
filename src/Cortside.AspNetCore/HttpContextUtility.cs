@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace Cortside.AspNetCore.Common {
+namespace Cortside.AspNetCore {
     public static class HttpContextUtility {
         public static string GetRequestIpAddress(HttpContext httpContext) {
             string ipList = httpContext?.Request?.Headers["X-FORWARDED-FOR"].ToString();

@@ -1,7 +1,6 @@
 ﻿using System;
-using Newtonsoft.Json;
 
-namespace Cortside.AspNetCore.Filters.Models {
+namespace Cortside.AspNetCore.Common.Models {
     /// <summary>
     /// Error model
     /// </summary>
@@ -37,7 +36,6 @@ namespace Cortside.AspNetCore.Filters.Models {
         /// <summary>
         /// Error field
         /// </summary>
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Property { get; set; }
 
         /// <summary>
@@ -48,7 +46,6 @@ namespace Cortside.AspNetCore.Filters.Models {
         /// <summary>
         /// Error exception
         /// </summary>
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public Exception Exception { get; set; }
     }
 }

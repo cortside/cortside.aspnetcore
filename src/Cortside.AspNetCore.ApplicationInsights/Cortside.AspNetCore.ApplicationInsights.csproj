@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Cortside.AspNetCore.Common\Cortside.AspNetCore.Common.csproj" />
+    <ProjectReference Include="..\Cortside.AspNetCore\Cortside.AspNetCore.csproj" />
   </ItemGroup>
 
 </Project>
