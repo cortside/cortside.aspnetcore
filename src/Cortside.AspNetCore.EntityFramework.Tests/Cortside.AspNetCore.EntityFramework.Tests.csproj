@@ -35,7 +35,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.8" />
   </ItemGroup>
 
-
   <ItemGroup>
     <ProjectReference Include="..\Cortside.AspNetCore.EntityFramework\Cortside.AspNetCore.EntityFramework.csproj" />
   </ItemGroup>

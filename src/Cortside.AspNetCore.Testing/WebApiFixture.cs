@@ -91,7 +91,7 @@ namespace Cortside.AspNetCore.Testing {
             return scope.ServiceProvider.GetRequiredService<TDbContext>();
         }
 
-        public new void Dispose() {
+        public void Dispose() {
             // Dispose of unmanaged resources.
             Dispose(true);
         }
