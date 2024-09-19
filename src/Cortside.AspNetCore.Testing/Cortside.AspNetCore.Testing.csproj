@@ -20,8 +20,8 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Cortside.Common.Testing" Version="6.3.455" />
-    <PackageReference Include="Cortside.Common.Testing.EntityFramework" Version="6.3.455" />
+    <PackageReference Include="Cortside.Common.Testing" Version="6.3.456" />
+    <PackageReference Include="Cortside.Common.Testing.EntityFramework" Version="6.3.456" />
     <PackageReference Include="Cortside.DomainEvent.Stub" Version="6.3.327" />
     <PackageReference Include="Cortside.MockServer.AccessControl" Version="6.2.74" />
     <PackageReference Include="coverlet.collector" Version="6.0.2">
