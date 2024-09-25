@@ -18,11 +18,11 @@
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
-    <PackageReference Include="PolicyServer.Runtime.Client.AspNetCore" Version="4.3.0" />
+    <PackageReference Include="PolicyServer.Runtime.Client.AspNetCore" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
     <PackageReference Include="Cortside.IdentityServer4.AccessTokenValidation" Version="6.0.9" />
-    <PackageReference Include="PolicyServer.Runtime.Client.AspNetCore" Version="4.3.0" />
+    <PackageReference Include="PolicyServer.Runtime.Client.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Microsoft.IdentityModel.Protocols" Version="8.1.0" />
     <PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="8.1.0" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.1.0" />
