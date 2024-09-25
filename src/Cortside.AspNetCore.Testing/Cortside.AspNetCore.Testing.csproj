@@ -17,9 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Cortside.Common.Testing" Version="6.3.456" />
     <PackageReference Include="Cortside.Common.Testing.EntityFramework" Version="6.3.456" />
     <PackageReference Include="Cortside.DomainEvent.Stub" Version="6.3.327" />
@@ -35,13 +32,13 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="WireMock.Net" Version="1.6.3" />
-    <PackageReference Include="xunit" Version="2.9.0" />
+    <PackageReference Include="xunit" Version="2.9.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="DistributedLock.FileSystem" Version="1.0.2" />
-    <PackageReference Include="Cortside.RestApiClient" Version="6.3.190" />
+    <PackageReference Include="Cortside.RestApiClient" Version="6.3.193" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
