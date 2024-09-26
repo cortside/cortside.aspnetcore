@@ -1,10 +1,12 @@
 using System;
-using System.IdentityModel.Tokens.Jwt;
 using Cortside.Common.Validation;
-using IdentityServer4.AccessTokenValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+#if (NET8_0_OR_GREATER)
+using Microsoft.IdentityModel.JsonWebTokens;
+#endif
 
 namespace Cortside.AspNetCore.AccessControl {
     public static class ServiceCollectionExtensions {
@@ -20,14 +22,18 @@ namespace Cortside.AspNetCore.AccessControl {
             Guard.Against(() => !configuration.GetSection("IdentityServer").Exists(), () => throw new ArgumentException("Configuration section named 'IdentityServer' is missing"));
             Guard.Against(() => !configuration.GetSection("PolicyServer").Exists(), () => throw new ArgumentException("Configuration section named 'PolicyServer' is missing"));
 
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+#if (NET8_0_OR_GREATER)
+            JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
+#else
+            System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+#endif
 
             var identityServerConfiguration = configuration.GetSection("IdentityServer").Get<IdentityServerConfiguration>();
             Guard.From.NullOrWhitespace(identityServerConfiguration.Authority, nameof(identityServerConfiguration.Authority), "IdentityServer:Authority is null");
             Guard.From.NullOrWhitespace(identityServerConfiguration.Authentication?.ClientId, nameof(identityServerConfiguration.Authentication.ClientId), "IdentityServer:Authentication:ClientId is null");
             Guard.From.NullOrWhitespace(identityServerConfiguration.Authentication?.ClientSecret, nameof(identityServerConfiguration.Authentication.ClientSecret), "IdentityServer:Authentication:ClientSecret is null");
 
-            var authenticationBuilder = services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+            var authenticationBuilder = services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options => {
                     // base-address of your identityserver
                     options.Authority = identityServerConfiguration.Authority;
@@ -42,12 +48,6 @@ namespace Cortside.AspNetCore.AccessControl {
                     options.EnableCaching = identityServerConfiguration.EnableCaching;
                     options.CacheDuration = identityServerConfiguration.CacheDuration;
                 });
-
-#if (NET8_0_OR_GREATER)
-            authenticationBuilder.AddJwtBearer(jwtBearerOptions => {
-                jwtBearerOptions.MapInboundClaims = false;
-            });
-#endif
 
             // policy server
             configuration["PolicyServer:TokenClient:Authority"] = identityServerConfiguration.Authority;
