@@ -27,7 +27,7 @@ namespace Cortside.AspNetCore.AccessControl {
             Guard.From.NullOrWhitespace(identityServerConfiguration.Authentication?.ClientId, nameof(identityServerConfiguration.Authentication.ClientId), "IdentityServer:Authentication:ClientId is null");
             Guard.From.NullOrWhitespace(identityServerConfiguration.Authentication?.ClientSecret, nameof(identityServerConfiguration.Authentication.ClientSecret), "IdentityServer:Authentication:ClientSecret is null");
 
-            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+            var authenticationBuilder = services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options => {
                     // base-address of your identityserver
                     options.Authority = identityServerConfiguration.Authority;
@@ -42,6 +42,12 @@ namespace Cortside.AspNetCore.AccessControl {
                     options.EnableCaching = identityServerConfiguration.EnableCaching;
                     options.CacheDuration = identityServerConfiguration.CacheDuration;
                 });
+
+#if (NET8_0_OR_GREATER)
+            authenticationBuilder.AddJwtBearer(jwtBearerOptions => {
+                jwtBearerOptions.MapInboundClaims = false;
+            });
+#endif
 
             // policy server
             configuration["PolicyServer:TokenClient:Authority"] = identityServerConfiguration.Authority;
