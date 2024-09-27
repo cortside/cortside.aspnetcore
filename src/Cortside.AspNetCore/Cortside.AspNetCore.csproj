@@ -14,12 +14,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Cortside.Bowdlerizer" Version="6.0.59" />
-    <PackageReference Include="Cortside.Common.BootStrap" Version="6.4.460-pre-condition-failed" />
-    <PackageReference Include="Cortside.Common.Correlation" Version="6.4.460-pre-condition-failed" />
-    <PackageReference Include="Cortside.Common.Cryptography" Version="6.4.460-pre-condition-failed" />
-    <PackageReference Include="Cortside.Common.Hosting" Version="6.4.460-pre-condition-failed" />
-    <PackageReference Include="Cortside.Common.Json" Version="6.4.460-pre-condition-failed" />
-    <PackageReference Include="Cortside.Common.Messages" Version="6.4.460-pre-condition-failed" />
+    <PackageReference Include="Cortside.Common.BootStrap" Version="6.4.464-develop" />
+    <PackageReference Include="Cortside.Common.Correlation" Version="6.4.464-develop" />
+    <PackageReference Include="Cortside.Common.Cryptography" Version="6.4.464-develop" />
+    <PackageReference Include="Cortside.Common.Hosting" Version="6.4.464-develop" />
+    <PackageReference Include="Cortside.Common.Json" Version="6.4.464-develop" />
+    <PackageReference Include="Cortside.Common.Messages" Version="6.4.464-develop" />
     <PackageReference Include="Cortside.Health" Version="6.1.93" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.33" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
