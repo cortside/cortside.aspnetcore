@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Cortside.Common.Messages;
 
-namespace Cortside.AspNetCore.Filters.Models {
+namespace Cortside.AspNetCore.Common.Models {
     /// <summary>
     /// Errors Model
     /// </summary>

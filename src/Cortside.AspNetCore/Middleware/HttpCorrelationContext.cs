@@ -3,7 +3,7 @@ using System.Linq;
 using Cortside.Common.Correlation;
 using Microsoft.AspNetCore.Http;
 
-namespace Cortside.AspNetCore {
+namespace Cortside.AspNetCore.Middleware {
     public static class HttpCorrelationContext {
         public static string SetFromHttpContext(HttpContext context) {
             // get possible request headers for correlationId           
