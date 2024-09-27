@@ -41,6 +41,11 @@ namespace Cortside.AspNetCore.Filters {
                         StatusCode = StatusCodes.Status422UnprocessableEntity
                     };
                     break;
+                case PreconditionFailedResponseException _:
+                    context.Result = new ObjectResult(GetErrorsModel(exception)) {
+                        StatusCode = StatusCodes.Status412PreconditionFailed
+                    };
+                    break;
                 case ConflictResponseException _:
                     context.Result = new ObjectResult(GetErrorsModel(exception)) {
                         StatusCode = StatusCodes.Status409Conflict
