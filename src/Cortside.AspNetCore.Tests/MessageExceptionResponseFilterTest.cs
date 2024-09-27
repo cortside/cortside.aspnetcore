@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using Cortside.AspNetCore.Filters;
 using Cortside.Common.Messages;
 using Cortside.Common.Messages.MessageExceptions;
@@ -78,6 +77,7 @@ namespace Cortside.AspNetCore.Tests {
             yield return new object[] { new NotFoundResponseException(), (Func<IActionResult, bool>)((result) => result is NotFoundObjectResult) };
             yield return new object[] { new UnprocessableEntityResponseException(), (Func<IActionResult, bool>)((result) => ((ObjectResult)result).StatusCode == StatusCodes.Status422UnprocessableEntity) };
             yield return new object[] { new ForbiddenAccessResponseException(), (Func<IActionResult, bool>)((result) => ((ObjectResult)result).StatusCode == StatusCodes.Status403Forbidden) };
+            yield return new object[] { new PreconditionFailedResponseException(), (Func<IActionResult, bool>)((result) => ((ObjectResult)result).StatusCode == StatusCodes.Status412PreconditionFailed) };
         }
 
         public static IEnumerable<object[]> GetPassThroughScenarios() {
