@@ -34,6 +34,7 @@ namespace Cortside.AspNetCore.AccessControl {
             Guard.From.NullOrWhitespace(identityServerConfiguration.Authentication?.ClientSecret, nameof(identityServerConfiguration.Authentication.ClientSecret), "IdentityServer:Authentication:ClientSecret is null");
 
             var authenticationBuilder = services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                //.AddOpenIdConnect(o => o.mapinboundclaims=false)
                 .AddIdentityServerAuthentication(options => {
                     // base-address of your identityserver
                     options.Authority = identityServerConfiguration.Authority;
