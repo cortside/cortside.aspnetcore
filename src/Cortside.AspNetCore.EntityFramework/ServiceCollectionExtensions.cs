@@ -1,5 +1,4 @@
 ﻿using System;
-using Cortside.AspNetCore.Common;
 using Cortside.AspNetCore.EntityFramework.Interceptors;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -38,23 +37,6 @@ namespace Cortside.AspNetCore.EntityFramework {
         /// <param name="action"></param>
         /// <returns></returns>
         public static IServiceCollection AddDatabaseContext<TInterface, TImplementation>(this IServiceCollection services, string connectionString, Action<DbContextOptionsBuilder> action = null, Action<SqlServerDbContextOptionsBuilder> sqlAction = null)
-                where TImplementation : DbContext, TInterface, IUnitOfWork
-                where TInterface : class {
-            services.AddDatabaseContext<TInterface, TImplementation>(connectionString, InternalDateTimeHandling.Utc, action, sqlAction);
-
-            return services;
-        }
-
-        /// <summary>
-        /// Registers sql server database context with connection string passed in
-        /// </summary>
-        /// <typeparam name="TInterface"></typeparam>
-        /// <typeparam name="TImplementation"></typeparam>
-        /// <param name="services"></param>
-        /// <param name="connectionString"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
-        public static IServiceCollection AddDatabaseContext<TInterface, TImplementation>(this IServiceCollection services, string connectionString, InternalDateTimeHandling dateTimeHandling, Action<DbContextOptionsBuilder> action = null, Action<SqlServerDbContextOptionsBuilder> sqlAction = null)
             where TImplementation : DbContext, TInterface, IUnitOfWork
             where TInterface : class {
             services.AddDbContext<TImplementation>(opt => {
