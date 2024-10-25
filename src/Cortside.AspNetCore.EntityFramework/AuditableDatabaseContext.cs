@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cortside.AspNetCore.EntityFramework {
     public class AuditableDatabaseContext<TSubject> : DbContext where TSubject : Subject {
-        private readonly ISubjectPrincipal subjectPrincipal;
-        private readonly ISubjectFactory<TSubject> subjectFactory;
+        protected readonly ISubjectPrincipal subjectPrincipal;
+        protected readonly ISubjectFactory<TSubject> subjectFactory;
 
         public AuditableDatabaseContext(DbContextOptions options, ISubjectPrincipal subjectPrincipal, ISubjectFactory<TSubject> subjectFactory) : base(options) {
             this.subjectPrincipal = subjectPrincipal;
