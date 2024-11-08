@@ -5,8 +5,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cortside.AspNetCore.Auditable;
 using Cortside.AspNetCore.Auditable.Entities;
+using Cortside.AspNetCore.Common;
+#if (NET8_0_OR_GREATER)
+using Cortside.AspNetCore.EntityFramework.Conventions;
+#endif
 using Cortside.Common.Security;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Cortside.AspNetCore.EntityFramework {
     public class AuditableDatabaseContext<TSubject> : DbContext where TSubject : Subject {
@@ -17,6 +23,11 @@ namespace Cortside.AspNetCore.EntityFramework {
             this.subjectPrincipal = subjectPrincipal;
             this.subjectFactory = subjectFactory;
         }
+
+        /// <summary>
+        /// Used to control the date
+        /// </summary>
+        public InternalDateTimeHandling DateTimeHandling { get; set; } = InternalDateTimeHandling.Utc;
 
         public DbSet<TSubject> Subjects { get; set; }
 
@@ -47,21 +58,22 @@ namespace Cortside.AspNetCore.EntityFramework {
         private async Task SetAuditableEntityValuesAsync() {
             // check for subject in subjects set and either create or get to attach to AudibleEntity
             var updatingSubject = await GetCurrentSubjectAsync();
+
+            var now = DateTimeHandling == InternalDateTimeHandling.Utc ? DateTime.UtcNow : DateTime.Now;
+
             ChangeTracker.DetectChanges();
-            var modified = ChangeTracker.Entries().Where(x => x.Entity is AuditableEntity && (x.State == EntityState.Modified || x.State == EntityState.Added));
-            var added = ChangeTracker.Entries().Where(x => x.Entity is AuditableEntity && x.State == EntityState.Added);
+            var entries = ChangeTracker.Entries()
+                .Where(e => e is { Entity: AuditableEntity, State: EntityState.Added or EntityState.Modified });
 
-#pragma warning disable S3267 // Loops should be simplified with "LINQ" expressions
-            foreach (var item in modified) {
-                ((AuditableEntity)item.Entity).LastModifiedSubject = updatingSubject;
-                ((AuditableEntity)item.Entity).LastModifiedDate = DateTime.Now.ToUniversalTime();
-            }
+            foreach (var entityEntry in entries) {
+                ((AuditableEntity)entityEntry.Entity).LastModifiedSubject = updatingSubject;
+                ((AuditableEntity)entityEntry.Entity).LastModifiedDate = now;
 
-            foreach (var item in added) {
-                ((AuditableEntity)item.Entity).CreatedSubject = updatingSubject;
-                ((AuditableEntity)item.Entity).CreatedDate = DateTime.Now.ToUniversalTime();
+                if (entityEntry.State == EntityState.Added) {
+                    ((AuditableEntity)entityEntry.Entity).CreatedSubject = updatingSubject;
+                    ((AuditableEntity)entityEntry.Entity).CreatedDate = now;
+                }
             }
-#pragma warning restore S3267 // Loops should be simplified with "LINQ" expressions
 
             await OnBeforeSaveChangesAsync(updatingSubject);
         }
@@ -96,5 +108,66 @@ namespace Cortside.AspNetCore.EntityFramework {
             Subjects.Add(subject);
             return subject;
         }
+
+        /// <summary>
+        /// Use in OnModelCreating to set a ValueConverter on all DateTime/DateTime? properties for all entities
+        /// </summary>
+        /// <param name="builder"></param>
+        protected static void SetDateTime(ModelBuilder builder) {
+            // 1/1/1753 12:00:00 AM and 12/31/9999 11:59:59 PM
+            // using local as default with the assumption that most of the time local will be utc and expected
+            // OR it's not utc and that local timezone is expected to be persisted.  potential for future other configuration
+            // value or use of DateTimeHandling
+            var min = new DateTime(1753, 1, 1, 0, 0, 0, DateTimeKind.Local);
+            var max = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Local);
+
+            var dateTimeConverter = new ValueConverter<DateTime, DateTime>(
+#pragma warning disable S3358 // Ternary operators should not be nested
+                v => v < min ? min : v > max ? max : v,
+                v => v < min ? min : v > max ? max : v);
+#pragma warning restore S3358 // Ternary operators should not be nested
+
+            var nullableDateTimeConverter = new ValueConverter<DateTime?, DateTime?>(
+#pragma warning disable S3358 // Ternary operators should not be nested
+                v => v.HasValue ? v < min ? min : v > max ? max : v : v,
+                v => v.HasValue ? v < min ? min : v > max ? max : v : v);
+#pragma warning restore S3358 // Ternary operators should not be nested
+
+            foreach (var entityType in builder.Model.GetEntityTypes()) {
+                foreach (var property in entityType.GetProperties()) {
+                    if (property.ClrType == typeof(DateTime)) {
+                        property.SetValueConverter(dateTimeConverter);
+                    } else if (property.ClrType == typeof(DateTime?)) {
+                        property.SetValueConverter(nullableDateTimeConverter);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Use in OnModelCreating to set DeleteBehavior to NoAction on all entity ForeignKeys
+        /// </summary>
+        /// <param name="builder"></param>
+        protected static void SetCascadeDelete(ModelBuilder builder) {
+            var fks = builder.Model.GetEntityTypes().SelectMany(t => t.GetDeclaredForeignKeys());
+            foreach (var fk in fks) {
+                fk.DeleteBehavior = DeleteBehavior.NoAction;
+            }
+        }
+
+#if (NET8_0_OR_GREATER)
+        /// <summary>
+        /// This adds a convention to apply HasTriggers to all tables in the model
+        /// </summary>
+        /// <remarks>
+        /// Cortside applies triggers to all tables by default, which require mitigation in EF7+
+        /// <see href="https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-7.0/breaking-changes?tabs=v7#mitigations-2"></see>
+        /// </remarks>
+        /// <param name="configurationBuilder"></param>
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder) {
+            configurationBuilder.Conventions.Add(_ => new BlankTriggerAddingConvention());
+        }
+#endif
+
     }
 }

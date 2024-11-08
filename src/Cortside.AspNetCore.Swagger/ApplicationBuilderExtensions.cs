@@ -1,6 +1,6 @@
 using System.Linq;
+using Asp.Versioning.ApiExplorer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
 namespace Cortside.AspNetCore.Swagger {
     public static class ApplicationBuilderExtensions {
@@ -18,6 +18,21 @@ namespace Cortside.AspNetCore.Swagger {
                     var version = description.GroupName.ToLowerInvariant();
                     options.SwaggerEndpoint($"/swagger/{version}/swagger.json", $"{apiName} " + version.ToUpper());
                 }
+
+                //app.UseSwagger();
+                //if (app.Environment.IsDevelopment()) {
+                //    app.UseSwaggerUI(
+                //       options => {
+                //           var descriptions = app.DescribeApiVersions();
+
+                //           // build a swagger endpoint for each discovered API version
+                //           foreach (var description in descriptions) {
+                //               var url = $"/swagger/{description.GroupName}/swagger.json";
+                //               var name = description.GroupName.ToUpperInvariant();
+                //               options.SwaggerEndpoint(url, name);
+                //           }
+                //       });
+                //}
             });
 
             foreach (var groupName in provider.ApiVersionDescriptions.Select(x => x.GroupName)) {

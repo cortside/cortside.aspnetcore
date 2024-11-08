@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using Asp.Versioning.ApiExplorer;
 using Cortside.AspNetCore.Enrichers;
 using Cortside.Bowdlerizer;
 using Cortside.Health.Models;
@@ -9,7 +10,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,6 +28,25 @@ namespace Cortside.AspNetCore.Builder {
         private string service;
         private bool executingIsEntryAssembly;
         private string url;
+
+        private Action<IHostBuilder> hostConfigurationAction = null;
+        private Action<IWebHostBuilder> webHostConfigurationAction = null;
+        private Action<LoggerConfiguration> loggerConfigurationAction = null;
+
+        public WebApiBuilder WithHostBuilder(Action<IHostBuilder> configuration) {
+            this.hostConfigurationAction = configuration;
+            return this;
+        }
+
+        public WebApiBuilder WithWebHostBuilder(Action<IWebHostBuilder> configuration) {
+            this.webHostConfigurationAction = configuration;
+            return this;
+        }
+
+        public WebApiBuilder WithLoggerConfiguration(Action<LoggerConfiguration> configuration) {
+            this.loggerConfigurationAction = configuration;
+            return this;
+        }
 
         public WebApiBuilder(string[] args) {
             this.args = args;
@@ -59,6 +78,15 @@ namespace Cortside.AspNetCore.Builder {
             url = System.Environment.GetEnvironmentVariable("ASPNETCORE_URLS");
 
             var builder = WebApplication.CreateBuilder(args);
+
+            if (hostConfigurationAction != null) {
+                hostConfigurationAction(builder.Host);
+            }
+
+            if (webHostConfigurationAction != null) {
+                webHostConfigurationAction(builder.WebHost);
+            }
+
             builder.Host.UseSerilog(Log.Logger);
 
             builder.WebHost.ConfigureAppConfiguration(b => b.AddConfiguration(config));
@@ -173,6 +201,10 @@ namespace Cortside.AspNetCore.Builder {
             var logFile = config["LogFile:Path"];
             if (!string.IsNullOrWhiteSpace(logFile)) {
                 configuration.WriteTo.File(logFile);
+            }
+
+            if (loggerConfigurationAction != null) {
+                loggerConfigurationAction(configuration);
             }
 
             return configuration;

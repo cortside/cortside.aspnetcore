@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Cortside.AspNetCore.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 

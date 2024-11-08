@@ -19,7 +19,7 @@ namespace Cortside.AspNetCore.Testing {
         private readonly WebApiFactory<TEntryPoint> api;
         private bool disposed;
 
-        public WebApiFixture() {
+        protected WebApiFixture() {
             api = new WebApiFactory<TEntryPoint>(
                 configureMockHttpServer: ConfigureMockHttpServer,
                 configureConfiguration: ConfigureConfiguration,
@@ -91,7 +91,7 @@ namespace Cortside.AspNetCore.Testing {
             return scope.ServiceProvider.GetRequiredService<TDbContext>();
         }
 
-        public new void Dispose() {
+        public void Dispose() {
             // Dispose of unmanaged resources.
             Dispose(true);
         }

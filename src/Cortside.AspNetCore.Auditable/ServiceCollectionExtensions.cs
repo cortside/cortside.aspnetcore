@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Cortside.Common.Security;
 using Microsoft.AspNetCore.Http;
@@ -19,7 +18,7 @@ namespace Cortside.AspNetCore.Auditable {
 
                 // when there is no httpcontext available, assume that subject is the "service" itself
                 var claims = new List<Claim>() {
-                    new Claim(JwtRegisteredClaimNames.Sub, Guid.Empty.ToString())
+                    new Claim("sub", Guid.Empty.ToString())
                 };
                 var system = new SubjectPrincipal(claims);
 

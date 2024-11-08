@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Cortside.AspNetCore {
+namespace Cortside.AspNetCore.Common {
     /// <summary>
     /// Specifies how to parse value when converting between string and <see cref="DateTime"/>.
     /// </summary>

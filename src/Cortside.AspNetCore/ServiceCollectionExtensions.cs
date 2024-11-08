@@ -1,13 +1,13 @@
 using System;
 using System.IO.Compression;
 using System.Net.Mime;
+using Cortside.AspNetCore.Common;
 using Cortside.AspNetCore.Filters;
+using Cortside.AspNetCore.Filters.Results;
 using Cortside.AspNetCore.ModelBinding;
 using Cortside.Common.BootStrap;
 using Cortside.Common.Cryptography;
 using Cortside.Common.Json;
-using Cortside.Common.Messages.Filters;
-using Cortside.Common.Messages.Results;
 using Cortside.Health.Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Cortside.AspNetCore {
-    public static class ServiceCollectionExtensions {
+    public static class CorrelationContextExtensions {
         /// <summary>
         /// Adds a startup task
         /// </summary>
@@ -58,7 +58,7 @@ namespace Cortside.AspNetCore {
             return services;
         }
 
-        public static IMvcBuilder AddApiDefaults(this IServiceCollection services, InternalDateTimeHandling internalDateTimeHandling = InternalDateTimeHandling.Utc, Action<MvcOptions> mvcAction = null) {
+        public static IMvcBuilder AddApiDefaults(this IServiceCollection services, InternalDateTimeHandling internalDateTimeHandling = InternalDateTimeHandling.Utc, Action<MvcOptions> mvcAction = null, Action<MvcNewtonsoftJsonOptions> mvcNewtonsoftJsonOptions = null) {
             // add response compression using gzip and brotli compression
             services.AddDefaultResponseCompression(CompressionLevel.Optimal);
 
@@ -68,7 +68,7 @@ namespace Cortside.AspNetCore {
             services.AddCors();
             services.AddOptions();
 
-            var mvcBuilder = services.AddApiControllers(internalDateTimeHandling, mvcAction);
+            var mvcBuilder = services.AddApiControllers(internalDateTimeHandling, mvcAction, mvcNewtonsoftJsonOptions);
 
             // warm all the services up, can chain these together if needed
             services.AddStartupTask<WarmupServicesStartupTask>();
@@ -76,7 +76,7 @@ namespace Cortside.AspNetCore {
             return mvcBuilder;
         }
 
-        public static IMvcBuilder AddApiControllers(this IServiceCollection services, InternalDateTimeHandling internalDateTimeHandling = InternalDateTimeHandling.Utc, Action<MvcOptions> mvcAction = null) {
+        public static IMvcBuilder AddApiControllers(this IServiceCollection services, InternalDateTimeHandling internalDateTimeHandling = InternalDateTimeHandling.Utc, Action<MvcOptions> mvcAction = null, Action<MvcNewtonsoftJsonOptions> mvcNewtonsoftJsonOptions = null) {
             var mvcBuilder = services.AddControllers(options => {
                 options.CacheProfiles.Add("Default", new CacheProfile {
                     Duration = 30,
@@ -85,8 +85,7 @@ namespace Cortside.AspNetCore {
                 options.SuppressAsyncSuffixInActionNames = false;
                 options.Conventions.Add(new ApiControllerVersionConvention());
                 options.ModelBinderProviders.Insert(0, new UtcDateTimeModelBinderProvider(internalDateTimeHandling));
-
-                mvcAction ??= o => { o.Filters.Add<MessageExceptionResponseFilter>(); };
+                mvcAction ??= (o) => { o.Filters.Add<MessageExceptionResponseFilter>(); };
                 mvcAction.Invoke(options);
             });
             mvcBuilder.ConfigureApiBehaviorOptions(options => {
@@ -99,6 +98,8 @@ namespace Cortside.AspNetCore {
             mvcBuilder.AddNewtonsoftJson(options => {
                 JsonNetUtility.ApplyGlobalDefaultSettings(options.SerializerSettings, internalDateTimeHandling);
                 options.SerializerSettings.Converters.Add(new IsoTimeSpanConverter());
+
+                mvcNewtonsoftJsonOptions?.Invoke(options);
             });
             mvcBuilder.PartManager.ApplicationParts.Add(new AssemblyPart(typeof(HealthController).Assembly));
 
