@@ -63,6 +63,10 @@ namespace Cortside.AspNetCore.Swagger {
             //services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
             services.AddSwaggerGen(c => {
+                // custom operationIds
+                c.CustomSchemaIds(x => x.FullName);
+                c.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["controller"]}_{e.ActionDescriptor.RouteValues["action"]}");
+
                 foreach (var version in versions) {
                     c.SwaggerDoc(version.Version, version);
                 }
