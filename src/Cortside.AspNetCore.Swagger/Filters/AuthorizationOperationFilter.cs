@@ -27,6 +27,17 @@ namespace Cortside.AspNetCore.Swagger.Filters {
 
             operation.Parameters ??= new List<OpenApiParameter>();
 
+            // display input parameter Authorization
+            operation.Parameters.Add(new OpenApiParameter {
+                Name = "Authorization",
+                @In = ParameterLocation.Header,
+                Description = "access token",
+                Required = false,
+                Schema = new OpenApiSchema {
+                    Type = "string"
+                }
+            });
+
             // display possible response status codes
             var code401 = ((int)HttpStatusCode.Unauthorized).ToString();
             if (!operation.Responses.ContainsKey(code401)) {
