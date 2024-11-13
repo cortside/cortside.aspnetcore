@@ -75,7 +75,17 @@ namespace Cortside.AspNetCore.Swagger {
 
                 // custom operationIds
                 c.CustomSchemaIds(x => x.FullName);
-                c.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["controller"]}_{e.ActionDescriptor.RouteValues["action"]}");
+                c.CustomOperationIds(e => {
+                    var controller = e.ActionDescriptor.RouteValues["controller"];
+                    var action = e.ActionDescriptor.RouteValues["action"];
+
+                    // remove implementation detail from operationId
+                    if (action.EndsWith("Async")) {
+                        action = action.Substring(0, action.Length - 5);
+                    }
+
+                    return $"{controller}_{action}";
+                });
 
                 c.OperationFilter<RemoveVersionFromParameter>();
                 c.OperationFilter<AuthorizeOperationFilter>();
