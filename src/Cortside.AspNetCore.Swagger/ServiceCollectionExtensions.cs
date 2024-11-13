@@ -63,10 +63,6 @@ namespace Cortside.AspNetCore.Swagger {
             //services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
             services.AddSwaggerGen(c => {
-                // custom operationIds
-                c.CustomSchemaIds(x => x.FullName);
-                c.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["controller"]}_{e.ActionDescriptor.RouteValues["action"]}");
-
                 foreach (var version in versions) {
                     c.SwaggerDoc(version.Version, version);
                 }
@@ -75,11 +71,28 @@ namespace Cortside.AspNetCore.Swagger {
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
 
+                //c.CustomSchemaIds(type => type.ToString());
+
+                // custom operationIds
+                c.CustomSchemaIds(x => x.FullName);
+                c.CustomOperationIds(e => {
+                    var controller = e.ActionDescriptor.RouteValues["controller"];
+                    var action = e.ActionDescriptor.RouteValues["action"];
+
+                    // remove implementation detail from operationId
+                    if (action.EndsWith("Async")) {
+                        action = action.Substring(0, action.Length - 5);
+                    }
+
+                    return $"{controller}_{action}";
+                });
+
                 c.OperationFilter<RemoveVersionFromParameter>();
                 c.OperationFilter<AuthorizeOperationFilter>();
                 c.DocumentFilter<ReplaceVersionWithExactValueInPath>();
-                c.TagActionsBy(apiDescription => new[] { apiDescription.RelativePath });
-                c.CustomSchemaIds(type => type.ToString());
+
+                //c.IgnoreObsoleteActions(); -- don't use this so can use Obsolete attribute in controller methods to communicate with other teams
+                //c.TagActionsBy(apiDescription => new[] { apiDescription.RelativePath });
 
                 var identityServerConfiguration = configuration.GetSection("IdentityServer").Get<IdentityServerConfiguration>();
                 c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme {
