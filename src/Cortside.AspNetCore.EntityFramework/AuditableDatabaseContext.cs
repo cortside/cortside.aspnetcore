@@ -166,6 +166,8 @@ namespace Cortside.AspNetCore.EntityFramework {
         /// <param name="configurationBuilder"></param>
         protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder) {
             configurationBuilder.Conventions.Add(_ => new BlankTriggerAddingConvention());
+
+            base.ConfigureConventions(configurationBuilder);
         }
 #endif
 

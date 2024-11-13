@@ -17,7 +17,7 @@ namespace Cortside.AspNetCore.Common.Models {
         /// <summary>
         /// Errors model constructor
         /// </summary>
-        public ErrorsModel(List<ErrorModel> errors) {
+        public ErrorsModel(IList<ErrorModel> errors) {
             Errors = errors ?? new List<ErrorModel>();
         }
 
@@ -32,7 +32,7 @@ namespace Cortside.AspNetCore.Common.Models {
         /// <summary>
         /// Errors List
         /// </summary>
-        public List<ErrorModel> Errors { get; set; }
+        public IList<ErrorModel> Errors { get; set; }
 
         /// <summary>
         /// Adds error model
@@ -43,6 +43,20 @@ namespace Cortside.AspNetCore.Common.Models {
                 Type = message.GetType().Name,
                 Property = message.Property,
                 Message = message.Message
+            };
+
+            Errors.Add(error);
+        }
+
+        /// <summary>
+        /// Adds error model
+        /// </summary>
+        /// <param name="message"></param>
+        public void AddError(string type, string property, string message, Exception exception = null) {
+            var error = new ErrorModel() {
+                Type = type,
+                Property = property,
+                Message = message
             };
 
             Errors.Add(error);
