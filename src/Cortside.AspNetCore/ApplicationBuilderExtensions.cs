@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Cortside.AspNetCore.Middleware;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 
@@ -19,6 +20,15 @@ namespace Cortside.AspNetCore {
                 .AllowAnyHeader()
                 .AllowCredentials());
             app.UseSerilogRequestLogging();
+
+            // To handle x-forwarded-* headers
+            // This would allow service to read the X-Forwarded-Proto header and reflect the actual scheme used by the client, even if it's behind a proxy.
+            var fordwardedHeaderOptions = new ForwardedHeadersOptions {
+                ForwardedHeaders = ForwardedHeaders.XForwardedHost | ForwardedHeaders.XForwardedProto
+            };
+            fordwardedHeaderOptions.KnownNetworks.Clear();
+            fordwardedHeaderOptions.KnownProxies.Clear();
+            app.UseForwardedHeaders(fordwardedHeaderOptions);
 
             return app;
         }
