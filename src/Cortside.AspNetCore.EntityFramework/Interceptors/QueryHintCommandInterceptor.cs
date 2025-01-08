@@ -18,6 +18,10 @@ namespace Cortside.AspNetCore.EntityFramework.Interceptors {
         }
 
         public static void ManipulateCommand(DbCommand command) {
+            // expose constant
+
+            // log if called with what string
+
             const string prefix = "-- Use option: ";
             var s = command.CommandText.Split(Environment.NewLine).FirstOrDefault();
 
@@ -26,6 +30,10 @@ namespace Cortside.AspNetCore.EntityFramework.Interceptors {
             }
 
             var option = s.Replace(prefix, "");
+
+            // check to make sure it's not added already
+            // add to new line
+
             command.CommandText += $" OPTION ({option})";
         }
     }
