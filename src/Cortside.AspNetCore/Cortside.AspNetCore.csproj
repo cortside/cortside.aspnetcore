@@ -20,7 +20,7 @@
     <PackageReference Include="Cortside.Common.Hosting" Version="6.4.464-develop" />
     <PackageReference Include="Cortside.Common.Json" Version="6.4.464-develop" />
     <PackageReference Include="Cortside.Common.Messages" Version="6.4.464-develop" />
-    <PackageReference Include="Cortside.Health" Version="6.1.99" />
+    <PackageReference Include="Cortside.Health" Version="6.2.101-develop" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.36" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.2" />
     <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.12.19">
