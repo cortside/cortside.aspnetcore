@@ -55,7 +55,7 @@ namespace Cortside.AspNetCore.Builder {
         public static string Environment => System.Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
 
         public static IConfiguration GetConfiguration() {
-            return new ConfigurationBuilder()
+            var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
                 .AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: true)
@@ -65,6 +65,10 @@ namespace Cortside.AspNetCore.Builder {
                 // This is the special line of code. It should be added in the place where you want to override configuration
                 .AddTestConfiguration()
                 .Build();
+
+            config.ExpandTemplates();
+
+            return config;
         }
 
         public bool ExecutingIsEntryAssembly => executingIsEntryAssembly;
