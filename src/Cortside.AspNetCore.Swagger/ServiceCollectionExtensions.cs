@@ -95,18 +95,22 @@ namespace Cortside.AspNetCore.Swagger {
                 //c.TagActionsBy(apiDescription => new[] { apiDescription.RelativePath });
 
                 var identityServerConfiguration = configuration.GetSection("IdentityServer").Get<IdentityServerConfiguration>();
-                c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme {
-                    Type = SecuritySchemeType.OAuth2,
-                    Flows = new OpenApiOAuthFlows {
-                        ClientCredentials = new OpenApiOAuthFlow {
-                            AuthorizationUrl = new Uri($"{identityServerConfiguration.Authority}/connect/authorize"),
-                            TokenUrl = new Uri($"{identityServerConfiguration.Authority}/connect/token"),
-                            Scopes = new Dictionary<string, string> {
-                                {identityServerConfiguration.ApiName, identityServerConfiguration.ApiName}
+                var authority = identityServerConfiguration?.Authority;
+
+                if (!string.IsNullOrWhiteSpace(authority)) {
+                    c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme {
+                        Type = SecuritySchemeType.OAuth2,
+                        Flows = new OpenApiOAuthFlows {
+                            ClientCredentials = new OpenApiOAuthFlow {
+                                AuthorizationUrl = new Uri($"{authority}/connect/authorize"),
+                                TokenUrl = new Uri($"{authority}/connect/token"),
+                                Scopes = new Dictionary<string, string> {
+                                    { identityServerConfiguration.ApiName, identityServerConfiguration.ApiName }
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                }
             });
 
             services.AddSwaggerGenNewtonsoftSupport();
