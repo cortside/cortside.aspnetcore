@@ -23,7 +23,6 @@ namespace Cortside.AspNetCore.AccessControl {
         public static IServiceCollection AddAccessControl(this IServiceCollection services, IConfiguration configuration) {
             Guard.From.Null(configuration, nameof(configuration));
             Guard.Against(() => !configuration.GetSection("IdentityServer").Exists(), () => throw new ArgumentException("Configuration section named 'IdentityServer' is missing"));
-            Guard.Against(() => !configuration.GetSection("PolicyServer").Exists(), () => throw new ArgumentException("Configuration section named 'PolicyServer' is missing"));
 
 #if (NET8_0_OR_GREATER)
             JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
@@ -57,7 +56,8 @@ namespace Cortside.AspNetCore.AccessControl {
             var accessControlConfiguration = configuration.GetSection("AccessControl").Exists() ? configuration.GetSection("AccessControl").Get<AccessControlConfiguration>() : new AccessControlConfiguration();
 
             // policy server
-            if (accessControlConfiguration.AuthorizationProvider == "PolicyServer") {
+            if (accessControlConfiguration.AuthorizationProvider == AccessControlProviders.PolicyServer) {
+                Guard.Against(() => !configuration.GetSection("PolicyServer").Exists(), () => throw new ArgumentException("Configuration section named 'PolicyServer' is missing"));
                 configuration["PolicyServer:TokenClient:Authority"] = identityServerConfiguration.Authority;
                 configuration["PolicyServer:TokenClient:ClientId"] = identityServerConfiguration.Authentication?.ClientId;
                 configuration["PolicyServer:TokenClient:ClientSecret"] = identityServerConfiguration.Authentication?.ClientSecret;
@@ -66,9 +66,11 @@ namespace Cortside.AspNetCore.AccessControl {
             }
 
             // authorization-api
-            if (accessControlConfiguration.AuthorizationProvider == "AuthorizationApi") {
+            if (accessControlConfiguration.AuthorizationProvider == AccessControlProviders.AuthorizationApi) {
 #if (NET8_0_OR_GREATER)
                 services.AddAuthorizationApiClient(configuration);
+#else
+                throw new ArgumentException($"{AccessControlProviders.AuthorizationApi} requires net8 or greater", nameof(accessControlConfiguration.AuthorizationProvider));
 #endif
             }
 
