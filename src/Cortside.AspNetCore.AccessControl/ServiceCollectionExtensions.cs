@@ -1,4 +1,7 @@
 using System;
+#if (NET8_0_OR_GREATER)
+using Cortside.Authorization.Client.AspNetCore;
+#endif
 using Cortside.Common.Validation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -50,12 +53,24 @@ namespace Cortside.AspNetCore.AccessControl {
                     options.CacheDuration = identityServerConfiguration.CacheDuration;
                 });
 
+            // authorization provider
+            var accessControlConfiguration = configuration.GetSection("AccessControl").Exists() ? configuration.GetSection("AccessControl").Get<AccessControlConfiguration>() : new AccessControlConfiguration();
+
             // policy server
-            configuration["PolicyServer:TokenClient:Authority"] = identityServerConfiguration.Authority;
-            configuration["PolicyServer:TokenClient:ClientId"] = identityServerConfiguration.Authentication?.ClientId;
-            configuration["PolicyServer:TokenClient:ClientSecret"] = identityServerConfiguration.Authentication?.ClientSecret;
-            services.AddPolicyServerRuntimeClient(configuration.GetSection("PolicyServer"))
-                .AddAuthorizationPermissionPolicies();
+            if (accessControlConfiguration.AuthorizationProvider == "PolicyServer") {
+                configuration["PolicyServer:TokenClient:Authority"] = identityServerConfiguration.Authority;
+                configuration["PolicyServer:TokenClient:ClientId"] = identityServerConfiguration.Authentication?.ClientId;
+                configuration["PolicyServer:TokenClient:ClientSecret"] = identityServerConfiguration.Authentication?.ClientSecret;
+                services.AddPolicyServerRuntimeClient(configuration.GetSection("PolicyServer"))
+                    .AddAuthorizationPermissionPolicies();
+            }
+
+            // authorization-api
+            if (accessControlConfiguration.AuthorizationProvider == "AuthorizationApi") {
+#if (NET8_0_OR_GREATER)
+                services.AddAuthorizationApiClient(configuration);
+#endif
+            }
 
             return services;
         }
