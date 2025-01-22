@@ -28,7 +28,6 @@
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.3.0" />
     <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
-    <PackageReference Include="Cortside.Authorization.Client" Version="1.0.27-ENG-4157-client" />
   </ItemGroup>
 
 </Project>

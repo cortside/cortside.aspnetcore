@@ -1,7 +1,4 @@
 using System;
-#if (NET8_0_OR_GREATER)
-using Cortside.Authorization.Client.AspNetCore;
-#endif
 using Cortside.Common.Validation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -67,11 +64,8 @@ namespace Cortside.AspNetCore.AccessControl {
 
             // authorization-api
             if (accessControlConfiguration.AuthorizationProvider == AccessControlProviders.AuthorizationApi) {
-#if (NET8_0_OR_GREATER)
-                services.AddAuthorizationApiClient(configuration);
-#else
-                throw new ArgumentException($"{AccessControlProviders.AuthorizationApi} requires net8 or greater", nameof(accessControlConfiguration.AuthorizationProvider));
-#endif
+                // TODO: caller to have package dependency and overload method here to call via action.  No default call in this method.
+                //services.AddAuthorizationApiClient(configuration);
             }
 
             return services;

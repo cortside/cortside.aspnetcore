@@ -93,7 +93,6 @@ namespace Cortside.AspNetCore.AccessControl.Tests {
             Assert.Equal("Configuration section named 'PolicyServer' is missing", ex.Message);
         }
 
-#if (NET8_0_OR_GREATER)
         [Fact]
         public void ShouldUseAuthorizationApiSection() {
             var services = new ServiceCollection();
@@ -106,9 +105,8 @@ namespace Cortside.AspNetCore.AccessControl.Tests {
                 })
                 .Build();
 
-            var ex = Assert.Throws<ArgumentException>(() => services.AddAccessControl(config));
-            Assert.Equal("Configuration section named 'AuthorizationApi' is missing", ex.Message);
+            var exception = Record.Exception(() => services.AddAccessControl(config));
+            Assert.Null(exception);
         }
-#endif
     }
 }
