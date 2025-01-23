@@ -65,7 +65,6 @@ namespace Cortside.AspNetCore.AccessControl {
             // authorization-api
             if (accessControlConfiguration.AuthorizationProvider == AccessControlProviders.AuthorizationApi) {
                 // TODO: caller to have package dependency and overload method here to call via action.  No default call in this method.
-                //services.AddAuthorizationApiClient(configuration);
             }
 
             return services;

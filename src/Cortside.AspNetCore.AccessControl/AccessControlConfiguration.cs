@@ -4,7 +4,7 @@
     }
 
     public static class AccessControlProviders {
-        public const string PolicyServer = nameof(PolicyServer);
-        public const string AuthorizationApi = nameof(AuthorizationApi);
+        public static readonly string PolicyServer = nameof(PolicyServer);
+        public static readonly string AuthorizationApi = nameof(AuthorizationApi);
     }
 }
