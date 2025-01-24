@@ -21,6 +21,8 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ matrix.dotnet-version }}
+    - name: set invariant culture
+      run: export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
     - name: Display dotnet version
       run: dotnet --version        
     - name: Restore dependencies
