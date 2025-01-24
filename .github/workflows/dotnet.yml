@@ -30,4 +30,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore src
     - name: Test
-      run: dotnet test --no-restore --no-build src
+      run: dotnet test --no-restore --no-build src -p:TargetFramework=net8.0
