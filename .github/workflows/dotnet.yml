@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet-version: [ '3.1.x' ]
+        dotnet-version: [ '8.0.x' ]
 
     steps:
     - uses: actions/checkout@v3
@@ -21,6 +21,8 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ matrix.dotnet-version }}
+    - name: set invariant culture
+      run: export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
     - name: Display dotnet version
       run: dotnet --version        
     - name: Restore dependencies
@@ -28,4 +30,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore src
     - name: Test
-      run: dotnet test --no-restore --no-build src
+      run: dotnet test --no-restore --no-build src -p:TargetFramework=net8.0

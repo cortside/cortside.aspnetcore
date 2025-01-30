@@ -83,12 +83,30 @@ namespace Cortside.AspNetCore.AccessControl.Tests {
             var services = new ServiceCollection();
             var config = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string> {
-                    ["IdentityServer:Authority"] = "http://ids"
+                    ["IdentityServer:Authority"] = "http://ids",
+                    ["IdentityServer:Authentication:ClientId"] = "clientId",
+                    ["IdentityServer:Authentication:ClientSecret"] = "secret",
                 })
                 .Build();
 
             var ex = Assert.Throws<ArgumentException>(() => services.AddAccessControl(config));
             Assert.Equal("Configuration section named 'PolicyServer' is missing", ex.Message);
+        }
+
+        [Fact]
+        public void ShouldUseAuthorizationApiSection() {
+            var services = new ServiceCollection();
+            var config = new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string> {
+                    ["IdentityServer:Authority"] = "http://ids",
+                    ["IdentityServer:Authentication:ClientId"] = "clientId",
+                    ["IdentityServer:Authentication:ClientSecret"] = "secret",
+                    ["AccessControl:AuthorizationProvider"] = "AuthorizationApi",
+                })
+                .Build();
+
+            var exception = Record.Exception(() => services.AddAccessControl(config));
+            Assert.Null(exception);
         }
     }
 }
