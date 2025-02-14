@@ -93,7 +93,7 @@ namespace Cortside.AspNetCore.Builder {
 
             builder.Host.UseSerilog(Log.Logger);
 
-            builder.WebHost.ConfigureAppConfiguration(b => b.AddConfiguration(config));
+            builder.Configuration.AddConfiguration(config);
             builder.WebHost.UseConfiguration(config);
             builder.WebHost.UseShutdownTimeout(TimeSpan.FromSeconds(10));
 

@@ -27,7 +27,7 @@ namespace Cortside.AspNetCore.Middleware {
             }
 
             context.Response.OnStarting(() => {
-                context.Response.Headers.Add("X-Correlation-Id", new[] { correlationId });
+                context.Response.Headers.Append("X-Correlation-Id", new[] { correlationId });
                 return Task.CompletedTask;
             });
 

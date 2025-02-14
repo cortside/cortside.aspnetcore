@@ -138,15 +138,5 @@ namespace Cortside.AspNetCore.EntityFramework {
 
             return body;
         }
-
-        private static Expression GetExpressionForIndexOfOrdering(Expression parameterExpression, string arguments) {
-            // TODO: string.IndexOf does not translate to sql
-            var method = typeof(string).GetMethod("IndexOf", [typeof(string), typeof(StringComparison)]);
-
-            Expression[] parms = [parameterExpression, Expression.Constant(StringComparison.OrdinalIgnoreCase)];
-            var call = Expression.Call(Expression.Constant(arguments), method, parms);
-
-            return call;
-        }
     }
 }

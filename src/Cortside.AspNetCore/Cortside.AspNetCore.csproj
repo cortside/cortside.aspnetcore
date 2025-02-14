@@ -6,22 +6,22 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Asp.Versioning.Http" Version="6.5.0" />
+    <PackageReference Include="Asp.Versioning.Http" Version="8.1.0" />
     <PackageReference Include="AsyncFixer" Version="1.6.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Cortside.Bowdlerizer" Version="6.0.59" />
-    <PackageReference Include="Cortside.Common.BootStrap" Version="6.4.464-develop" />
-    <PackageReference Include="Cortside.Common.Correlation" Version="6.4.464-develop" />
-    <PackageReference Include="Cortside.Common.Cryptography" Version="6.4.464-develop" />
-    <PackageReference Include="Cortside.Common.Hosting" Version="6.4.464-develop" />
-    <PackageReference Include="Cortside.Common.Json" Version="6.4.464-develop" />
-    <PackageReference Include="Cortside.Common.Messages" Version="6.4.464-develop" />
-    <PackageReference Include="Cortside.Health" Version="6.2.101-develop" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.36" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.2" />
-    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.12.19">
+    <PackageReference Include="Cortside.Bowdlerizer" Version="8.0.99-develop" />
+    <PackageReference Include="Cortside.Common.BootStrap" Version="8.0.473-develop" />
+    <PackageReference Include="Cortside.Common.Correlation" Version="8.0.473-develop" />
+    <PackageReference Include="Cortside.Common.Cryptography" Version="8.0.473-develop" />
+    <PackageReference Include="Cortside.Common.Hosting" Version="8.0.473-develop" />
+    <PackageReference Include="Cortside.Common.Json" Version="8.0.473-develop" />
+    <PackageReference Include="Cortside.Common.Messages" Version="8.0.473-develop" />
+    <PackageReference Include="Cortside.Health" Version="8.0.102-develop" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.13" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.13.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -29,9 +29,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
-    <PackageReference Include="Serilog.Bowdlerizer" Version="6.1.81" />
-    <PackageReference Include="Serilog.Sinks.Seq" Version="8.0.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+    <PackageReference Include="Serilog.Bowdlerizer" Version="6.1.87" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" />
     <PackageReference Include="SonarAnalyzer.CSharp" Version="10.6.0.109712">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>

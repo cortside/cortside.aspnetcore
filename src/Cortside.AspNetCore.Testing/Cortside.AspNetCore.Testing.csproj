@@ -5,17 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cortside.Common.Testing" Version="6.4.464-develop" />
-    <PackageReference Include="Cortside.Common.Testing.EntityFramework" Version="6.4.464-develop" />
-    <PackageReference Include="Cortside.DomainEvent.Stub" Version="6.4.348-develop" />
-    <PackageReference Include="Cortside.MockServer.AccessControl" Version="6.2.74" />
-    <PackageReference Include="coverlet.collector" Version="6.0.3">
+    <PackageReference Include="Cortside.Common.Testing" Version="8.0.473-develop" />
+    <PackageReference Include="Cortside.Common.Testing.EntityFramework" Version="8.0.473-develop" />
+    <PackageReference Include="Cortside.DomainEvent.Stub" Version="8.0.362-multiple" />
+    <PackageReference Include="Cortside.MockServer.AccessControl" Version="8.0.81-develop" />
+    <PackageReference Include="coverlet.collector" Version="6.0.4">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="FluentAssertions" Version="6.12.2" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.12.19">
+    <PackageReference Include="FluentAssertions" Version="8.0.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.13.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -27,16 +27,16 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="WireMock.Net" Version="1.6.11" />
+    <PackageReference Include="WireMock.Net" Version="1.7.2" />
     <PackageReference Include="xunit" Version="2.9.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="DistributedLock.FileSystem" Version="1.0.3" />
-    <PackageReference Include="Cortside.RestApiClient" Version="6.3.193" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.11" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.11" />
+    <PackageReference Include="Cortside.RestApiClient" Version="8.0.201-develop" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.2" />
   </ItemGroup>
 
   <ItemGroup>
