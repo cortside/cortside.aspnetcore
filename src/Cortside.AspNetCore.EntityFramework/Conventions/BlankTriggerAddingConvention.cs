@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace Cortside.AspNetCore.EntityFramework.Conventions {
     public class BlankTriggerAddingConvention : IModelFinalizingConvention {
-
         public virtual void ProcessModelFinalizing(
             IConventionModelBuilder modelBuilder,
             IConventionContext<IConventionModelBuilder> context) {

@@ -7,12 +7,15 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Cortside.AspNetCore.EntityFramework.Interceptors {
     public class QueryHintCommandInterceptor : DbCommandInterceptor {
-        public override InterceptionResult<DbDataReader> ReaderExecuting(DbCommand command, CommandEventData eventData, InterceptionResult<DbDataReader> result) {
+        public override InterceptionResult<DbDataReader> ReaderExecuting(DbCommand command, CommandEventData eventData,
+            InterceptionResult<DbDataReader> result) {
             ManipulateCommand(command);
             return result;
         }
 
-        public override ValueTask<InterceptionResult<DbDataReader>> ReaderExecutingAsync(DbCommand command, CommandEventData eventData, InterceptionResult<DbDataReader> result, CancellationToken cancellationToken = default) {
+        public override ValueTask<InterceptionResult<DbDataReader>> ReaderExecutingAsync(DbCommand command,
+            CommandEventData eventData, InterceptionResult<DbDataReader> result,
+            CancellationToken cancellationToken = default) {
             ManipulateCommand(command);
             return new ValueTask<InterceptionResult<DbDataReader>>(result);
         }

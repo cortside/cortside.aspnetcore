@@ -12,6 +12,7 @@ namespace Cortside.AspNetCore.EntityFramework.Tests {
             using (var context = new DatabaseContext()) {
                 sql = context.People.TagWith("Use option: RECOMPILE").TagWith("foo").ToQueryString();
             }
+
             var command = new TestDbCommand(sql);
 
             // act

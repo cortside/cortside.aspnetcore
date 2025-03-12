@@ -5,7 +5,9 @@ namespace Cortside.AspNetCore.EntityFramework {
     public class SortField {
         public SortField(string sortParameter) {
             string direction = sortParameter.Trim()[..1];
-            SortDirection = string.Equals(direction, "-", StringComparison.OrdinalIgnoreCase) ? SortDirection.Descending : SortDirection.Ascending;
+            SortDirection = string.Equals(direction, "-", StringComparison.OrdinalIgnoreCase)
+                ? SortDirection.Descending
+                : SortDirection.Ascending;
 
             var property = string.Equals(direction, "-", StringComparison.OrdinalIgnoreCase)
                 ? sortParameter[1..]

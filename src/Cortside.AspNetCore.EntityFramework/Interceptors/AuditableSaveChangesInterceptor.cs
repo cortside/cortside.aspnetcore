@@ -15,7 +15,8 @@ namespace Cortside.AspNetCore.EntityFramework.Interceptors {
         protected readonly ISubjectFactory<TSubject> subjectFactory;
         protected readonly DbSet<TSubject> subjects;
 
-        protected AuditableSaveChangesInterceptor(DbSet<TSubject> subjects, InternalDateTimeHandling dateTimeHandling, ISubjectPrincipal subjectPrincipal, ISubjectFactory<TSubject> subjectFactory) {
+        protected AuditableSaveChangesInterceptor(DbSet<TSubject> subjects, InternalDateTimeHandling dateTimeHandling,
+            ISubjectPrincipal subjectPrincipal, ISubjectFactory<TSubject> subjectFactory) {
             this.subjects = subjects;
             this.dateTimeHandling = dateTimeHandling;
             this.subjectPrincipal = subjectPrincipal;

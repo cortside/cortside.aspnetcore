@@ -9,7 +9,8 @@ using Xunit;
 namespace Cortside.AspNetCore.Tests.Hosting {
     public class TimedHostedServiceTests {
         private class TestTimedHostedService : TimedHostedService {
-            public TestTimedHostedService(ILogger logger, bool enabled, int interval, bool generateCorrelationId = true) : base(logger, enabled, interval, generateCorrelationId) {
+            public TestTimedHostedService(ILogger logger, bool enabled, int interval, bool generateCorrelationId = true)
+                : base(logger, enabled, interval, generateCorrelationId) {
             }
 
             public Task PublicExecuteAsync(CancellationToken stoppingToken) {

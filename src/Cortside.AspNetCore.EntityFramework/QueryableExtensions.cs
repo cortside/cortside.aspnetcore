@@ -5,11 +5,13 @@ using System.Reflection;
 
 namespace Cortside.AspNetCore.EntityFramework {
     public static class QueryableExtensions {
-        public static IQueryable<T> ToPagedQuery<T>(this IQueryable<T> query, int page, int pageSize, int skipAdditionalRowsCount = 0) {
+        public static IQueryable<T> ToPagedQuery<T>(this IQueryable<T> query, int page, int pageSize,
+            int skipAdditionalRowsCount = 0) {
             return query.Skip(pageSize * (page - 1) + skipAdditionalRowsCount).Take(pageSize);
         }
 
-        public static IOrderedQueryable<TSource> OrderBy<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, bool orderByDescending) {
+        public static IOrderedQueryable<TSource> OrderBy<TSource, TKey>(this IQueryable<TSource> source,
+            Expression<Func<TSource, TKey>> keySelector, bool orderByDescending) {
             return orderByDescending ? source.OrderByDescending(keySelector) : source.OrderBy(keySelector);
         }
 
@@ -38,8 +40,10 @@ namespace Cortside.AspNetCore.EntityFramework {
                 var method = sortParameter.GetOrderMethod(index);
                 if (t.Name.Contains("nullable", StringComparison.CurrentCultureIgnoreCase)) {
                     // first add an expression where we order by the property.HasValue
-                    var nullCheckProperty = GetPropertyLambda<T>($"{sortParameter.Property}.HasValue", sortParameter.Arguments);
-                    expression = Expression.Call(typeof(Queryable), method, new Type[] { query.ElementType, nullCheckProperty.Item2 },
+                    var nullCheckProperty =
+                        GetPropertyLambda<T>($"{sortParameter.Property}.HasValue", sortParameter.Arguments);
+                    expression = Expression.Call(typeof(Queryable), method,
+                        new Type[] { query.ElementType, nullCheckProperty.Item2 },
                         expression,
                         Expression.Quote(nullCheckProperty.Item1));
 
@@ -52,6 +56,7 @@ namespace Cortside.AspNetCore.EntityFramework {
                     new Type[] { query.ElementType, t },
                     expression, Expression.Quote(exp));
             }
+
             return (IOrderedQueryable<T>)query.Provider.CreateQuery<T>(expression);
         }
 
@@ -66,7 +71,8 @@ namespace Cortside.AspNetCore.EntityFramework {
             foreach (var name in propertyNames) {
                 body = Expression.PropertyOrField(body, name);
 
-                var propertyInfo = type.GetProperty(name, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+                var propertyInfo = type.GetProperty(name,
+                    BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
                 if (propertyInfo == null) {
                     throw new ArgumentException("Sort property does not exist!");
                 }
@@ -79,7 +85,8 @@ namespace Cortside.AspNetCore.EntityFramework {
             if (type.IsEnum && string.Equals("ordinal", arguments, StringComparison.InvariantCultureIgnoreCase)) {
                 body = GetExpressionForEnumOrdering<T>(type, propertyExpression);
                 type = typeof(int);
-            } else if (type == typeof(bool) && string.Equals("truefirst", arguments, StringComparison.InvariantCultureIgnoreCase)) {
+            } else if (type == typeof(bool) &&
+                       string.Equals("truefirst", arguments, StringComparison.InvariantCultureIgnoreCase)) {
                 body = GetExpressionForBooleanOrdering(propertyExpression);
                 type = typeof(int);
             } else if (type == typeof(string) && !string.IsNullOrWhiteSpace(arguments)) {
@@ -121,10 +128,12 @@ namespace Cortside.AspNetCore.EntityFramework {
             // TODO: value is the int value of the enum instead of the description -- which is unimportant as sorting by the enum in the database is just the column for string
             var body = orderedValues.Select((value, ordinal) => new { value, ordinal })
                 .Reverse()
-                .Aggregate((Expression)null, (next, item) => next == null ? (Expression)
-                    Expression.Constant(item.ordinal) :
-                    Expression.Condition(
-                        Expression.Equal(parameterExpression, Expression.Convert(Expression.Constant(item.value), type)),
+                .Aggregate((Expression)null, (next, item) => next == null
+                    ? (Expression)
+                    Expression.Constant(item.ordinal)
+                    : Expression.Condition(
+                        Expression.Equal(parameterExpression,
+                            Expression.Convert(Expression.Constant(item.value), type)),
                         Expression.Constant(item.ordinal),
                         next));
 

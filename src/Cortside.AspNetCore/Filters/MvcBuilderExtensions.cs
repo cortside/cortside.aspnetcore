@@ -8,7 +8,9 @@ namespace Cortside.AspNetCore.Filters {
             if (builder == null) {
                 throw new ArgumentNullException(nameof(builder));
             }
-            builder.Services.Configure<MvcOptions>(options => options.Conventions.Add(new ApiControllerVersionConvention()));
+
+            builder.Services.Configure<MvcOptions>(options =>
+                options.Conventions.Add(new ApiControllerVersionConvention()));
             return builder;
         }
     }

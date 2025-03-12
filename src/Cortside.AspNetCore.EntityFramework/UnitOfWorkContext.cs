@@ -6,8 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Cortside.AspNetCore.EntityFramework {
-    public class UnitOfWorkContext<TSubject> : AuditableDatabaseContext<TSubject>, IUnitOfWork where TSubject : Subject {
-        public UnitOfWorkContext(DbContextOptions options, ISubjectPrincipal subjectPrincipal, ISubjectFactory<TSubject> subjectFactory) : base(options, subjectPrincipal, subjectFactory) {
+    public class UnitOfWorkContext<TSubject> : AuditableDatabaseContext<TSubject>, IUnitOfWork
+        where TSubject : Subject {
+        public UnitOfWorkContext(DbContextOptions options, ISubjectPrincipal subjectPrincipal,
+            ISubjectFactory<TSubject> subjectFactory) : base(options, subjectPrincipal, subjectFactory) {
         }
 
         /// <summary>

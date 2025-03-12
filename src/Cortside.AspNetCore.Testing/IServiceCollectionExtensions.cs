@@ -27,7 +27,8 @@ namespace Cortside.AspNetCore.Testing {
             return o.Value.SerializerSettings;
         }
 
-        public static void RegisterInMemoryDbContext<TDatabaseContext>(this IServiceCollection services, string testId, Action<TDatabaseContext> seedDatabase) where TDatabaseContext : DbContext {
+        public static void RegisterInMemoryDbContext<TDatabaseContext>(this IServiceCollection services, string testId,
+            Action<TDatabaseContext> seedDatabase) where TDatabaseContext : DbContext {
             // Remove the app's DbContext registration.
             services.RemoveAll<DbContextOptions<TDatabaseContext>>();
             services.RemoveAll<DbContext>();

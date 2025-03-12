@@ -25,7 +25,8 @@ namespace Cortside.AspNetCore.Common.Models {
         /// <param name="pageNumber"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        public static PagedResult<T> ToPagedResult<T>(this IList<T> list, int totalItems, int pageNumber, int pageSize) {
+        public static PagedResult<T>
+            ToPagedResult<T>(this IList<T> list, int totalItems, int pageNumber, int pageSize) {
             var result = new PagedResult<T>() {
                 TotalItems = totalItems,
                 PageNumber = pageNumber,

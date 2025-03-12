@@ -4,9 +4,9 @@ using Cortside.AspNetCore.Auditable;
 using Cortside.AspNetCore.Auditable.Entities;
 using Cortside.AspNetCore.Common;
 using Cortside.AspNetCore.EntityFramework.Tests.Contexts;
-using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Shouldly;
 using Xunit;
 
 namespace Cortside.AspNetCore.EntityFramework.Tests {
@@ -38,8 +38,8 @@ namespace Cortside.AspNetCore.EntityFramework.Tests {
 
             // assert
             Assert.Equal(InternalDateTimeHandling.Local, context.DateTimeHandling);
-            person.CreatedDate.Should().BeIn(DateTimeKind.Local);
-            person.CreatedDate.Should().BeOnOrBefore(DateTime.Now);
+            person.CreatedDate.Kind.ShouldBe(DateTimeKind.Local);
+            person.CreatedDate.ShouldBeLessThanOrEqualTo(DateTime.Now);
         }
 
         [Fact]
@@ -59,8 +59,8 @@ namespace Cortside.AspNetCore.EntityFramework.Tests {
 
             // assert
             Assert.Equal(InternalDateTimeHandling.Utc, context.DateTimeHandling);
-            person.CreatedDate.Should().BeIn(DateTimeKind.Utc);
-            person.CreatedDate.Should().BeOnOrBefore(DateTime.UtcNow);
+            person.CreatedDate.Kind.ShouldBe(DateTimeKind.Utc);
+            person.CreatedDate.ShouldBeLessThanOrEqualTo(DateTime.UtcNow);
         }
     }
 }

@@ -13,7 +13,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Cortside.Common.Testing" Version="8.0.473-develop" />
-    <PackageReference Include="FluentAssertions" Version="8.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="8.0.13" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.13.2">
@@ -25,6 +24,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Shouldly" Version="4.3.0" />
     <PackageReference Include="SonarAnalyzer.CSharp" Version="10.6.0.109712">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>

@@ -6,9 +6,9 @@ using Cortside.AspNetCore.Auditable;
 using Cortside.AspNetCore.Auditable.Entities;
 using Cortside.AspNetCore.EntityFramework.Tests.Contexts;
 using Cortside.Common.Security;
-using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Shouldly;
 using Xunit;
 
 namespace Cortside.AspNetCore.EntityFramework.Tests {
@@ -39,11 +39,11 @@ namespace Cortside.AspNetCore.EntityFramework.Tests {
             await context.SaveChangesAsync();
 
             // assert
-            person.CreatedDate.Should().BeOnOrAfter(now);
-            person.CreatedSubject.SubjectId.Should().Be(Guid.Empty);
-            person.CreatedSubject.UserPrincipalName.Should().BeNull();
-            person.LastModifiedDate.Should().Be(person.CreatedDate);
-            person.LastModifiedSubject.SubjectId.Should().Be(person.CreatedSubject.SubjectId);
+            person.CreatedDate.ShouldBeGreaterThanOrEqualTo(now);
+            person.CreatedSubject.SubjectId.ShouldBe(Guid.Empty);
+            person.CreatedSubject.UserPrincipalName.ShouldBeNull();
+            person.LastModifiedDate.ShouldBe(person.CreatedDate);
+            person.LastModifiedSubject.SubjectId.ShouldBe(person.CreatedSubject.SubjectId);
         }
 
         [Fact]
@@ -55,9 +55,7 @@ namespace Cortside.AspNetCore.EntityFramework.Tests {
             };
             var subjectPrincipal = new SubjectPrincipal(claims);
 
-            services.AddScoped<ISubjectPrincipal, SubjectPrincipal>((sp) => {
-                return subjectPrincipal;
-            });
+            services.AddScoped<ISubjectPrincipal, SubjectPrincipal>((sp) => { return subjectPrincipal; });
 
             var provider = services.BuildServiceProvider();
             var context = provider.GetRequiredService<UtcContext<Subject>>();
@@ -70,11 +68,11 @@ namespace Cortside.AspNetCore.EntityFramework.Tests {
             await context.SaveChangesAsync();
 
             // assert
-            person.CreatedDate.Should().BeOnOrAfter(now);
-            person.CreatedSubject.SubjectId.Should().Be(subjectPrincipal.SubjectId);
-            person.CreatedSubject.UserPrincipalName.Should().Be(subjectPrincipal.UserPrincipalName);
-            person.LastModifiedDate.Should().Be(person.CreatedDate);
-            person.LastModifiedSubject.SubjectId.Should().Be(person.CreatedSubject.SubjectId);
+            person.CreatedDate.ShouldBeGreaterThanOrEqualTo(now);
+            person.CreatedSubject.SubjectId.ToString().ShouldBe(subjectPrincipal.SubjectId);
+            person.CreatedSubject.UserPrincipalName.ShouldBe(subjectPrincipal.UserPrincipalName);
+            person.LastModifiedDate.ShouldBe(person.CreatedDate);
+            person.LastModifiedSubject.SubjectId.ShouldBe(person.CreatedSubject.SubjectId);
         }
 
         [Fact]
@@ -95,11 +93,11 @@ namespace Cortside.AspNetCore.EntityFramework.Tests {
             await context.SaveChangesAsync();
 
             // assert
-            person.CreatedDate.Should().BeOnOrAfter(now);
-            person.CreatedSubject.SubjectId.Should().Be(Guid.Empty);
-            person.CreatedSubject.UserPrincipalName.Should().BeNull();
-            person.LastModifiedDate.Should().BeAfter(person.CreatedDate);
-            person.LastModifiedSubject.SubjectId.Should().Be(person.CreatedSubject.SubjectId);
+            person.CreatedDate.ShouldBeGreaterThanOrEqualTo(now);
+            person.CreatedSubject.SubjectId.ShouldBe(Guid.Empty);
+            person.CreatedSubject.UserPrincipalName.ShouldBeNull();
+            person.LastModifiedDate.ShouldBeGreaterThan(person.CreatedDate);
+            person.LastModifiedSubject.SubjectId.ShouldBe(person.CreatedSubject.SubjectId);
         }
     }
 }

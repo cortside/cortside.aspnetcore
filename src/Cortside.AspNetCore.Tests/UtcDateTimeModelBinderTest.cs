@@ -4,12 +4,12 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Cortside.AspNetCore.Common;
 using Cortside.AspNetCore.ModelBinding;
-using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Primitives;
+using Shouldly;
 using Xunit;
 
 namespace Cortside.AspNetCore.Tests {
@@ -21,7 +21,8 @@ namespace Cortside.AspNetCore.Tests {
 
         [Theory]
         [MemberData(nameof(Data))]
-        public async Task BindModelAsync_returns_success_with_with_expected_value(string modelValue, DateTime expectedResult) {
+        public async Task BindModelAsync_returns_success_with_with_expected_value(string modelValue,
+            DateTime expectedResult) {
             // Arrange
             var modelBinder = new UtcDateTimeModelBinder(InternalDateTimeHandling.Utc);
             var bindingContext = BuildBindingContext(modelValue);
@@ -30,10 +31,10 @@ namespace Cortside.AspNetCore.Tests {
             await modelBinder.BindModelAsync(bindingContext);
 
             // Assert
-            bindingContext.Result.IsModelSet.Should().Be(true);
+            bindingContext.Result.IsModelSet.ShouldBe(true);
             var model = bindingContext.Result.Model as DateTime?;
-            model.Value.Should().Be(expectedResult);
-            model.Value.Kind.Should().Be(DateTimeKind.Utc);
+            model.Value.ShouldBe(expectedResult);
+            model.Value.Kind.ShouldBe(DateTimeKind.Utc);
         }
 
         [Fact]
@@ -46,8 +47,8 @@ namespace Cortside.AspNetCore.Tests {
             await modelBinder.BindModelAsync(bindingContext);
 
             // Assert
-            bindingContext.Result.IsModelSet.Should().Be(false);
-            bindingContext.ModelState[bindingContext.ModelName].Errors.Count.Should().Be(1);
+            bindingContext.Result.IsModelSet.ShouldBe(false);
+            bindingContext.ModelState[bindingContext.ModelName].Errors.Count.ShouldBe(1);
         }
 
         [Fact]
@@ -60,8 +61,8 @@ namespace Cortside.AspNetCore.Tests {
             await modelBinder.BindModelAsync(bindingContext);
 
             // Assert
-            bindingContext.Result.IsModelSet.Should().Be(false);
-            bindingContext.ModelState[bindingContext.ModelName].Errors.Count.Should().Be(1);
+            bindingContext.Result.IsModelSet.ShouldBe(false);
+            bindingContext.ModelState[bindingContext.ModelName].Errors.Count.ShouldBe(1);
         }
 
         private ModelBindingContext BuildBindingContext(string modelValue) {
@@ -69,8 +70,7 @@ namespace Cortside.AspNetCore.Tests {
             var bindingContext = new DefaultModelBindingContext { ModelName = ModelName };
 
             var bindingSource = new BindingSource("", "", false, false);
-            var queryCollection = new QueryCollection(new Dictionary<string, StringValues>
-            {
+            var queryCollection = new QueryCollection(new Dictionary<string, StringValues> {
                 { ModelName, new StringValues(modelValue) },
                 { "Foo", new StringValues("1964/12/02 12:00:00") }
             });

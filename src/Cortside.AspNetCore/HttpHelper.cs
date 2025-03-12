@@ -25,6 +25,7 @@ namespace Cortside.AspNetCore {
                 if (string.IsNullOrEmpty(url) || url == "...") {
                     url = request.Host.Value;
                 }
+
                 var proto = request.Headers["x-forwarded-proto"].FirstOrDefault();
                 var path = uri.AbsolutePath;
                 return proto + "://" + url + path;

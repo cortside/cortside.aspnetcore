@@ -61,7 +61,8 @@ namespace Cortside.AspNetCore.Filters {
             }
 
             var result = context.Result as ObjectResult;
-            logger.LogDebug("Handled exception of type {Type}, returning status code of {StatusCode}", exception.GetType(), result?.StatusCode);
+            logger.LogDebug("Handled exception of type {Type}, returning status code of {StatusCode}",
+                exception.GetType(), result?.StatusCode);
             context.ExceptionHandled = true;
         }
 

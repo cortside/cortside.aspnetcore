@@ -8,7 +8,8 @@ namespace Cortside.AspNetCore.Common.Models {
         /// <summary>
         /// Error model
         /// </summary>
-        public ErrorModel() { }
+        public ErrorModel() {
+        }
 
         /// <summary>
         /// Error model

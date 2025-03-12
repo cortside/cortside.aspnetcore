@@ -14,6 +14,7 @@ using Xunit.Abstractions;
 namespace Cortside.AspNetCore.Testing {
     public class WebApiFactory<TEntryPoint> : WebApplicationFactory<TEntryPoint> where TEntryPoint : class {
         private bool disposed;
+
         // testId is created outside of the options so that it's constant and not reevaluated at instance creation time
         private readonly string testId = Guid.NewGuid().ToString();
 
@@ -21,7 +22,9 @@ namespace Cortside.AspNetCore.Testing {
         private readonly Action<IConfigurationBuilder> configureConfiguration;
         private readonly Action<IMockHttpServerBuilder> configureMockHttpServer;
 
-        public WebApiFactory(Action<IMockHttpServerBuilder> configureMockHttpServer = null, Action<IConfigurationBuilder> configureConfiguration = null, Action<IServiceCollection> configureServices = null) {
+        public WebApiFactory(Action<IMockHttpServerBuilder> configureMockHttpServer = null,
+            Action<IConfigurationBuilder> configureConfiguration = null,
+            Action<IServiceCollection> configureServices = null) {
             this.configureServices = configureServices;
             this.configureConfiguration = configureConfiguration;
             this.configureMockHttpServer = configureMockHttpServer;
@@ -53,13 +56,9 @@ namespace Cortside.AspNetCore.Testing {
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder) {
-            builder.ConfigureAppConfiguration(config => {
-                config.AddConfiguration(Configuration);
-            });
+            builder.ConfigureAppConfiguration(config => { config.AddConfiguration(Configuration); });
 
-            builder.ConfigureTestServices(services => {
-                configureServices.Invoke(services);
-            });
+            builder.ConfigureTestServices(services => { configureServices.Invoke(services); });
         }
 
         public new void Dispose() {

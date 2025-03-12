@@ -16,15 +16,13 @@ namespace Cortside.AspNetCore.Tests.Middleware {
         [Fact]
         public async Task ReturnsCorrelationIdInResponseHeader() {
             var builder = new WebHostBuilder()
-               .Configure(app => {
-                   app.UseMiddleware<CorrelationMiddleware>();
-               })
-               .ConfigureServices(services => {
-                   services.AddControllersWithViews(options => {
-                       options.Filters.Add<MessageExceptionResponseFilter>();
-                   });
-                   services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-               });
+                .Configure(app => { app.UseMiddleware<CorrelationMiddleware>(); })
+                .ConfigureServices(services => {
+                    services.AddControllersWithViews(options => {
+                        options.Filters.Add<MessageExceptionResponseFilter>();
+                    });
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                });
 
             using var server = new TestServer(builder);
 
@@ -38,10 +36,8 @@ namespace Cortside.AspNetCore.Tests.Middleware {
         [Fact]
         public async Task ReturnsRequestCorrelationIdInResponseHeader() {
             var builder = new WebHostBuilder()
-               .Configure(app => app.UseMiddleware<CorrelationMiddleware>())
-               .ConfigureServices(services => {
-                   services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-               });
+                .Configure(app => app.UseMiddleware<CorrelationMiddleware>())
+                .ConfigureServices(services => { services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); });
 
             using var server = new TestServer(builder);
 
@@ -60,24 +56,24 @@ namespace Cortside.AspNetCore.Tests.Middleware {
         [Fact]
         public async Task ReturnsCorrelationIdInResponseHeaderOnUnhandledException() {
             var builder = new WebHostBuilder()
-               .Configure(app => {
-                   app.UseMiddleware<CorrelationMiddleware>();
-                   app.UseExceptionHandler(error => error.Run(_ => Task.CompletedTask));
+                .Configure(app => {
+                    app.UseMiddleware<CorrelationMiddleware>();
+                    app.UseExceptionHandler(error => error.Run(_ => Task.CompletedTask));
 
-                   _ = app.Use((context, next) => {
-                       if (DateTime.Now.Day > 0) {
-                           throw new InvalidOperationException();
-                       }
+                    _ = app.Use((context, next) => {
+                        if (DateTime.Now.Day > 0) {
+                            throw new InvalidOperationException();
+                        }
 
-                       return next(context);
-                   });
-               })
-               .ConfigureServices(services => {
-                   services.AddControllersWithViews(options => {
-                       options.Filters.Add<MessageExceptionResponseFilter>();
-                   });
-                   services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-               });
+                        return next(context);
+                    });
+                })
+                .ConfigureServices(services => {
+                    services.AddControllersWithViews(options => {
+                        options.Filters.Add<MessageExceptionResponseFilter>();
+                    });
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                });
 
             using var server = new TestServer(builder);
 

@@ -28,5 +28,4 @@ namespace Cortside.AspNetCore.Common.Models {
         /// </value>
         public string Sort { get; set; } = "-CreatedDate";
     }
-
 }

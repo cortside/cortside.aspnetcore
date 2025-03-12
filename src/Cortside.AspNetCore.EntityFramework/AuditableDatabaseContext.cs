@@ -14,7 +14,8 @@ namespace Cortside.AspNetCore.EntityFramework {
         protected readonly ISubjectPrincipal subjectPrincipal;
         protected readonly ISubjectFactory<TSubject> subjectFactory;
 
-        public AuditableDatabaseContext(DbContextOptions options, ISubjectPrincipal subjectPrincipal, ISubjectFactory<TSubject> subjectFactory) : base(options) {
+        public AuditableDatabaseContext(DbContextOptions options, ISubjectPrincipal subjectPrincipal,
+            ISubjectFactory<TSubject> subjectFactory) : base(options) {
             this.subjectPrincipal = subjectPrincipal;
             this.subjectFactory = subjectFactory;
         }
@@ -56,7 +57,8 @@ namespace Cortside.AspNetCore.EntityFramework {
         /// </summary>
         /// <param name="optionsBuilder"></param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-            optionsBuilder.AddInterceptors(new AuditableInterceptor<TSubject>(Subjects, DateTimeHandling, subjectPrincipal, subjectFactory));
+            optionsBuilder.AddInterceptors(new AuditableInterceptor<TSubject>(Subjects, DateTimeHandling,
+                subjectPrincipal, subjectFactory));
 
             base.OnConfiguring(optionsBuilder);
         }

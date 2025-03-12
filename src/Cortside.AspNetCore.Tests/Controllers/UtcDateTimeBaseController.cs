@@ -9,7 +9,8 @@ namespace Cortside.AspNetCore.Tests.Controllers {
         private readonly JsonSerializerSettings jsonSerializerSettings;
 
         public UtcDateTimeBaseController(IServiceProvider services) {
-            IOptions<MvcNewtonsoftJsonOptions> newtonsoftOptions = services.GetService<IOptions<MvcNewtonsoftJsonOptions>>();
+            IOptions<MvcNewtonsoftJsonOptions> newtonsoftOptions =
+                services.GetService<IOptions<MvcNewtonsoftJsonOptions>>();
             jsonSerializerSettings = newtonsoftOptions.Value.SerializerSettings.CloneJsonSerializerSettings();
             jsonSerializerSettings.NullValueHandling = NullValueHandling.Include;
         }

@@ -18,18 +18,22 @@ namespace Cortside.AspNetCore.Common.Models {
         /// Total number of items found for the given resource
         /// </summary>
         public int TotalItems { get; set; }
+
         /// <summary>
         /// Current paged result page number
         /// </summary>
         public int PageNumber { get; set; }
+
         /// <summary>
         /// Current paged result page size
         /// </summary>
         public int PageSize { get; set; }
+
         /// <summary>
         /// Total number of paged result pages for given resource
         /// </summary>
         public int TotalPages => (int)Math.Ceiling(TotalItems / (double)PageSize);
+
         /// <summary>
         /// Current paged result page of results
         /// </summary>

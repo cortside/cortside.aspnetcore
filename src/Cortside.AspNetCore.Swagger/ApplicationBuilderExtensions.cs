@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Builder;
 
 namespace Cortside.AspNetCore.Swagger {
     public static class ApplicationBuilderExtensions {
-        public static IApplicationBuilder UseSwagger(this IApplicationBuilder builder, string apiName, IApiVersionDescriptionProvider provider) {
+        public static IApplicationBuilder UseSwagger(this IApplicationBuilder builder, string apiName,
+            IApiVersionDescriptionProvider provider) {
             builder.UseSwagger();
             builder.UseSwaggerUI(options => {
                 options.RoutePrefix = "swagger";

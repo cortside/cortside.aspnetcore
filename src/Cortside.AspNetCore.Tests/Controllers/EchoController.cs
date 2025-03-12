@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Cortside.AspNetCore.Tests.Controllers {
     [Route("api/[controller]")]
     public class EchoController : UtcDateTimeBaseController {
-        public EchoController(IServiceProvider services) : base(services) { }
+        public EchoController(IServiceProvider services) : base(services) {
+        }
 
         [Route("echo-date/{date}")]
         [HttpGet]

@@ -52,7 +52,8 @@ namespace Cortside.AspNetCore.Testing {
         public RestApiClient.RestApiClient CreateRestApiClient(ITestOutputHelper output) {
             var httpClient = api.CreateClient();
             var logger = new XunitLogger("IntegrationTest", output);
-            return new RestApiClient.RestApiClient(logger, new HttpContextAccessor(), new RestApiClientOptions(), httpClient);
+            return new RestApiClient.RestApiClient(logger, new HttpContextAccessor(), new RestApiClientOptions(),
+                httpClient);
         }
 
         public HttpClient UnauthorizedClient {
