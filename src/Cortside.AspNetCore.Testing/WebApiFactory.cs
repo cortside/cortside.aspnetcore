@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cortside.AspNetCore.Builder;
 using Cortside.MockServer;
 using Cortside.MockServer.Builder;

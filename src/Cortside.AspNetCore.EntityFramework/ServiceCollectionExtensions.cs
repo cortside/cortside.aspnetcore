@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cortside.AspNetCore.EntityFramework.Interceptors;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;

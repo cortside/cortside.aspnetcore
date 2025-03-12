@@ -1,4 +1,4 @@
-﻿using Cortside.AspNetCore.EntityFramework.Interceptors;
+using Cortside.AspNetCore.EntityFramework.Interceptors;
 using Cortside.AspNetCore.EntityFramework.Tests.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Xunit;

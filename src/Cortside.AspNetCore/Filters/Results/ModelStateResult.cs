@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Cortside.AspNetCore.Common.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;

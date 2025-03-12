@@ -1,4 +1,4 @@
-﻿using Cortside.AspNetCore.EntityFramework.Interceptors;
+using Cortside.AspNetCore.EntityFramework.Interceptors;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cortside.AspNetCore.EntityFramework.Tests.Contexts {

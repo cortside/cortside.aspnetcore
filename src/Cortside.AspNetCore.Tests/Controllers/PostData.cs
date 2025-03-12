@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Cortside.AspNetCore.Tests.Controllers {
     public class PostData {

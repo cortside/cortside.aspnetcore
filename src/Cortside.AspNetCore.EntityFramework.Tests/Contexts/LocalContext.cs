@@ -1,4 +1,4 @@
-﻿using Cortside.AspNetCore.Auditable;
+using Cortside.AspNetCore.Auditable;
 using Cortside.AspNetCore.Auditable.Entities;
 using Cortside.AspNetCore.Common;
 using Cortside.Common.Security;

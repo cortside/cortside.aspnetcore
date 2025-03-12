@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
