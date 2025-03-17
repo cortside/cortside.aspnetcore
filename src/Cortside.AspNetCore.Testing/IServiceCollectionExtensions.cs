@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.IO;
+using Cortside.Common.Testing.Extensions;
 using Cortside.DomainEvent;
 using Cortside.DomainEvent.Stub;
 using Medallion.Threading;
@@ -7,6 +8,7 @@ using Medallion.Threading.FileSystem;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
@@ -25,10 +27,15 @@ namespace Cortside.AspNetCore.Testing {
             return o.Value.SerializerSettings;
         }
 
-        public static void RegisterInMemoryDbContext<TDatabaseContext>(this IServiceCollection services, string testId, Action<TDatabaseContext> seedDatabase) where TDatabaseContext : DbContext {
+        public static void RegisterInMemoryDbContext<TDatabaseContext>(this IServiceCollection services, string testId,
+            Action<TDatabaseContext> seedDatabase) where TDatabaseContext : DbContext {
             // Remove the app's DbContext registration.
             services.RemoveAll<DbContextOptions<TDatabaseContext>>();
             services.RemoveAll<DbContext>();
+
+            // https://github.com/dotnet/efcore/issues/35126
+            // needed for using ef core 9 with net8
+            services.Unregister<IDbContextOptionsConfiguration<TDatabaseContext>>();
 
             // register test instance
             services.AddDbContext<TDatabaseContext>(options => {

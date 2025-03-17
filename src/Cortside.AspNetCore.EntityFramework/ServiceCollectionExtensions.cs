@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cortside.AspNetCore.EntityFramework.Interceptors;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -17,10 +17,11 @@ namespace Cortside.AspNetCore.EntityFramework {
         /// <param name="action"></param>
         /// <param name="sqlAction"></param>
         /// <returns></returns>
-        public static IServiceCollection AddDatabaseContext<TInterface, TImplementation>(this IServiceCollection services, IConfiguration configuration, Action<DbContextOptionsBuilder> action = null, Action<SqlServerDbContextOptionsBuilder> sqlAction = null)
-                where TImplementation : DbContext, TInterface, IUnitOfWork
-                where TInterface : class {
-
+        public static IServiceCollection AddDatabaseContext<TInterface, TImplementation>(
+            this IServiceCollection services, IConfiguration configuration,
+            Action<DbContextOptionsBuilder> action = null, Action<SqlServerDbContextOptionsBuilder> sqlAction = null)
+            where TImplementation : DbContext, TInterface, IUnitOfWork
+            where TInterface : class {
             var connectionString = configuration.GetSection("Database").GetValue<string>("ConnectionString");
             services.AddDatabaseContext<TInterface, TImplementation>(connectionString, action, sqlAction);
 
@@ -36,9 +37,11 @@ namespace Cortside.AspNetCore.EntityFramework {
         /// <param name="connectionString"></param>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static IServiceCollection AddDatabaseContext<TInterface, TImplementation>(this IServiceCollection services, string connectionString, Action<DbContextOptionsBuilder> action = null, Action<SqlServerDbContextOptionsBuilder> sqlAction = null)
-                where TImplementation : DbContext, TInterface, IUnitOfWork
-                where TInterface : class {
+        public static IServiceCollection AddDatabaseContext<TInterface, TImplementation>(
+            this IServiceCollection services, string connectionString, Action<DbContextOptionsBuilder> action = null,
+            Action<SqlServerDbContextOptionsBuilder> sqlAction = null)
+            where TImplementation : DbContext, TInterface, IUnitOfWork
+            where TInterface : class {
             services.AddDbContext<TImplementation>(opt => {
                 opt.UseSqlServer(connectionString,
                     sqlServerOptionsAction: sqlOptions => {

@@ -13,7 +13,8 @@ namespace Cortside.AspNetCore.ApplicationInsights {
         /// <param name="services"></param>
         /// <param name="cloudRoleName"></param>
         /// <returns></returns>
-        public static IServiceCollection AddCloudRoleNameInitializer(this IServiceCollection services, string cloudRoleName) {
+        public static IServiceCollection AddCloudRoleNameInitializer(this IServiceCollection services,
+            string cloudRoleName) {
             Guard.From.NullOrWhitespace(cloudRoleName, nameof(cloudRoleName));
 
             services.AddSingleton<ITelemetryInitializer>(_ => new CloudRoleNameTelemetryInitializer(cloudRoleName));
@@ -29,7 +30,8 @@ namespace Cortside.AspNetCore.ApplicationInsights {
         /// <param name="instrumentationKey"></param>
         /// <returns></returns>
         [Obsolete("Use of InstrumentationKey has been obsoleted, use override with ")]
-        public static IServiceCollection AddApplicationInsights(this IServiceCollection services, string cloudRoleName, string instrumentationKey) {
+        public static IServiceCollection AddApplicationInsights(this IServiceCollection services, string cloudRoleName,
+            string instrumentationKey) {
             Guard.From.NullOrWhitespace(cloudRoleName, nameof(cloudRoleName));
             // TODO: add logging stating missing connection string or instrumentation key
 
@@ -50,7 +52,8 @@ namespace Cortside.AspNetCore.ApplicationInsights {
         /// <param name="cloudRoleName"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static IServiceCollection AddApplicationInsights(this IServiceCollection services, string cloudRoleName, ApplicationInsightsServiceOptions options) {
+        public static IServiceCollection AddApplicationInsights(this IServiceCollection services, string cloudRoleName,
+            ApplicationInsightsServiceOptions options) {
             Guard.From.NullOrWhitespace(cloudRoleName, nameof(cloudRoleName));
             Guard.From.Null(options, nameof(options));
             // TODO: add logging stating missing connection string or instrumentation key

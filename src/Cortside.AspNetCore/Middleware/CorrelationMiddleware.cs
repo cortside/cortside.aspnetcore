@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -27,7 +27,7 @@ namespace Cortside.AspNetCore.Middleware {
             }
 
             context.Response.OnStarting(() => {
-                context.Response.Headers.Add("X-Correlation-Id", new[] { correlationId });
+                context.Response.Headers.Append("X-Correlation-Id", new[] { correlationId });
                 return Task.CompletedTask;
             });
 

@@ -1,165 +1,47 @@
-﻿using System;
+using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Cortside.AspNetCore.Auditable;
+using Cortside.AspNetCore.Auditable.Entities;
+using Cortside.AspNetCore.Common;
+using Cortside.Common.Security;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Cortside.AspNetCore.EntityFramework.Interceptors {
-    public class AuditableInterceptor : ISaveChangesInterceptor {
-        //private readonly string _connectionString;
-        //private SaveChangesAudit _audit;
-
-        public AuditableInterceptor() {
-            //_connectionString = connectionString;
+    public class AuditableInterceptor<TSubject> : AuditableSaveChangesInterceptor<TSubject> where TSubject : Subject {
+        public AuditableInterceptor(DbSet<TSubject> subjects, InternalDateTimeHandling dateTimeHandling,
+            ISubjectPrincipal subjectPrincipal, ISubjectFactory<TSubject> subjectFactory) : base(subjects,
+            dateTimeHandling, subjectPrincipal, subjectFactory) {
         }
 
-        //public async ValueTask<InterceptionResult<int>> SavingChangesAsync(
-        //    DbContextEventData eventData,
-        //    InterceptionResult<int> result,
-        //    CancellationToken cancellationToken = default) {
-        //    _audit = CreateAudit(eventData.Context);
+        public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData,
+            InterceptionResult<int> result, CancellationToken cancellationToken = default) {
+            // check for subject in subjects set and either create or get to attach to AudibleEntity
+            var updatingSubject = await GetCurrentSubjectAsync();
 
-        //    using var auditContext = new AuditContext(_connectionString);
+            var now = dateTimeHandling == InternalDateTimeHandling.Utc ? DateTime.UtcNow : DateTime.Now;
 
-        //    auditContext.Add(_audit);
-        //    await auditContext.SaveChangesAsync();
+            DbContext? dbContext = eventData.Context;
+            if (dbContext is null) {
+                return await base.SavingChangesAsync(eventData, result, cancellationToken);
+            }
 
-        //    return result;
-        //}
+            var entities = dbContext.ChangeTracker.Entries<AuditableEntity>()
+                .Where(e => e is { State: EntityState.Added or EntityState.Modified });
 
-        public InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result) {
-            //_audit = CreateAudit(eventData.Context);
+            foreach (var entityEntry in entities) {
+                entityEntry.Entity.LastModifiedSubject = updatingSubject;
+                entityEntry.Entity.LastModifiedDate = now;
 
-            //using var auditContext = new AuditContext(_connectionString);
-            //auditContext.Add(_audit);
-            //auditContext.SaveChanges();
+                if (entityEntry.State == EntityState.Added) {
+                    entityEntry.Entity.CreatedSubject = updatingSubject;
+                    entityEntry.Entity.CreatedDate = now;
+                }
+            }
 
-            //var modified = eventData.Context.ChangeTracker.Entries().Where(x => x.Entity is IValueObject && (x.State == EntityState.Modified || x.State == EntityState.Added));
-
-            //foreach (var entry in modified) {
-            //    if (entry.Entity is Address) {
-            //        var key = ((IValueObject)entry.Entity).UniqueKey;
-            //        var dbset = eventData.Context.Set<Address>();
-            //        var entity = dbset.AsNoTracking().FirstOrDefault(x => x.UniqueKey == key);
-            //        if (entity != null) {
-            //            entry.State = EntityState.Detached;
-            //            entry.CurrentValues.SetValues(entity);
-            //            ((Address)entry.Entity).AddressId = entity.AddressId;
-            //            //entry.State = EntityState.Unchanged;
-            //            Console.Out.WriteLine(((Address)entry.Entity).AddressId);
-            //            entry.Reload();
-            //        }
-            //    }
-            //}
-
-            return result;
+            return await base.SavingChangesAsync(eventData, result, cancellationToken);
         }
-
-        public int SavedChanges(SaveChangesCompletedEventData eventData, int result) {
-            //using var auditContext = new AuditContext(_connectionString);
-
-            //auditContext.Attach(_audit);
-            //_audit.Succeeded = true;
-            //_audit.EndTime = DateTime.UtcNow;
-
-            //auditContext.SaveChanges();
-
-            return result;
-        }
-
-        public void SaveChangesFailed(DbContextErrorEventData eventData) {
-            //using var auditContext = new AuditContext(_connectionString);
-
-            //auditContext.Attach(_audit);
-            //_audit.Succeeded = false;
-            //_audit.EndTime = DateTime.UtcNow;
-            //_audit.ErrorMessage = eventData.Exception.Message;
-
-            //auditContext.SaveChanges();
-        }
-
-        public ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result,
-            CancellationToken cancellationToken = new CancellationToken()) {
-            throw new NotImplementedException();
-        }
-
-        public ValueTask<int> SavedChangesAsync(SaveChangesCompletedEventData eventData, int result,
-            CancellationToken cancellationToken = new CancellationToken()) {
-            throw new NotImplementedException();
-        }
-
-        public Task SaveChangesFailedAsync(DbContextErrorEventData eventData,
-            CancellationToken cancellationToken = new CancellationToken()) {
-            throw new NotImplementedException();
-        }
-
-
-        //public async ValueTask<int> SavedChangesAsync(
-        //    SaveChangesCompletedEventData eventData,
-        //    int result,
-        //    CancellationToken cancellationToken = default) {
-        //    using var auditContext = new AuditContext(_connectionString);
-
-        //    auditContext.Attach(_audit);
-        //    _audit.Succeeded = true;
-        //    _audit.EndTime = DateTime.UtcNow;
-
-        //    await auditContext.SaveChangesAsync(cancellationToken);
-
-        //    return result;
-        //}
-
-        #region SaveChangesFailed
-
-        //public async Task SaveChangesFailedAsync(
-        //    DbContextErrorEventData eventData,
-        //    CancellationToken cancellationToken = default) {
-        //    using var auditContext = new AuditContext(_connectionString);
-
-        //    auditContext.Attach(_audit);
-        //    _audit.Succeeded = false;
-        //    _audit.EndTime = DateTime.UtcNow;
-        //    _audit.ErrorMessage = eventData.Exception.InnerException?.Message;
-
-        //    await auditContext.SaveChangesAsync(cancellationToken);
-        //}
-        #endregion
-
-        #region CreateAudit
-        //private static SaveChangesAudit CreateAudit(DbContext context) {
-        //    context.ChangeTracker.DetectChanges();
-
-        //    var audit = new SaveChangesAudit { AuditId = Guid.NewGuid(), StartTime = DateTime.UtcNow };
-
-        //    foreach (var entry in context.ChangeTracker.Entries()) {
-        //        var auditMessage = entry.State switch {
-        //            EntityState.Deleted => CreateDeletedMessage(entry),
-        //            EntityState.Modified => CreateModifiedMessage(entry),
-        //            EntityState.Added => CreateAddedMessage(entry),
-        //            _ => null
-        //        };
-
-        //        if (auditMessage != null) {
-        //            audit.Entities.Add(new EntityAudit { State = entry.State, AuditMessage = auditMessage });
-        //        }
-        //    }
-
-        //    return audit;
-
-        //    string CreateAddedMessage(EntityEntry entry)
-        //        => entry.Properties.Aggregate(
-        //            $"Inserting {entry.Metadata.DisplayName()} with ",
-        //            (auditString, property) => auditString + $"{property.Metadata.Name}: '{property.CurrentValue}' ");
-
-        //    string CreateModifiedMessage(EntityEntry entry)
-        //        => entry.Properties.Where(property => property.IsModified || property.Metadata.IsPrimaryKey()).Aggregate(
-        //            $"Updating {entry.Metadata.DisplayName()} with ",
-        //            (auditString, property) => auditString + $"{property.Metadata.Name}: '{property.CurrentValue}' ");
-
-        //    string CreateDeletedMessage(EntityEntry entry)
-        //        => entry.Properties.Where(property => property.Metadata.IsPrimaryKey()).Aggregate(
-        //            $"Deleting {entry.Metadata.DisplayName()} with ",
-        //            (auditString, property) => auditString + $"{property.Metadata.Name}: '{property.CurrentValue}' ");
-        //}
-        #endregion
     }
 }

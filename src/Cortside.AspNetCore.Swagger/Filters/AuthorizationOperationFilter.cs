@@ -57,17 +57,19 @@ namespace Cortside.AspNetCore.Swagger.Filters {
             if (authorizeAttribute != null && !string.IsNullOrWhiteSpace(authorizeAttribute.Policy)) {
                 authorizationDescription = $" (Auth permission: {authorizeAttribute.Policy})";
             }
+
             operation.Summary ??= "";
             operation.Summary += authorizationDescription;
 
-            operation.Security.Add(new OpenApiSecurityRequirement()
-            {
+            operation.Security.Add(new OpenApiSecurityRequirement() {
                 {
                     new OpenApiSecurityScheme() {
                         Reference = new OpenApiReference {
                             Type = ReferenceType.SecurityScheme, Id = "oauth2"
                         }
-                }, new List<string>() }
+                    },
+                    new List<string>()
+                }
             });
         }
 

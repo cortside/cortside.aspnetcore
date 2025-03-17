@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace Cortside.AspNetCore.EntityFramework.Conventions {
     public class BlankTriggerAddingConvention : IModelFinalizingConvention {
-
         public virtual void ProcessModelFinalizing(
             IConventionModelBuilder modelBuilder,
             IConventionContext<IConventionModelBuilder> context) {

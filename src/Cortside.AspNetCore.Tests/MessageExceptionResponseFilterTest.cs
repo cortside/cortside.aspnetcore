@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using Cortside.AspNetCore.Filters;
 using Cortside.Common.Messages;
 using Cortside.Common.Messages.MessageExceptions;
@@ -15,6 +14,7 @@ namespace Cortside.AspNetCore.Tests {
     public class MessageExceptionResponseFilterTest : IDisposable {
         private readonly MessageExceptionResponseFilter filter;
         private readonly LoggerFactory loggerFactory = new LoggerFactory();
+
         public MessageExceptionResponseFilterTest() {
             filter = new MessageExceptionResponseFilter(new Logger<MessageExceptionResponseFilter>(loggerFactory));
         }
@@ -32,7 +32,8 @@ namespace Cortside.AspNetCore.Tests {
 
         [Theory]
         [MemberData(nameof(GetCommonMessageExceptionScenarios))]
-        public void ShouldWriteResponseForCommonMessageExceptions(MessageException message, Func<IActionResult, bool> comparison) {
+        public void ShouldWriteResponseForCommonMessageExceptions(MessageException message,
+            Func<IActionResult, bool> comparison) {
             // arrange
             ActionExecutedContext context = GetActionExecutedContext();
             context.Exception = message;
@@ -75,9 +76,24 @@ namespace Cortside.AspNetCore.Tests {
         }
 
         public static IEnumerable<object[]> GetCommonMessageExceptionScenarios() {
-            yield return new object[] { new NotFoundResponseException(), (Func<IActionResult, bool>)((result) => result is NotFoundObjectResult) };
-            yield return new object[] { new UnprocessableEntityResponseException(), (Func<IActionResult, bool>)((result) => ((ObjectResult)result).StatusCode == StatusCodes.Status422UnprocessableEntity) };
-            yield return new object[] { new ForbiddenAccessResponseException(), (Func<IActionResult, bool>)((result) => ((ObjectResult)result).StatusCode == StatusCodes.Status403Forbidden) };
+            yield return new object[] {
+                new NotFoundResponseException(), (Func<IActionResult, bool>)((result) => result is NotFoundObjectResult)
+            };
+            yield return new object[] {
+                new UnprocessableEntityResponseException(),
+                (Func<IActionResult, bool>)((result) =>
+                    ((ObjectResult)result).StatusCode == StatusCodes.Status422UnprocessableEntity)
+            };
+            yield return new object[] {
+                new ForbiddenAccessResponseException(),
+                (Func<IActionResult, bool>)((result) =>
+                    ((ObjectResult)result).StatusCode == StatusCodes.Status403Forbidden)
+            };
+            yield return new object[] {
+                new PreconditionFailedResponseException(),
+                (Func<IActionResult, bool>)((result) =>
+                    ((ObjectResult)result).StatusCode == StatusCodes.Status412PreconditionFailed)
+            };
         }
 
         public static IEnumerable<object[]> GetPassThroughScenarios() {

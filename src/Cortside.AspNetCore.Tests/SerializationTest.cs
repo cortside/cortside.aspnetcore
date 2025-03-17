@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cortside.Common.Json;
 using Cortside.Common.Testing;
 using Newtonsoft.Json;
@@ -14,7 +14,6 @@ namespace Cortside.AspNetCore.Tests {
     }
 
     public class SerializationTest {
-
         [Fact]
         public void Serialization() {
             var settings = JsonNetUtility.GlobalDefaultSettings();
@@ -29,7 +28,6 @@ namespace Cortside.AspNetCore.Tests {
                     Duration = TimeSpan.FromHours(5.5)
                 };
 
-
                 string json = JsonConvert.SerializeObject(flight, Formatting.None, settings);
                 string expected =
                     """{"destination":"Dubai","departureDate":"2013-01-21T00:00:00Z","departureDateUtc":"2013-01-21T00:00:00Z","departureDateLocal":"2013-01-21T07:00:00Z","duration":"P0Y0M0DT5H30M0S"}""";
@@ -42,7 +40,8 @@ namespace Cortside.AspNetCore.Tests {
             var settings = JsonNetUtility.GlobalDefaultSettings();
             settings.Converters.Add(new IsoTimeSpanConverter());
 
-            string json = """{"destination":"Dubai","departureDate":"2013-01-21T00:00:00Z","departureDateUtc":"2013-01-21T00:00:00Z","departureDateLocal":"2013-01-21T07:00:00Z","duration":"P0Y0M0DT5H30M0S"}""";
+            string json =
+                """{"destination":"Dubai","departureDate":"2013-01-21T00:00:00Z","departureDateUtc":"2013-01-21T00:00:00Z","departureDateLocal":"2013-01-21T07:00:00Z","duration":"P0Y0M0DT5H30M0S"}""";
             var flight = JsonConvert.DeserializeObject<Flight>(json, settings);
 
             Assert.Equal(DateTimeKind.Utc, flight.DepartureDate.Kind);

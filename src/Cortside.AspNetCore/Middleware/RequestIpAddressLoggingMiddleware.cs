@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -9,7 +9,8 @@ namespace Cortside.AspNetCore.Middleware {
         private readonly ILogger<RequestIpAddressLoggingMiddleware> logger;
         private readonly RequestDelegate next;
 
-        public RequestIpAddressLoggingMiddleware(ILogger<RequestIpAddressLoggingMiddleware> logger, RequestDelegate next) {
+        public RequestIpAddressLoggingMiddleware(ILogger<RequestIpAddressLoggingMiddleware> logger,
+            RequestDelegate next) {
             this.logger = logger;
             this.next = next;
         }

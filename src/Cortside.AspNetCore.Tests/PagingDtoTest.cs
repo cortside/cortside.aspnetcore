@@ -1,13 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Cortside.AspNetCore.Common.Paging;
 using Xunit;
 
 namespace Cortside.AspNetCore.Tests {
     public class PagingDtoTest {
-
         [Fact]
         public void ShouldCalculateTotalPages() {
-
             // arrange
             var items = new List<string> {
                 "str1",
@@ -18,7 +16,6 @@ namespace Cortside.AspNetCore.Tests {
                 "str6",
                 "str7",
             };
-
 
             // act
             var pagedDto = new PagedList<string> {

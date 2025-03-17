@@ -1,4 +1,4 @@
-﻿using Cortside.AspNetCore.Common;
+using Cortside.AspNetCore.Common;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -13,7 +13,8 @@ namespace Cortside.AspNetCore {
             return ApplyGlobalDefaultSettings(new JsonSerializerSettings(), internalDateTimeHandling);
         }
 
-        public static JsonSerializerSettings ApplyGlobalDefaultSettings(JsonSerializerSettings settings, InternalDateTimeHandling internalDateTimeHandling) {
+        public static JsonSerializerSettings ApplyGlobalDefaultSettings(JsonSerializerSettings settings,
+            InternalDateTimeHandling internalDateTimeHandling) {
             settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             settings.MissingMemberHandling = MissingMemberHandling.Ignore;

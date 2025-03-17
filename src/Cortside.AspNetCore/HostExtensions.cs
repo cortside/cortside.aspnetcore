@@ -12,7 +12,8 @@ namespace Cortside.AspNetCore {
         /// </summary>
         /// <param name="host">The host.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        public static async Task RunWithTasksAsync(this WebApplication host, string url = null, CancellationToken cancellationToken = default) {
+        public static async Task RunWithTasksAsync(this WebApplication host, string url = null,
+            CancellationToken cancellationToken = default) {
             // Execute all the tasks
             foreach (var startupTask in host.Services.GetServices<IStartupTask>()) {
                 await startupTask.ExecuteAsync(cancellationToken).ConfigureAwait(false);

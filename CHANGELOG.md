@@ -1,3 +1,62 @@
+# Release 8.0
+
+* Updated powershell scripts to latest versions from coeus/shoppingcart-api
+* Standardized library build files and resolved code coverage issues
+* Update target framework to net8.0
+* Update all dependency nuget packages
+* Add/Fix build badges
+* Transition to use Shouldly instead of FluentAssertions
+* Add handling of PreconditionFailedResponseException to return 412 in MessageExceptionResponseFilter
+* Add new EF Core interceptor for handling of audit responsibilities, moving functionality from AuditableDatabaseContext, this will allow other custom implemented database context classes to still benefit from audit stamping
+* Broke out some common model builder methods from AuditableDatabaseContext to new ModelBuilderExtensions extension class
+* Add Authorization parameter to swagger model
+* Add definition for CustomSchemaId and CustomOperationIds to swagger definition
+* Add helper extension methods for ToPagedResult and ToListResult on IList<T>
+* Add IConfiguration support for values to have substitutable values anywhere in configuration with IConfiguration extension method ExpandTemplates
+* Conditionally add security to swagger model if identity authority is configured
+* Add support for Cortside.Authorization in AccessControlConfiguration
+
+|Commit|Date|Author|Message|
+|---|---|---|---|
+| 0d3e1c5 | <span style="white-space:nowrap;">2024-09-02</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update version
+| 2e19b1d | <span style="white-space:nowrap;">2024-09-13</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge branch 'master' into develop
+| 4bd9e9b | <span style="white-space:nowrap;">2024-09-27</span> | <span style="white-space:nowrap;">Erik</span> |  add precondition failed
+| 9b6e152 | <span style="white-space:nowrap;">2024-09-27</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge pull request #30 from cortside/feature/pre-condition-failed
+| 521db7d | <span style="white-space:nowrap;">2024-09-27</span> | <span style="white-space:nowrap;">Erik</span> |  Merge remote-tracking branch 'remotes/origin/master' into feature/merge-master
+| 10abbf4 | <span style="white-space:nowrap;">2024-09-27</span> | <span style="white-space:nowrap;">Erik</span> |  (origin/feature/merge-master) update cortside.common packages
+| 5807943 | <span style="white-space:nowrap;">2024-10-21</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  merge master
+| ad7c57e | <span style="white-space:nowrap;">2024-10-24</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Add new AuditableInterceptor, moving most of setting audit stap logic to there; moved 2 model builder methods to extension methods insted of by inheritance
+| 3d8cf28 | <span style="white-space:nowrap;">2024-10-24</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  project cleanup
+| 4a1ea34 | <span style="white-space:nowrap;">2024-10-24</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  change values from private to protected so that they are available to derived classes
+| 41f6582 | <span style="white-space:nowrap;">2024-10-24</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  remove unneeded extension method overload
+| 8b257c6 | <span style="white-space:nowrap;">2024-11-12</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  merge master
+| 30fb3c2 | <span style="white-space:nowrap;">2024-11-13</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  add custom operationsIds for swagger
+| 65468d0 | <span style="white-space:nowrap;">2024-11-13</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge branch 'master' into develop
+| c62ea63 | <span style="white-space:nowrap;">2024-11-13</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge branch 'master' into develop
+| fe07c7f | <span style="white-space:nowrap;">2024-11-14</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  add helper extensions for result classes
+| 5d7880d | <span style="white-space:nowrap;">2024-12-05</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge branch 'master' into develop
+| 1bc6dbc | <span style="white-space:nowrap;">2025-01-08</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update nuget packages
+| 3bb083b | <span style="white-space:nowrap;">2025-01-08</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update nuget packages
+| b6e5bdc | <span style="white-space:nowrap;">2025-01-15</span> | <span style="white-space:nowrap;">=</span> |  config extension for templates
+| f9184c8 | <span style="white-space:nowrap;">2025-01-15</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge pull request #34 from cortside/feature/substitutions
+| 80ce069 | <span style="white-space:nowrap;">2025-01-16</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  check to see if identity authority is setup before adding security to swagger
+| 22a9d2d | <span style="white-space:nowrap;">2025-01-21</span> | <span style="white-space:nowrap;">=</span> |  authorization-api
+| 286d8d1 | <span style="white-space:nowrap;">2025-01-22</span> | <span style="white-space:nowrap;">=</span> |  update tests
+| fe40a7d | <span style="white-space:nowrap;">2025-01-22</span> | <span style="white-space:nowrap;">=</span> |  remove package ref
+| 48f23c7 | <span style="white-space:nowrap;">2025-01-23</span> | <span style="white-space:nowrap;">=</span> |  codacy
+| 4f32908 | <span style="white-space:nowrap;">2025-01-24</span> | <span style="white-space:nowrap;">=</span> |  deal with no icu
+| d71e3da | <span style="white-space:nowrap;">2025-01-24</span> | <span style="white-space:nowrap;">=</span> |  bump version
+| 5db56ac | <span style="white-space:nowrap;">2025-01-24</span> | <span style="white-space:nowrap;">=</span> |  to 8
+| 4998981 | <span style="white-space:nowrap;">2025-01-24</span> | <span style="white-space:nowrap;">=</span> |  only test 8
+| a5bd33a | <span style="white-space:nowrap;">2025-01-30</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge pull request #35 from cortside/feature/ENG-4482-authorization
+| e9484c3 | <span style="white-space:nowrap;">2025-02-14</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update to net8
+| 81f0ff6 | <span style="white-space:nowrap;">2025-02-14</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update to net8
+| 0b350c7 | <span style="white-space:nowrap;">2025-02-14</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update to net8
+| 9b720da | <span style="white-space:nowrap;">2025-03-12</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  reformatting
+| fd8c9da | <span style="white-space:nowrap;">2025-03-12</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Use Shouldly instead of FluentAssertions because of new licensing; reformat source;
+| 186eda3 | <span style="white-space:nowrap;">2025-03-13</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  (HEAD -> release/8.0, origin/develop, origin/HEAD, develop) update packages
+****
+
 # Release 6.3
 
 ## Breaking changes

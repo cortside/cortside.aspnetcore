@@ -1,11 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net8.0;</TargetFrameworks>
+    <TargetFramework>net8.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
     <NoWarn>1701;1702;VSTHRD200;</NoWarn>
-    <LangVersion>11.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,22 +12,29 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Cortside.Common.Hosting" Version="6.3.458" />
-    <PackageReference Include="Cortside.Common.Testing" Version="6.3.458" />
-    <PackageReference Include="FluentAssertions" Version="6.12.1" />
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.33" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.11.20">
+    <PackageReference Include="Cortside.Common.Testing" Version="8.0.478" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="8.0.14" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.13.61">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Moq" Version="4.20.72" />
-    <PackageReference Include="xunit" Version="2.9.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+    <PackageReference Include="Roslynator.Analyzers" Version="4.13.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="coverlet.collector" Version="6.0.2">
+    <PackageReference Include="Shouldly" Version="4.3.0" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.7.0.110445">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.0.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="6.0.4">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

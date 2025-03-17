@@ -34,6 +34,7 @@ namespace Cortside.AspNetCore {
                     logger.LogError(ex, $"Unable to resolve type {singleton.FullName} during warmup");
                 }
             }
+
             timer.Stop();
             logger.LogInformation("warmup took {elapsedMilliseconds} ms", timer.ElapsedMilliseconds);
             return Task.CompletedTask;

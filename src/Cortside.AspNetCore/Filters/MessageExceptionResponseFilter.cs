@@ -1,4 +1,4 @@
-﻿using Cortside.AspNetCore.Common.Models;
+using Cortside.AspNetCore.Common.Models;
 using Cortside.Common.Messages;
 using Cortside.Common.Messages.MessageExceptions;
 using Microsoft.AspNetCore.Http;
@@ -41,6 +41,11 @@ namespace Cortside.AspNetCore.Filters {
                         StatusCode = StatusCodes.Status422UnprocessableEntity
                     };
                     break;
+                case PreconditionFailedResponseException _:
+                    context.Result = new ObjectResult(GetErrorsModel(exception)) {
+                        StatusCode = StatusCodes.Status412PreconditionFailed
+                    };
+                    break;
                 case ConflictResponseException _:
                     context.Result = new ObjectResult(GetErrorsModel(exception)) {
                         StatusCode = StatusCodes.Status409Conflict
@@ -56,7 +61,8 @@ namespace Cortside.AspNetCore.Filters {
             }
 
             var result = context.Result as ObjectResult;
-            logger.LogDebug("Handled exception of type {Type}, returning status code of {StatusCode}", exception.GetType(), result?.StatusCode);
+            logger.LogDebug("Handled exception of type {Type}, returning status code of {StatusCode}",
+                exception.GetType(), result?.StatusCode);
             context.ExceptionHandled = true;
         }
 

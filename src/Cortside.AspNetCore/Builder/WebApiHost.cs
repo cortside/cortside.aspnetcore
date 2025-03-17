@@ -48,7 +48,9 @@ namespace Cortside.AspNetCore.Builder {
                 await app.RunWithTasksAsync(builder.Url).ConfigureAwait(false);
 
                 return 0;
-            } catch (Exception ex) when (ex is not OperationCanceledException && ex.GetType().Name != "StopTheHostException" && !builder.ExecutingIsEntryAssembly) {
+            } catch (Exception ex) when (ex is not OperationCanceledException &&
+                                         ex.GetType().Name != "StopTheHostException" &&
+                                         !builder.ExecutingIsEntryAssembly) {
                 // FYI the exception filter is to handle dotnet ef commands when dealing with migrations
                 Log.Fatal(ex, "Host terminated unexpectedly");
                 return 1;

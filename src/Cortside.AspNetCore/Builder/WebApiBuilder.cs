@@ -52,10 +52,11 @@ namespace Cortside.AspNetCore.Builder {
             this.args = args;
         }
 
-        public static string Environment => System.Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
+        public static string Environment =>
+            System.Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
 
         public static IConfiguration GetConfiguration() {
-            return new ConfigurationBuilder()
+            var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
                 .AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: true)
@@ -65,6 +66,10 @@ namespace Cortside.AspNetCore.Builder {
                 // This is the special line of code. It should be added in the place where you want to override configuration
                 .AddTestConfiguration()
                 .Build();
+
+            config.ExpandTemplates();
+
+            return config;
         }
 
         public bool ExecutingIsEntryAssembly => executingIsEntryAssembly;
@@ -89,16 +94,15 @@ namespace Cortside.AspNetCore.Builder {
 
             builder.Host.UseSerilog(Log.Logger);
 
-            builder.WebHost.ConfigureAppConfiguration(b => b.AddConfiguration(config));
+            builder.Configuration.AddConfiguration(config);
             builder.WebHost.UseConfiguration(config);
             builder.WebHost.UseShutdownTimeout(TimeSpan.FromSeconds(10));
 
             builder.WebHost.UseKestrel(o => {
                 o.AddServerHeader = false;
                 if (!string.IsNullOrWhiteSpace(certificateThumbprint)) {
-                    o.ListenAnyIP(new Uri(url).Port, listenOptions => {
-                        listenOptions.UseHttps(X509.GetCertificate(certificateThumbprint));
-                    });
+                    o.ListenAnyIP(new Uri(url).Port,
+                        listenOptions => { listenOptions.UseHttps(X509.GetCertificate(certificateThumbprint)); });
                 }
             });
             builder.WebHost.ConfigureKestrel(options => {
@@ -118,7 +122,8 @@ namespace Cortside.AspNetCore.Builder {
             var provider = app.Services.GetService<IApiVersionDescriptionProvider>();
             startup?.Configure(app, app.Environment, provider);
 
-            app.Logger.LogInformation($"Service {app.Environment.ApplicationName} started with environment {app.Environment.EnvironmentName}");
+            app.Logger.LogInformation(
+                $"Service {app.Environment.ApplicationName} started with environment {app.Environment.EnvironmentName}");
             app.Logger.LogInformation($"args: [{string.Join(",", args)}]");
             app.Logger.LogInformation($"ASPNETCORE_URLS: {url}");
             app.Lifetime.ApplicationStarted.Register(() => LogAddresses(app.Services, app.Logger));
@@ -183,7 +188,8 @@ namespace Cortside.AspNetCore.Builder {
             return calling == entry && entry == executing;
         }
 
-        private LoggerConfiguration GetLoggerConfiguration(BuildModel build, string serviceName, Bowdlerizer.Bowdlerizer bowdlerizer) {
+        private LoggerConfiguration GetLoggerConfiguration(BuildModel build, string serviceName,
+            Bowdlerizer.Bowdlerizer bowdlerizer) {
             var configuration = new LoggerConfiguration()
                 .ReadFrom.Configuration(config)
                 .UsingBowdlerizer(bowdlerizer)
@@ -198,6 +204,7 @@ namespace Cortside.AspNetCore.Builder {
             if (!string.IsNullOrWhiteSpace(serverUrl)) {
                 configuration.WriteTo.Seq(serverUrl);
             }
+
             var logFile = config["LogFile:Path"];
             if (!string.IsNullOrWhiteSpace(logFile)) {
                 configuration.WriteTo.File(logFile);

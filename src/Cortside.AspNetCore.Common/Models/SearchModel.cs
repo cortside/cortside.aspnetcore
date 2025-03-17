@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace Cortside.AspNetCore.Common.Models {
     public class SearchModel {
@@ -28,5 +28,4 @@ namespace Cortside.AspNetCore.Common.Models {
         /// </value>
         public string Sort { get; set; } = "-CreatedDate";
     }
-
 }

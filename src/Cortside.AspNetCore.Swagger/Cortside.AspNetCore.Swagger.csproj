@@ -1,27 +1,35 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net8.0;</TargetFrameworks>
+    <TargetFramework>net8.0</TargetFramework>
     <OpenApiGenerateDocuments>false</OpenApiGenerateDocuments>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Asp.Versioning.Http" Version="6.5.0" />
-    <PackageReference Include="Asp.Versioning.Mvc" Version="6.4.1" />
-    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="6.4.0" />
+    <PackageReference Include="Asp.Versioning.Http" Version="8.1.0" />
+    <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
     <PackageReference Include="AsyncFixer" Version="1.6.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Cortside.Common.Messages" Version="6.3.458" />
-    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.11.20">
+    <PackageReference Include="Cortside.Common.Messages" Version="8.0.478" />
+    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.13.61">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.8.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.8.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.8.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.ReDoc" Version="6.8.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.8.0" />
+    <PackageReference Include="Roslynator.Analyzers" Version="4.13.1">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.7.0.110445">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="7.3.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.3.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="7.3.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.ReDoc" Version="7.3.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="7.3.1" />
   </ItemGroup>
 
   <ItemGroup>

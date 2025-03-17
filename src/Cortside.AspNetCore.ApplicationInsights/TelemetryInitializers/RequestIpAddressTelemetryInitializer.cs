@@ -1,4 +1,4 @@
-﻿using Microsoft.ApplicationInsights.Channel;
+using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Http;
@@ -18,7 +18,8 @@ namespace Cortside.AspNetCore.ApplicationInsights.TelemetryInitializers {
             }
 
             if (!requestTelemetry.Properties.ContainsKey(PROPERTY_KEY)) {
-                requestTelemetry.Properties.Add(PROPERTY_KEY, HttpContextUtility.GetRequestIpAddress(httpContextAccessor.HttpContext));
+                requestTelemetry.Properties.Add(PROPERTY_KEY,
+                    HttpContextUtility.GetRequestIpAddress(httpContextAccessor.HttpContext));
             }
         }
     }

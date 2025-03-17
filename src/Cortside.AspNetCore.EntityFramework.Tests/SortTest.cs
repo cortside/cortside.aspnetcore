@@ -10,7 +10,7 @@ namespace Cortside.AspNetCore.EntityFramework.Tests {
 
             var propertyNames = propertyName.Split('.');
 
-            Assert.Equal(1, propertyNames.Length);
+            Assert.Single(propertyNames);
         }
 
         [Fact]

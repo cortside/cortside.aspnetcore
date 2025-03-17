@@ -6,10 +6,13 @@ namespace Cortside.AspNetCore.Common.Models {
     /// </summary>
     /// <typeparam name="T">model</typeparam>
     public class ListResult<T> {
-        public ListResult() { }
+        public ListResult() {
+        }
+
         public ListResult(IList<T> results) {
             Results = results;
         }
+
         public IList<T> Results { get; set; }
     }
 }

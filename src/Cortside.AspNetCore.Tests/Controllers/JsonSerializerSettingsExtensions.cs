@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS0618 // use of obsolete method/property
+#pragma warning disable CS0618 // use of obsolete method/property
 
 using Newtonsoft.Json;
 

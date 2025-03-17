@@ -1,4 +1,4 @@
-﻿using Cortside.AspNetCore.Auditable.Entities;
+using Cortside.AspNetCore.Auditable.Entities;
 
 namespace Cortside.AspNetCore.EntityFramework.Tests.Contexts {
     public class Person : AuditableEntity {

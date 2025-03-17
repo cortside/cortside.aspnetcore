@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cortside.Common.Security;
 using Microsoft.AspNetCore.Http;

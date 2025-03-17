@@ -24,7 +24,8 @@ namespace Cortside.AspNetCore {
         /// <typeparam name="T"></typeparam>
         /// <param name="services">The services.</param>
         /// <returns></returns>
-        public static IServiceCollection AddStartupTask<T>(this IServiceCollection services) where T : class, IStartupTask {
+        public static IServiceCollection AddStartupTask<T>(this IServiceCollection services)
+            where T : class, IStartupTask {
             services.AddTransient<IStartupTask, T>();
             services.AddSingleton(services);
             return services;
@@ -46,7 +47,8 @@ namespace Cortside.AspNetCore {
             return services;
         }
 
-        public static IServiceCollection AddDefaultResponseCompression(this IServiceCollection services, CompressionLevel compressionLevel) {
+        public static IServiceCollection AddDefaultResponseCompression(this IServiceCollection services,
+            CompressionLevel compressionLevel) {
             services.AddResponseCompression(options => {
                 options.EnableForHttps = true;
                 options.Providers.Add<BrotliCompressionProvider>();
@@ -58,7 +60,9 @@ namespace Cortside.AspNetCore {
             return services;
         }
 
-        public static IMvcBuilder AddApiDefaults(this IServiceCollection services, InternalDateTimeHandling internalDateTimeHandling = InternalDateTimeHandling.Utc, Action<MvcOptions> mvcAction = null, Action<MvcNewtonsoftJsonOptions> mvcNewtonsoftJsonOptions = null) {
+        public static IMvcBuilder AddApiDefaults(this IServiceCollection services,
+            InternalDateTimeHandling internalDateTimeHandling = InternalDateTimeHandling.Utc,
+            Action<MvcOptions> mvcAction = null, Action<MvcNewtonsoftJsonOptions> mvcNewtonsoftJsonOptions = null) {
             // add response compression using gzip and brotli compression
             services.AddDefaultResponseCompression(CompressionLevel.Optimal);
 
@@ -76,7 +80,9 @@ namespace Cortside.AspNetCore {
             return mvcBuilder;
         }
 
-        public static IMvcBuilder AddApiControllers(this IServiceCollection services, InternalDateTimeHandling internalDateTimeHandling = InternalDateTimeHandling.Utc, Action<MvcOptions> mvcAction = null, Action<MvcNewtonsoftJsonOptions> mvcNewtonsoftJsonOptions = null) {
+        public static IMvcBuilder AddApiControllers(this IServiceCollection services,
+            InternalDateTimeHandling internalDateTimeHandling = InternalDateTimeHandling.Utc,
+            Action<MvcOptions> mvcAction = null, Action<MvcNewtonsoftJsonOptions> mvcNewtonsoftJsonOptions = null) {
             var mvcBuilder = services.AddControllers(options => {
                 options.CacheProfiles.Add("Default", new CacheProfile {
                     Duration = 30,

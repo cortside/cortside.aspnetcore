@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using Asp.Versioning.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;

@@ -17,10 +17,11 @@ namespace Cortside.AspNetCore.AccessControl {
         /// <param name="services">The services.</param>
         /// <param name="configuration">The configuration.</param>
         /// <returns></returns>
-        public static IServiceCollection AddAccessControl(this IServiceCollection services, IConfiguration configuration) {
+        public static IServiceCollection AddAccessControl(this IServiceCollection services,
+            IConfiguration configuration) {
             Guard.From.Null(configuration, nameof(configuration));
-            Guard.Against(() => !configuration.GetSection("IdentityServer").Exists(), () => throw new ArgumentException("Configuration section named 'IdentityServer' is missing"));
-            Guard.Against(() => !configuration.GetSection("PolicyServer").Exists(), () => throw new ArgumentException("Configuration section named 'PolicyServer' is missing"));
+            Guard.Against(() => !configuration.GetSection("IdentityServer").Exists(),
+                () => throw new ArgumentException("Configuration section named 'IdentityServer' is missing"));
 
 #if (NET8_0_OR_GREATER)
             JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
@@ -28,12 +29,19 @@ namespace Cortside.AspNetCore.AccessControl {
             System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 #endif
 
-            var identityServerConfiguration = configuration.GetSection("IdentityServer").Get<IdentityServerConfiguration>();
-            Guard.From.NullOrWhitespace(identityServerConfiguration.Authority, nameof(identityServerConfiguration.Authority), "IdentityServer:Authority is null");
-            Guard.From.NullOrWhitespace(identityServerConfiguration.Authentication?.ClientId, nameof(identityServerConfiguration.Authentication.ClientId), "IdentityServer:Authentication:ClientId is null");
-            Guard.From.NullOrWhitespace(identityServerConfiguration.Authentication?.ClientSecret, nameof(identityServerConfiguration.Authentication.ClientSecret), "IdentityServer:Authentication:ClientSecret is null");
+            var identityServerConfiguration =
+                configuration.GetSection("IdentityServer").Get<IdentityServerConfiguration>();
+            Guard.From.NullOrWhitespace(identityServerConfiguration.Authority,
+                nameof(identityServerConfiguration.Authority), "IdentityServer:Authority is null");
+            Guard.From.NullOrWhitespace(identityServerConfiguration.Authentication?.ClientId,
+                nameof(identityServerConfiguration.Authentication.ClientId),
+                "IdentityServer:Authentication:ClientId is null");
+            Guard.From.NullOrWhitespace(identityServerConfiguration.Authentication?.ClientSecret,
+                nameof(identityServerConfiguration.Authentication.ClientSecret),
+                "IdentityServer:Authentication:ClientSecret is null");
 
             var authenticationBuilder = services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                //.AddOpenIdConnect(o => o.mapinboundclaims=false)
                 .AddIdentityServerAuthentication(options => {
                     // base-address of your identityserver
                     options.Authority = identityServerConfiguration.Authority;
@@ -49,12 +57,28 @@ namespace Cortside.AspNetCore.AccessControl {
                     options.CacheDuration = identityServerConfiguration.CacheDuration;
                 });
 
+            // authorization provider
+            var accessControlConfiguration = configuration.GetSection("AccessControl").Exists()
+                ? configuration.GetSection("AccessControl").Get<AccessControlConfiguration>()
+                : new AccessControlConfiguration();
+
             // policy server
-            configuration["PolicyServer:TokenClient:Authority"] = identityServerConfiguration.Authority;
-            configuration["PolicyServer:TokenClient:ClientId"] = identityServerConfiguration.Authentication?.ClientId;
-            configuration["PolicyServer:TokenClient:ClientSecret"] = identityServerConfiguration.Authentication?.ClientSecret;
-            services.AddPolicyServerRuntimeClient(configuration.GetSection("PolicyServer"))
-                .AddAuthorizationPermissionPolicies();
+            if (accessControlConfiguration.AuthorizationProvider == AccessControlProviders.PolicyServer) {
+                Guard.Against(() => !configuration.GetSection("PolicyServer").Exists(),
+                    () => throw new ArgumentException("Configuration section named 'PolicyServer' is missing"));
+                configuration["PolicyServer:TokenClient:Authority"] = identityServerConfiguration.Authority;
+                configuration["PolicyServer:TokenClient:ClientId"] =
+                    identityServerConfiguration.Authentication?.ClientId;
+                configuration["PolicyServer:TokenClient:ClientSecret"] =
+                    identityServerConfiguration.Authentication?.ClientSecret;
+                services.AddPolicyServerRuntimeClient(configuration.GetSection("PolicyServer"))
+                    .AddAuthorizationPermissionPolicies();
+            }
+
+            // authorization-api
+            if (accessControlConfiguration.AuthorizationProvider == AccessControlProviders.AuthorizationApi) {
+                // TODO: caller to have package dependency and overload method here to call via action.  No default call in this method.
+            }
 
             return services;
         }

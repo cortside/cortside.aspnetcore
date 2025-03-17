@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using Cortside.AspNetCore.Common;
 using Cortside.AspNetCore.Tests.Controllers;
 using Cortside.Common.Testing;
-using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Shouldly;
 using Xunit;
 
 namespace Cortside.AspNetCore.Tests {
@@ -22,9 +22,9 @@ namespace Cortside.AspNetCore.Tests {
 
         public IntegrationTest() {
             configurationValues = new Dictionary<string, string> {
-                {"Key1", "Value1"},
-                {"Nested:Key1", "NestedValue1"},
-                {"Nested:Key2", "NestedValue2"}
+                { "Key1", "Value1" },
+                { "Nested:Key1", "NestedValue1" },
+                { "Nested:Key2", "NestedValue2" }
             };
         }
 
@@ -32,12 +32,8 @@ namespace Cortside.AspNetCore.Tests {
             JsonConvert.DefaultSettings = () => JsonNetUtility.GlobalDefaultSettings(internalDateTimeHandling);
 
             var builder = new WebHostBuilder()
-                .ConfigureAppConfiguration(config => {
-                    config.AddInMemoryCollection(configurationValues);
-                })
-                .ConfigureServices(services => {
-                    services.AddApiDefaults(internalDateTimeHandling);
-                })
+                .ConfigureAppConfiguration(config => { config.AddInMemoryCollection(configurationValues); })
+                .ConfigureServices(services => { services.AddApiDefaults(internalDateTimeHandling); })
                 .Configure(app => {
                     app.UseRouting();
                     app.UseEndpoints(endpoints => endpoints.MapControllers());
@@ -62,7 +58,6 @@ namespace Cortside.AspNetCore.Tests {
             responseMessage = await server.CreateClient().PostAsync(uri, content);
 
             return responseMessage;
-
         }
 
         [Theory]
@@ -81,16 +76,21 @@ namespace Cortside.AspNetCore.Tests {
             // Assert
             var content = await responseMessage.Content.ReadAsStringAsync();
             content = content.Replace("\"", "");
-            content.Should().Be(expected);
-            responseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
+            content.ShouldBe(expected);
+            responseMessage.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
         [Theory]
-        [InlineData("Mountain Standard Time", InternalDateTimeHandling.Utc, "2000-10-02 12:00:00 AM", "2000-10-02T00:00:00.0000000Z")]
-        [InlineData("Mountain Standard Time", InternalDateTimeHandling.Utc, "2000-10-02T00:00:00-5:00", "2000-10-02T05:00:00.0000000Z")]
-        [InlineData("Mountain Standard Time", InternalDateTimeHandling.Local, "2000-10-02 12:00:00 AM", "2000-10-02T00:00:00.0000000Z")]
-        [InlineData("Mountain Standard Time", InternalDateTimeHandling.Local, "2000-10-02T00:00:00-5:00", "2000-10-02T05:00:00.0000000Z")]
-        public async Task ShouldPost(string timezone, InternalDateTimeHandling internalDateTimeHandling, string value, string expected) {
+        [InlineData("Mountain Standard Time", InternalDateTimeHandling.Utc, "2000-10-02 12:00:00 AM",
+            "2000-10-02T00:00:00.0000000Z")]
+        [InlineData("Mountain Standard Time", InternalDateTimeHandling.Utc, "2000-10-02T00:00:00-5:00",
+            "2000-10-02T05:00:00.0000000Z")]
+        [InlineData("Mountain Standard Time", InternalDateTimeHandling.Local, "2000-10-02 12:00:00 AM",
+            "2000-10-02T00:00:00.0000000Z")]
+        [InlineData("Mountain Standard Time", InternalDateTimeHandling.Local, "2000-10-02T00:00:00-5:00",
+            "2000-10-02T05:00:00.0000000Z")]
+        public async Task ShouldPost(string timezone, InternalDateTimeHandling internalDateTimeHandling, string value,
+            string expected) {
             // Arrange
             server = CreateTestServer(internalDateTimeHandling);
             var json = "{\"DateFrom\":\"" + value + "\",\"DateTo\":\"2000-10-03\"}";
@@ -102,9 +102,9 @@ namespace Cortside.AspNetCore.Tests {
                 // Assert
                 var content = await responseMessage.Content.ReadAsStringAsync();
                 var data = JsonConvert.DeserializeObject<PostData>(content, new JsonSerializerSettings());
-                data.DateFrom.Kind.Should().Be(DateTimeKind.Utc);
-                data.DateFrom.ToString("O").Should().Be(expected);
-                responseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
+                data.DateFrom.Kind.ShouldBe(DateTimeKind.Utc);
+                data.DateFrom.ToString("O").ShouldBe(expected);
+                responseMessage.StatusCode.ShouldBe(HttpStatusCode.OK);
             }
         }
     }

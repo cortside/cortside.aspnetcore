@@ -5,7 +5,8 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Cortside.AspNetCore.Swagger.Filters {
     internal static class OperationFilterContextExtensions {
-        public static IEnumerable<T> GetControllerAndActionAttributes<T>(this OperationFilterContext context) where T : Attribute {
+        public static IEnumerable<T> GetControllerAndActionAttributes<T>(this OperationFilterContext context)
+            where T : Attribute {
             var controllerAttributes = context.MethodInfo.DeclaringType.GetTypeInfo().GetCustomAttributes<T>();
             var actionAttributes = context.MethodInfo.GetCustomAttributes<T>();
 

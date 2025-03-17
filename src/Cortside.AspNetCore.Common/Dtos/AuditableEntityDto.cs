@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Cortside.AspNetCore.Common.Dtos {
     public class AuditableEntityDto {
