@@ -1,5 +1,21 @@
 # Release 8.0
 
+* Updated powershell scripts to latest versions from coeus/shoppingcart-api
+* Standardized library build files and resolved code coverage issues
+* Update target framework to net8.0
+* Update all dependency nuget packages
+* Add/Fix build badges
+* Transition to use Shouldly instead of FluentAssertions
+* Add handling of PreconditionFailedResponseException to return 412 in MessageExceptionResponseFilter
+* Add new EF Core interceptor for handling of audit responsibilities, moving functionality from AuditableDatabaseContext, this will allow other custom implemented database context classes to still benefit from audit stamping
+* Broke out some common model builder methods from AuditableDatabaseContext to new ModelBuilderExtensions extension class
+* Add Authorization parameter to swagger model
+* Add definition for CustomSchemaId and CustomOperationIds to swagger definition
+* Add helper extension methods for ToPagedResult and ToListResult on IList<T>
+* Add IConfiguration support for values to have substitutable values anywhere in configuration with IConfiguration extension method ExpandTemplates
+* Conditionally add security to swagger model if identity authority is configured
+* Add support for Cortside.Authorization in AccessControlConfiguration
+
 |Commit|Date|Author|Message|
 |---|---|---|---|
 | 0d3e1c5 | <span style="white-space:nowrap;">2024-09-02</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update version
