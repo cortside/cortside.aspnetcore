@@ -12,12 +12,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Cortside.Bowdlerizer" Version="8.0.103" />
-    <PackageReference Include="Cortside.Common.BootStrap" Version="8.0.478" />
+    <PackageReference Include="Cortside.Common.BootStrap" Version="8.0.482" />
     <PackageReference Include="Cortside.Common.Correlation" Version="8.0.478" />
     <PackageReference Include="Cortside.Common.Cryptography" Version="8.0.478" />
     <PackageReference Include="Cortside.Common.Hosting" Version="8.0.478" />
     <PackageReference Include="Cortside.Common.Json" Version="8.0.478" />
-    <PackageReference Include="Cortside.Common.Messages" Version="8.0.478" />
+    <PackageReference Include="Cortside.Common.Messages" Version="8.0.482" />
     <PackageReference Include="Cortside.Health" Version="8.0.111" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.14" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.3" />

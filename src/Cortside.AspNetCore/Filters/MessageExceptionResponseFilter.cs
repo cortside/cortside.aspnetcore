@@ -56,6 +56,11 @@ namespace Cortside.AspNetCore.Filters {
                         StatusCode = StatusCodes.Status403Forbidden
                     };
                     break;
+                case UnauthorizedResponseException _:
+                    context.Result = new ObjectResult(GetErrorsModel(exception)) {
+                        StatusCode = StatusCodes.Status401Unauthorized
+                    };
+                    break;
                 default:
                     return;
             }
