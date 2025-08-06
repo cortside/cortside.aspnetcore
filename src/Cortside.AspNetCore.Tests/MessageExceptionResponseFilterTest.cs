@@ -72,7 +72,7 @@ namespace Cortside.AspNetCore.Tests {
             // second
             Assert.Equal("InvalidTypeFormatError", model.Errors[1].Type);
             Assert.Equal("property2", model.Errors[1].Property);
-            Assert.Equal("abc is not a valid value for property2.", model.Errors[1].Message);
+            Assert.Equal("`abc` is not a valid value for property2.", model.Errors[1].Message);
         }
 
         public static IEnumerable<object[]> GetCommonMessageExceptionScenarios() {
