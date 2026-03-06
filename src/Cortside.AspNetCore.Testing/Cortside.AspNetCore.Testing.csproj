@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cortside.Common.Testing" Version="8.0.478" />
-    <PackageReference Include="Cortside.Common.Testing.EntityFramework" Version="8.0.478" />
-    <PackageReference Include="Cortside.DomainEvent.Stub" Version="8.0.375" />
+    <PackageReference Include="Cortside.Common.Testing" Version="8.1.500-develop" />
+    <PackageReference Include="Cortside.Common.Testing.EntityFramework" Version="8.1.500-develop" />
+    <PackageReference Include="Cortside.DomainEvent.Stub" Version="8.0.395" />
     <PackageReference Include="Cortside.MockServer.AccessControl" Version="8.0.86" />
     <PackageReference Include="coverlet.collector" Version="6.0.4">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -34,7 +34,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="DistributedLock.FileSystem" Version="1.0.3" />
-    <PackageReference Include="Cortside.RestApiClient" Version="8.0.203-8.0" />
+    <PackageReference Include="Cortside.RestApiClient" Version="8.0.206" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.14" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.3" />
   </ItemGroup>

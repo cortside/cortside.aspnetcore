@@ -12,7 +12,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Cortside.Common.Testing" Version="8.0.478" />
+    <PackageReference Include="Cortside.Common.Testing" Version="8.1.500-develop" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="8.0.14" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.13.61">
