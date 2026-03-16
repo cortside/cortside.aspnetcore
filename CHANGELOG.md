@@ -1,3 +1,18 @@
+# Release 8.1
+
+|Commit|Date|Author|Message|
+|---|---|---|---|
+| ebbf333 | <span style="white-space:nowrap;">2025-03-13</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update version
+| 70355ad | <span style="white-space:nowrap;">2025-03-17</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge branch 'master' into develop
+| d9367a2 | <span style="white-space:nowrap;">2025-06-05</span> | <span style="white-space:nowrap;">Owoose Ohenhen</span> |  Added unauthorized response exception handling
+| 5b30b36 | <span style="white-space:nowrap;">2025-06-05</span> | <span style="white-space:nowrap;">Owoose Ohenhen</span> |  Modified package references
+| 39b927a | <span style="white-space:nowrap;">2025-08-05</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update to develop branch for cortside.common
+| 8022017 | <span style="white-space:nowrap;">2025-08-05</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  (origin/feature/EBSVC-3503, feature/EBSVC-3503) [EBSVC-2503] add unit test coverage for new exception
+| 9af6377 | <span style="white-space:nowrap;">2026-03-05</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  Merge pull request #37 from cortside/feature/EBSVC-3503
+| 6c144f6 | <span style="white-space:nowrap;">2026-03-13</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  update latest nuget packages and scripts
+| f372afc | <span style="white-space:nowrap;">2026-03-16</span> | <span style="white-space:nowrap;">Cort Schaefer</span> |  (HEAD -> release/8.1, origin/develop, origin/HEAD, develop) update to latest cortside libraries
+****
+
 # Release 8.0
 
 * Updated powershell scripts to latest versions from coeus/shoppingcart-api

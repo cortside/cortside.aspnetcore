@@ -32,8 +32,7 @@ namespace Cortside.AspNetCore.Tests {
 
         [Theory]
         [MemberData(nameof(GetCommonMessageExceptionScenarios))]
-        public void ShouldWriteResponseForCommonMessageExceptions(MessageException message,
-            Func<IActionResult, bool> comparison) {
+        public void ShouldWriteResponseForCommonMessageExceptions(MessageException message, Func<IActionResult, bool> comparison) {
             // arrange
             ActionExecutedContext context = GetActionExecutedContext();
             context.Exception = message;
@@ -72,17 +71,24 @@ namespace Cortside.AspNetCore.Tests {
             // second
             Assert.Equal("InvalidTypeFormatError", model.Errors[1].Type);
             Assert.Equal("property2", model.Errors[1].Property);
-            Assert.Equal("abc is not a valid value for property2.", model.Errors[1].Message);
+            Assert.Equal("`abc` is not a valid value for property2.", model.Errors[1].Message);
         }
 
         public static IEnumerable<object[]> GetCommonMessageExceptionScenarios() {
             yield return new object[] {
-                new NotFoundResponseException(), (Func<IActionResult, bool>)((result) => result is NotFoundObjectResult)
+                new NotFoundResponseException(),
+                (Func<IActionResult, bool>)((result) =>
+                    ((ObjectResult)result).StatusCode == StatusCodes.Status404NotFound)
             };
             yield return new object[] {
                 new UnprocessableEntityResponseException(),
                 (Func<IActionResult, bool>)((result) =>
                     ((ObjectResult)result).StatusCode == StatusCodes.Status422UnprocessableEntity)
+            };
+            yield return new object[] {
+                new UnauthorizedResponseException(),
+                (Func<IActionResult, bool>)((result) =>
+                    ((ObjectResult)result).StatusCode == StatusCodes.Status401Unauthorized)
             };
             yield return new object[] {
                 new ForbiddenAccessResponseException(),
@@ -93,6 +99,27 @@ namespace Cortside.AspNetCore.Tests {
                 new PreconditionFailedResponseException(),
                 (Func<IActionResult, bool>)((result) =>
                     ((ObjectResult)result).StatusCode == StatusCodes.Status412PreconditionFailed)
+            };
+
+            yield return new object[] {
+                new BadRequestResponseException(),
+                (Func<IActionResult, bool>)((result) =>
+                    ((ObjectResult)result).StatusCode == StatusCodes.Status400BadRequest)
+            };
+            yield return new object[] {
+                new ValidationListException(),
+                (Func<IActionResult, bool>)((result) =>
+                    ((ObjectResult)result).StatusCode == StatusCodes.Status400BadRequest)
+            };
+            yield return new object[] {
+                new InternalServerErrorResponseException(),
+                (Func<IActionResult, bool>)((result) =>
+                    ((ObjectResult)result).StatusCode == StatusCodes.Status500InternalServerError)
+            };
+            yield return new object[] {
+                new ConflictResponseException(),
+                (Func<IActionResult, bool>)((result) =>
+                    ((ObjectResult)result).StatusCode == StatusCodes.Status409Conflict)
             };
         }
 
