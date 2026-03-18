@@ -5,7 +5,7 @@ using System.Net;
 using Cortside.AspNetCore.Common.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Cortside.AspNetCore.Swagger.Filters {
@@ -25,8 +25,6 @@ namespace Cortside.AspNetCore.Swagger.Filters {
                 return;
             }
 
-            operation.Parameters ??= new List<OpenApiParameter>();
-
             // display input parameter Authorization
             operation.Parameters.Add(new OpenApiParameter {
                 Name = "Authorization",
@@ -34,7 +32,7 @@ namespace Cortside.AspNetCore.Swagger.Filters {
                 Description = "access token",
                 Required = false,
                 Schema = new OpenApiSchema {
-                    Type = "string"
+                    Type = JsonSchemaType.String
                 }
             });
 
@@ -63,11 +61,7 @@ namespace Cortside.AspNetCore.Swagger.Filters {
 
             operation.Security.Add(new OpenApiSecurityRequirement() {
                 {
-                    new OpenApiSecurityScheme() {
-                        Reference = new OpenApiReference {
-                            Type = ReferenceType.SecurityScheme, Id = "oauth2"
-                        }
-                    },
+                    new OpenApiSecuritySchemeReference("oauth2"),
                     new List<string>()
                 }
             });
@@ -80,20 +74,22 @@ namespace Cortside.AspNetCore.Swagger.Filters {
             }
 
             response.Description = "BadRequest";
-            response.Content ??= new Dictionary<string, OpenApiMediaType>();
 
             var openApiMediaType = new OpenApiMediaType();
 
             var type = typeof(ErrorsModel);
-            if (!context.SchemaRepository.TryLookupByType(type, out var schema)) {
-                schema = context.SchemaGenerator.GenerateSchema(type, context.SchemaRepository);
-                if (schema == null) {
+            if (context.SchemaRepository.TryLookupByType(type, out var schemaReference)) {
+                openApiMediaType.Schema = schemaReference;
+            } else {
+                var generatedSchema = context.SchemaGenerator.GenerateSchema(type, context.SchemaRepository);
+                if (generatedSchema == null) {
                     throw new InvalidOperationException($"Failed to register swagger schema type '{type.Name}'");
                 }
+
+                openApiMediaType.Schema = generatedSchema;
             }
 
             // TODO: look for produces attribute
-            openApiMediaType.Schema = schema;
             response.Content.Add("application/json", openApiMediaType);
         }
     }

@@ -1,16 +1,19 @@
-using Microsoft.ApplicationInsights.Channel;
-using Microsoft.ApplicationInsights.Extensibility;
+using System.Collections.Generic;
+using OpenTelemetry.Resources;
 
 namespace Cortside.AspNetCore.ApplicationInsights.TelemetryInitializers {
-    public class CloudRoleNameTelemetryInitializer : ITelemetryInitializer {
+    public class CloudRoleNameTelemetryInitializer : IResourceDetector {
+        private const string SERVICE_NAME = "service.name";
         private readonly string cloudRoleName;
 
         public CloudRoleNameTelemetryInitializer(string cloudRoleName) {
             this.cloudRoleName = cloudRoleName;
         }
 
-        public void Initialize(ITelemetry telemetry) {
-            telemetry.Context.Cloud.RoleName = cloudRoleName;
+        public Resource Detect() {
+            return new Resource(new Dictionary<string, object> {
+                [SERVICE_NAME] = cloudRoleName
+            });
         }
     }
 }

@@ -7,7 +7,7 @@ using Cortside.AspNetCore.AccessControl;
 using Cortside.AspNetCore.Swagger.Filters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace Cortside.AspNetCore.Swagger {
     /// <summary>

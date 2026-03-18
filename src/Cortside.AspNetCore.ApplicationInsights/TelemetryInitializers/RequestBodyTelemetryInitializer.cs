@@ -1,11 +1,10 @@
 using System.IO;
-using Microsoft.ApplicationInsights.Channel;
-using Microsoft.ApplicationInsights.DataContracts;
-using Microsoft.ApplicationInsights.Extensibility;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using OpenTelemetry;
 
 namespace Cortside.AspNetCore.ApplicationInsights.TelemetryInitializers {
-    public class RequestBodyTelemetryInitializer : ITelemetryInitializer {
+    public class RequestBodyTelemetryInitializer : BaseProcessor<Activity> {
         private const string PROPERTY_KEY = "RequestBody";
         readonly IHttpContextAccessor httpContextAccessor;
 
@@ -13,7 +12,7 @@ namespace Cortside.AspNetCore.ApplicationInsights.TelemetryInitializers {
             this.httpContextAccessor = httpContextAccessor;
         }
 
-        public void Initialize(ITelemetry telemetry) {
+        public override void OnEnd(Activity data) {
             var request = httpContextAccessor?.HttpContext?.Request;
 
             var hasReadableBody = request != null &&
@@ -23,11 +22,11 @@ namespace Cortside.AspNetCore.ApplicationInsights.TelemetryInitializers {
                 return;
             }
 
-            if (telemetry is not RequestTelemetry requestTelemetry) {
+            if (data.Kind != ActivityKind.Server) {
                 return;
             }
 
-            if (requestTelemetry.Properties.ContainsKey(PROPERTY_KEY)) {
+            if (data.GetTagItem(PROPERTY_KEY) is not null) {
                 return;
             }
 
@@ -35,7 +34,7 @@ namespace Cortside.AspNetCore.ApplicationInsights.TelemetryInitializers {
             var sr = new StreamReader(request.Body);
             var bodyContent = sr.ReadToEnd();
             request.Body.Position = 0;
-            requestTelemetry.Properties.Add(PROPERTY_KEY, bodyContent);
+            data.SetTag(PROPERTY_KEY, bodyContent);
         }
     }
 }

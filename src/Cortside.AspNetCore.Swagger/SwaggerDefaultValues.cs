@@ -1,9 +1,10 @@
 using System;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Cortside.AspNetCore.Swagger {
@@ -43,16 +44,19 @@ namespace Cortside.AspNetCore.Swagger {
 
                 parameter.Description ??= description.ModelMetadata?.Description;
 
-                if (parameter.Schema.Default == null &&
+                if (parameter.Schema is OpenApiSchema schema &&
+                    schema.Default == null &&
                     description.DefaultValue != null &&
                     description.DefaultValue is not DBNull &&
                     description.ModelMetadata is ModelMetadata modelMetadata) {
                     // REF: https://github.com/Microsoft/aspnet-api-versioning/issues/429#issuecomment-605402330
                     var json = JsonSerializer.Serialize(description.DefaultValue, modelMetadata.ModelType);
-                    parameter.Schema.Default = OpenApiAnyFactory.CreateFromJson(json);
+                    schema.Default = JsonNode.Parse(json);
                 }
 
-                parameter.Required |= description.IsRequired;
+                if (parameter is OpenApiParameter openApiParameter) {
+                    openApiParameter.Required |= description.IsRequired;
+                }
             }
         }
     }

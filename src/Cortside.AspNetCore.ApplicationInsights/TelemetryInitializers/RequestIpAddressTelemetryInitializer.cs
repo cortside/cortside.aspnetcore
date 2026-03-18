@@ -1,10 +1,9 @@
-using Microsoft.ApplicationInsights.Channel;
-using Microsoft.ApplicationInsights.DataContracts;
-using Microsoft.ApplicationInsights.Extensibility;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using OpenTelemetry;
 
 namespace Cortside.AspNetCore.ApplicationInsights.TelemetryInitializers {
-    public class RequestIpAddressTelemetryInitializer : ITelemetryInitializer {
+    public class RequestIpAddressTelemetryInitializer : BaseProcessor<Activity> {
         private const string PROPERTY_KEY = "RequestIpAddress";
         readonly IHttpContextAccessor httpContextAccessor;
 
@@ -12,14 +11,13 @@ namespace Cortside.AspNetCore.ApplicationInsights.TelemetryInitializers {
             this.httpContextAccessor = httpContextAccessor;
         }
 
-        public void Initialize(ITelemetry telemetry) {
-            if (telemetry is not RequestTelemetry requestTelemetry) {
+        public override void OnEnd(Activity data) {
+            if (data.Kind != ActivityKind.Server) {
                 return;
             }
 
-            if (!requestTelemetry.Properties.ContainsKey(PROPERTY_KEY)) {
-                requestTelemetry.Properties.Add(PROPERTY_KEY,
-                    HttpContextUtility.GetRequestIpAddress(httpContextAccessor.HttpContext));
+            if (data.GetTagItem(PROPERTY_KEY) is null) {
+                data.SetTag(PROPERTY_KEY, HttpContextUtility.GetRequestIpAddress(httpContextAccessor.HttpContext));
             }
         }
     }
