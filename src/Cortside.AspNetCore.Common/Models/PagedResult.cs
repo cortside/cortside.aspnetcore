@@ -32,7 +32,12 @@ namespace Cortside.AspNetCore.Common.Models {
         /// <summary>
         /// Total number of paged result pages for given resource
         /// </summary>
-        public int TotalPages => (int)Math.Ceiling(TotalItems / (double)PageSize);
+        public int TotalPages =>
+            PageSize <= 0
+                ? 0
+                // Integer division with ceiling rounding
+                // See https://stackoverflow.com/a/4175152/539997
+                : (TotalItems + PageSize - 1) / PageSize;
 
         /// <summary>
         /// Current paged result page of results
